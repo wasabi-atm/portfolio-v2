@@ -1,0 +1,9 @@
+label[role="tab"]:has(input:focus-visible) {
+  outline: 2px solid rgba(0, 82, 245, 0.45);
+  outline-offset: 2px;
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; }
+}

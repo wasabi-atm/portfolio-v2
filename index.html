@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Styled Floating Nav</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: { content: '#000000', muted: '#6A6A6A', connect: '#2A9320' }
+        }
+      }
+    }
+  </script>
+
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&amp;display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="min-h-dvh bg-zinc-100 antialiased font-['Roboto']">
+
+  <!-- Nav -->
+  <fieldset
+    role="tablist"
+    aria-label="Primary navigation"
+    class="
+      fixed left-1/2 -translate-x-1/2 z-50
+      bottom-[calc(env(safe-area-inset-bottom)+36px)]
+      md:bottom-auto md:top-6
+      w-[min(92vw,700px)]
+      flex items-center justify-between
+      rounded-full
+      bg-white/15 md:bg-zinc-300/20
+      backdrop-blur-xl backdrop-saturate-150 shadow-[0_6px_16px_rgba(0,0,0,0.10)]
+      ring-1 ring-white/30 md:ring-0
+      px-4 py-2 md:px-6 md:py-3
+      gap-2 md:gap-6
+    "
+  >
+    <legend class="sr-only">Navigation</legend>
+
+    <!-- Home -->
+    <label role="tab" aria-selected="true"
+      class="group flex-1 md:flex-none md:px-0 grid place-items-center
+             [grid-auto-flow:row] md:[grid-auto-flow:column] gap-1 md:gap-0 text-center font-normal">
+      <input type="radio" name="nav" value="home" checked class="peer sr-only" />
+      <!-- Icon (mobile only) -->
+      <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 md:hidden text-neutral-500 peer-checked:text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l9-9 9 9M5 10v10h14V10" />
+      </svg>
+      <span class="text-neutral-500
+                   peer-checked:text-black
+                   peer-checked:underline
+                   text-[11px] xs:text-xs md:text-xl">Home</span>
+    </label>
+
+    <!-- Projects -->
+    <label role="tab"
+      class="group flex-1 md:flex-none md:px-0 grid place-items-center
+             [grid-auto-flow:row] md:[grid-auto-flow:column] gap-1 md:gap-0 text-center font-normal">
+      <input type="radio" name="nav" value="projects" class="peer sr-only" />
+      <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 md:hidden text-neutral-500 peer-checked:text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h10M4 18h16" />
+      </svg>
+      <span class="text-neutral-500
+                   peer-checked:text-black
+                   peer-checked:underline
+                   text-[11px] xs:text-xs md:text-xl">Projects</span>
+    </label>
+
+    <!-- Blogs -->
+    <label role="tab"
+      class="group flex-1 md:flex-none md:px-0 grid place-items-center
+             [grid-auto-flow:row] md:[grid-auto-flow:column] gap-1 md:gap-0 text-center font-normal">
+      <input type="radio" name="nav" value="blogs" class="peer sr-only" />
+      <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 md:hidden text-neutral-500 peer-checked:text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10l6 6v8a2 2 0 01-2 2z" />
+      </svg>
+      <span class="text-neutral-500
+                   peer-checked:text-black
+                   peer-checked:underline
+                   text-[11px] xs:text-xs md:text-xl">Blogs</span>
+    </label>
+
+    <!-- Connect -->
+    <label role="tab"
+      class="group flex-1 md:flex-none md:px-0 grid place-items-center
+             [grid-auto-flow:row] md:[grid-auto-flow:column] gap-1 md:gap-0 text-center font-normal">
+      <input type="radio" name="nav" value="connect" class="peer sr-only" />
+      <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 md:hidden text-neutral-500 peer-checked:text-green-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 11a4 4 0 108 0m-9 7h10a2 2 0 002-2v-5H5v5a2 2 0 002 2z" />
+      </svg>
+      <span class="text-neutral-500 peer-checked:text-green-700
+                   peer-checked:underline
+                   text-[11px] xs:text-xs md:text-xl">Connect</span>
+    </label>
+  </fieldset>
+
+    <!-- Content -->
+    <!-- Greeting -->
+<main class="mx-auto w-full max-w-[1100px] px-6 sm:px-8 md:px-12 lg:px-24 xl:px-28 2xl:px-32 py-12 sm:py-12 md:py-24 lg:py-32 space-y-4 sm:space-y-4 md:space-y-6 lg:space-y-8">
+    <div class="justify-start leading-tight tracking-tight">
+      <span class="text-black text-3xl sm:text-4xl md:text-5xl font-light">Hi, I’m </span><span class="text-black text-3xl sm:text-4xl md:text-5xl font-medium underline">Wira</span><span class="text-black text-3xl sm:text-4xl md:text-5xl font-medium"> Wibisana</span>
+    </div>
+    <div class="justify-start leading-tight tracking-tight">
+      <span class="text-black text-3xl sm:text-4xl md:text-5xl font-light">Designing </span><span class="text-black text-3xl sm:text-4xl md:text-5xl font-medium">Product Experience</span>
+    </div>
+    <div class="justify-start leading-tight tracking-tight">
+      <span class="text-black text-3xl sm:text-4xl md:text-5xl font-medium">Technology</span><span class="text-black text-3xl sm:text-4xl md:text-5xl font-light"> Enthusiast</span>
+    </div>
+    <div class="justify-start leading-tight tracking-tight">
+      <span class="text-black text-3xl sm:text-4xl md:text-5xl font-light">Cat &amp; Dog</span><span class="text-black text-3xl sm:text-4xl md:text-5xl font-medium"> Person</span>
+    </div>
+ </main>
+    
+    <!-- 2 Proudest Projects -->
+<section class="mx-auto w-full max-w-[1100px] px-6 sm:px-8 md:px-12 lg:px-24 xl:px-28 2xl:px-32 py-12 grid grid-cols-1 md:grid-cols-2 gap-6">
+  <figure class="flex flex-col gap-3">
+    <div class="bg-gray-200 aspect-video flex items-center justify-center">Image 1</div>
+    <figcaption class="text-sm sm:text-base text-muted leading-snug">
+      Lorem ipsum dolor sit amet.
+    </figcaption>
+  </figure>
+  <figure class="flex flex-col gap-3">
+    <div class="bg-gray-200 aspect-video flex items-center justify-center">Image 2</div>
+    <figcaption class="text-sm sm:text-base text-muted leading-snug">
+      Lorem ipsum dolor sit amet.
+    </figcaption>
+  </figure>
+</section>
+
+
+
+  <script src="app.js"></script>
+</body>
+</html>
