@@ -42,60 +42,41 @@
     <legend class="sr-only">Navigation</legend>
 
     <!-- Home -->
-    <label role="tab" aria-selected="true"
-      class="group flex-1 md:flex-none md:px-0 grid place-items-center
-             [grid-auto-flow:row] md:[grid-auto-flow:column] gap-1 md:gap-0 text-center font-normal">
-      <input type="radio" name="nav" value="home" checked class="peer sr-only" />
+    <a role="tab" href="index.html" aria-current="page"
+      class="group flex-1 md:flex-none md:px-0 grid place-items-center [grid-auto-flow:row] md:[grid-auto-flow:column] gap-1 md:gap-0 text-center font-normal">
       <!-- Icon (mobile only) -->
-      <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 md:hidden text-neutral-500 peer-checked:text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 md:hidden text-neutral-500 aria-[current=page]:text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l9-9 9 9M5 10v10h14V10" />
       </svg>
-      <span class="text-neutral-500
-                   peer-checked:text-black
-                   peer-checked:underline
-                   text-[11px] xs:text-xs md:text-xl">Home</span>
-    </label>
+      <span class="text-neutral-500 aria-[current=page]:text-black aria-[current=page]:underline text-[11px] xs:text-xs md:text-xl">Home</span>
+    </a>
 
     <!-- Projects -->
-    <label role="tab"
-      class="group flex-1 md:flex-none md:px-0 grid place-items-center
-             [grid-auto-flow:row] md:[grid-auto-flow:column] gap-1 md:gap-0 text-center font-normal">
-      <input type="radio" name="nav" value="projects" class="peer sr-only" />
-      <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 md:hidden text-neutral-500 peer-checked:text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    <a role="tab" href="projects.html"
+      class="group flex-1 md:flex-none md:px-0 grid place-items-center [grid-auto-flow:row] md:[grid-auto-flow:column] gap-1 md:gap-0 text-center font-normal">
+      <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 md:hidden text-neutral-500 aria-[current=page]:text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h10M4 18h16" />
       </svg>
-      <span class="text-neutral-500
-                   peer-checked:text-black
-                   peer-checked:underline
-                   text-[11px] xs:text-xs md:text-xl">Projects</span>
-    </label>
+      <span class="text-neutral-500 aria-[current=page]:text-black aria-[current=page]:underline text-[11px] xs:text-xs md:text-xl">Projects</span>
+    </a>
 
     <!-- Blogs -->
-    <label role="tab"
-      class="group flex-1 md:flex-none md:px-0 grid place-items-center
-             [grid-auto-flow:row] md:[grid-auto-flow:column] gap-1 md:gap-0 text-center font-normal">
-      <input type="radio" name="nav" value="blogs" class="peer sr-only" />
-      <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 md:hidden text-neutral-500 peer-checked:text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    <a role="tab" href="blogs.html"
+      class="group flex-1 md:flex-none md:px-0 grid place-items-center [grid-auto-flow:row] md:[grid-auto-flow:column] gap-1 md:gap-0 text-center font-normal">
+      <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 md:hidden text-neutral-500 aria-[current=page]:text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10l6 6v8a2 2 0 01-2 2z" />
       </svg>
-      <span class="text-neutral-500
-                   peer-checked:text-black
-                   peer-checked:underline
-                   text-[11px] xs:text-xs md:text-xl">Blogs</span>
-    </label>
+      <span class="text-neutral-500 aria-[current=page]:text-black aria-[current=page]:underline text-[11px] xs:text-xs md:text-xl">Blogs</span>
+    </a>
 
     <!-- Connect -->
-    <label role="tab"
-      class="group flex-1 md:flex-none md:px-0 grid place-items-center
-             [grid-auto-flow:row] md:[grid-auto-flow:column] gap-1 md:gap-0 text-center font-normal">
-      <input type="radio" name="nav" value="connect" class="peer sr-only" />
-      <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 md:hidden text-neutral-500 peer-checked:text-green-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    <a role="tab" href="connect.html"
+      class="group flex-1 md:flex-none md:px-0 grid place-items-center [grid-auto-flow:row] md:[grid-auto-flow:column] gap-1 md:gap-0 text-center font-normal">
+      <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 md:hidden text-neutral-500 aria-[current=page]:text-green-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 11a4 4 0 108 0m-9 7h10a2 2 0 002-2v-5H5v5a2 2 0 002 2z" />
       </svg>
-      <span class="text-neutral-500 peer-checked:text-green-700
-                   peer-checked:underline
-                   text-[11px] xs:text-xs md:text-xl">Connect</span>
-    </label>
+      <span class="text-neutral-500 aria-[current=page]:text-green-700 aria-[current=page]:underline text-[11px] xs:text-xs md:text-xl">Connect</span>
+    </a>
   </fieldset>
 
     <!-- Content -->
