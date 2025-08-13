@@ -7,93 +7,45 @@
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet" />
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
-    tailwind.config = {
-      theme: { extend: {} }
-    }
+    tailwind.config = { theme: { extend: {} } }
   </script>
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body class="min-h-dvh bg-zinc-100 antialiased font-['Roboto']">
 
   <!-- Navigation -->
-  <fieldset
-    role="tablist"
-    aria-label="Primary navigation"
-    class="
-      fixed left-1/2 -translate-x-1/2 z-50
-      bottom-[calc(env(safe-area-inset-bottom)+36px)]
-      md:bottom-auto md:top-6
-      w-[min(92vw,700px)]
-      flex items-center justify-between
-      rounded-full
-      bg-white/15 md:bg-zinc-300/20
-      backdrop-blur-xl backdrop-saturate-150 shadow-[0_6px_16px_rgba(0,0,0,0.10)]
-      ring-1 ring-white/30 md:ring-0
-      px-4 py-2 md:px-6 md:py-3
-      gap-2 md:gap-6
-    "
-  >
+  <fieldset role="tablist" aria-label="Primary navigation"
+    class="fixed left-1/2 -translate-x-1/2 z-50 bottom-[calc(env(safe-area-inset-bottom)+36px)] md:bottom-auto md:top-6 w-[min(92vw,700px)] flex items-center justify-between rounded-full bg-white/15 md:bg-zinc-300/20 backdrop-blur-xl backdrop-saturate-150 shadow-[0_6px_16px_rgba(0,0,0,0.10)] ring-1 ring-white/30 md:ring-0 px-4 py-2 md:px-6 md:py-3 gap-2 md:gap-6">
     <legend class="sr-only">Navigation</legend>
 
-    <!-- Home -->
-    <a role="tab" href="index.html"
-      class="group flex-1 md:flex-none md:px-0 grid place-items-center [grid-auto-flow:row] md:[grid-auto-flow:column] gap-1 md:gap-0 text-center font-normal">
-      <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 md:hidden text-neutral-500 aria-[current=page]:text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l9-9 9 9M5 10v10h14V10" />
-      </svg>
+    <a role="tab" href="index.html" class="group flex-1 md:flex-none md:px-0 grid place-items-center [grid-auto-flow:row] md:[grid-auto-flow:column] gap-1 md:gap-0 text-center font-normal">
+      <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 md:hidden text-neutral-500 aria-[current=page]:text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l9-9 9 9M5 10v10h14V10" /></svg>
       <span class="text-neutral-500 aria-[current=page]:text-black aria-[current=page]:underline text-[11px] xs:text-xs md:text-xl">Home</span>
     </a>
 
-    <!-- Projects -->
-    <a role="tab" href="projects.html" aria-current="page"
-      class="group flex-1 md:flex-none md:px-0 grid place-items-center [grid-auto-flow:row] md:[grid-auto-flow:column] gap-1 md:gap-0 text-center font-normal">
-      <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 md:hidden text-neutral-500 aria-[current=page]:text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h10M4 18h16" />
-      </svg>
+    <a role="tab" href="projects.html" aria-current="page" class="group flex-1 md:flex-none md:px-0 grid place-items-center [grid-auto-flow:row] md:[grid-auto-flow:column] gap-1 md:gap-0 text-center font-normal">
+      <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 md:hidden text-neutral-500 aria-[current=page]:text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h10M4 18h16" /></svg>
       <span class="text-neutral-500 aria-[current=page]:text-black aria-[current=page]:underline text-[11px] xs:text-xs md:text-xl">Projects</span>
     </a>
 
-    <!-- Blogs -->
-    <a role="tab" href="blogs.html"
-      class="group flex-1 md:flex-none md:px-0 grid place-items-center [grid-auto-flow:row] md:[grid-auto-flow:column] gap-1 md:gap-0 text-center font-normal">
-      <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 md:hidden text-neutral-500 aria-[current=page]:text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10l6 6v8a2 2 0 01-2 2z" />
-      </svg>
+    <a role="tab" href="blogs.html" class="group flex-1 md:flex-none md:px-0 grid place-items-center [grid-auto-flow:row] md:[grid-auto-flow:column] gap-1 md:gap-0 text-center font-normal">
+      <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 md:hidden text-neutral-500 aria-[current=page]:text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10l6 6v8a2 2 0 01-2 2z" /></svg>
       <span class="text-neutral-500 aria-[current=page]:text-black aria-[current=page]:underline text-[11px] xs:text-xs md:text-xl">Blogs</span>
     </a>
 
-    <!-- Connect -->
-    <a role="tab" href="connect.html"
-      class="group flex-1 md:flex-none md:px-0 grid place-items-center [grid-auto-flow:row] md:[grid-auto-flow:column] gap-1 md:gap-0 text-center font-normal">
-      <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 md:hidden text-neutral-500 aria-[current=page]:text-green-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 11a4 4 0 108 0m-9 7h10a2 2 0 002-2v-5H5v5a2 2 0 002 2z" />
-      </svg>
+    <a role="tab" href="connect.html" class="group flex-1 md:flex-none md:px-0 grid place-items-center [grid-auto-flow:row] md:[grid-auto-flow:column] gap-1 md:gap-0 text-center font-normal">
+      <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 md:hidden text-neutral-500 aria-[current=page]:text-green-700" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 11a4 4 0 108 0m-9 7h10a2 2 0 002-2v-5H5v5a2 2 0 002 2z" /></svg>
       <span class="text-neutral-500 aria-[current=page]:text-green-700 aria-[current=page]:underline text-[11px] xs:text-xs md:text-xl">Connect</span>
     </a>
   </fieldset>
 
-  <!-- Main Content -->
-  <main class="mx-auto w-full max-w-[1100px] px-6 sm:px-8 md:px-12 lg:px-24 xl:px-28 2xl:px-32 py-12 sm:py-12 md:py-24 lg:py-32 space-y-4 sm:space-y-4 md:space-y-6 lg:space-y-8">
-
-    <!-- Page Title -->
-    <header>
-      <h1 class="text-4xl font-medium">
-        Past works <span class="font-light">showcase</span>
-      </h1>
+  <main class="mx-auto w-full md:max-w-[1100px] px-0 md:px-12 py-12 sm:py-12 md:py-24 space-y-4 sm:space-y-4 md:space-y-6">
+    <header class="px-6">
+      <h1 class="text-4xl font-medium">Past works <span class="font-light">showcase</span></h1>
     </header>
 
-    <!-- Filter Buttons -->
-    <div class="px-6 flex gap-4 text-sm">
-      <button class="font-medium underline">ALL</button>
-      <button>UI/UX</button>
-      <button>Physical</button>
-      <button>Logo</button>
-      <button>Game</button>
-    </div>
-
-    <!-- Projects Grid -->
+    <div id="projects-filters" class="mt-2 flex flex-wrap gap-2 px-6"></div>
     <section id="projects-grid-3col"></section>
-
   </main>
 
   <script src="app.js"></script>
