@@ -1,15 +1,104 @@
-const nav = document.querySelector('fieldset[role="tablist"]');
-const labels = nav ? [...nav.querySelectorAll('label[role="tab"]')] : [];
+// ==================== Global Navigation Renderer ====================
+const NAV_ITEMS = [
+  {
+    href: 'index.html',
+    label: 'Home',
+    icon: (isCurrent = false) => `
+      ${isCurrent
+        ? `<svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 md:hidden text-black" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+             <path d="M3 10.5L12 3l9 7.5V20a2 2 0 0 1-2 2h-5v-6h-4v6H5a2 2 0 0 1-2-2v-9.5z"/>
+           </svg>`
+        : `<svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 md:hidden text-neutral-500 aria-[current=page]:text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l9-9 9 9M5 10v10h14V10" />
+           </svg>`}
+    `
+  },
+  {
+    href: 'projects.html',
+    label: 'Projects',
+    icon: (isCurrent = false) => `
+      ${isCurrent
+        ? `<svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 md:hidden text-black" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+             <path d="M3 3h8v8H3zM13 3h8v8h-8zM3 13h8v8H3zM13 13h8v8h-8z"/>
+           </svg>`
+        : `<svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 md:hidden text-neutral-500 aria-[current=page]:text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h10M4 18h16" />
+           </svg>`}
+    `
+  },
+  {
+    href: 'blogs.html',
+    label: 'Blogs',
+    icon: (isCurrent = false) => `
+      ${isCurrent
+        ? `<svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 md:hidden text-black" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+             <path d="M6 2h9l5 5v15a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2zM15 2v6h6"/>
+           </svg>`
+        : `<svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 md:hidden text-neutral-500 aria-[current=page]:text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10l6 6v8a2 2 0 01-2 2z" />
+           </svg>`}
+    `
+  },
+  {
+    href: 'connect.html',
+    label: 'Connect',
+    icon: (isCurrent = false) => `
+      ${isCurrent
+        ? `<svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 md:hidden text-green-700" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+             <path d="M12 12a5 5 0 1 0-5-5 5 5 0 0 0 5 5zm-7 10a7 7 0 0 1 14 0z"/>
+           </svg>`
+        : `<svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 md:hidden text-neutral-500 aria-[current=page]:text-green-700" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 11a4 4 0 108 0m-9 7h10a2 2 0 002-2v-5H5v5a2 2 0 002 2z" />
+           </svg>`}
+    `
+  }
+];
 
-function syncTabs() {
-  labels.forEach(l => {
-    const checked = l.querySelector('input[type="radio"]').checked;
-    l.setAttribute('aria-selected', checked ? 'true' : 'false');
-  });
+function currentFilename() {
+  try {
+    const parts = location.pathname.split('/');
+    let name = parts[parts.length - 1] || 'index.html';
+    // Handle root path ("/") – assume index.html
+    if (!name.includes('.')) name = 'index.html';
+    return name;
+  } catch { return 'index.html'; }
 }
 
-labels.forEach(l => l.querySelector('input').addEventListener('change', syncTabs));
-syncTabs();
+function renderGlobalNav() {
+  const mount = document.getElementById('site-nav');
+  if (!mount) return; // page can opt-out by omitting the mount node
+
+  const here = currentFilename();
+
+  const links = NAV_ITEMS.map(item => {
+    const isCurrent = (here === item.href) || (here === 'showcase.html' && item.href === 'projects.html');
+    return `
+      <a role="tab" href="${item.href}" ${isCurrent ? 'aria-current="page"' : ''}
+        class="group flex-1 md:flex-none md:px-0 grid place-items-center [grid-auto-flow:row] md:[grid-auto-flow:column] gap-2 md:gap-0 text-center font-normal">
+        ${item.icon(isCurrent)}
+        <span class="text-neutral-500 md:text-neutral-500 aria-[current=page]:text-black aria-[current=page]:underline text-sm md:text-l ${isCurrent ? 'font-bold md:text-black md:underline md:decoration-2 md:underline-offset-4' : 'font-medium'} ${item.label === 'Connect' ? 'aria-[current=page]:text-green-700 md:aria-[current=page]:text-black' : ''}">${item.label}</span>
+      </a>`;
+  }).join('');
+
+  mount.innerHTML = `
+    <fieldset role="tablist" aria-label="Primary navigation"
+      class="
+        fixed left-1/2 -translate-x-1/2 z-50
+        bottom-[calc(env(safe-area-inset-bottom)+36px)]
+        md:bottom-auto md:top-6
+        w-[min(90vw,500px)] md:w-[min(60vw,400px)]
+        flex items-center justify-between
+        rounded-full md:rounded-full
+        bg-white/15 md:bg-zinc-300/20
+        backdrop-blur-xl backdrop-saturate-150 shadow-[0_6px_16px_rgba(0,0,0,0.10)]
+        ring-1 ring-white/30 md:ring-0
+        px-6 py-4 md:px-6 md:py-4
+        gap-4 md:gap-3
+      ">
+      <legend class="sr-only">Navigation</legend>
+      ${links}
+    </fieldset>`;
+}
 
 // ==================== Builder.io wiring ====================
 const BUILDER_API_KEY = '90c23362a6384ffabd3fd5a5978de250';
@@ -21,17 +110,13 @@ async function fetchJson(url) {
   return res.json();
 }
 
-// Try multiple endpoints so data shows even if name/id differs
 async function fetchBuilder(model, params = {}) {
   const baseParams = { apiKey: BUILDER_API_KEY, cachebust: Date.now(), ...params };
   const qp = (obj) => new URLSearchParams(obj).toString();
 
   const attempts = [
-    // 1) By model name (plural)
     `https://cdn.builder.io/api/v3/content/${model}?${qp(baseParams)}`,
-    // 2) By model name (singular)
     `https://cdn.builder.io/api/v3/content/${model.replace(/s$/, '')}?${qp(baseParams)}`,
-    // 3) By explicit modelId
     `https://cdn.builder.io/api/v3/content?${qp({ ...baseParams, modelId: BUILDER_MODEL_ID })}`,
   ];
 
@@ -48,7 +133,6 @@ async function fetchBuilder(model, params = {}) {
   return [];
 }
 
-// ---------- Projects grid + hover overlay + tag filters ----------
 const STATE = { all: [], filtered: [], activeTag: 'ALL' };
 
 function normalizeProject(entry) {
@@ -59,13 +143,43 @@ function normalizeProject(entry) {
   const date = d.date || d.publishedAt || entry?.lastUpdated || entry?.firstPublished || null;
   const slug = (d.slug || '').toString();
   const description = (d.description || '').toString();
-  // normalize other images into an array of URLs
+
   let otherImages = [];
   if (Array.isArray(d.otherImages)) {
-    otherImages = d.otherImages.map(img => typeof img === 'string' ? img : (img?.url || null)).filter(Boolean);
+    otherImages = d.otherImages
+      .flatMap((item) => {
+        const urls = [];
+        if (typeof item === 'string') return [item];
+        if (item && typeof item.url === 'string') urls.push(item.url);
+        if (item && item.image && typeof item.image.url === 'string') urls.push(item.image.url);
+        if (item && typeof item === 'object') {
+          for (const v of Object.values(item)) {
+            if (typeof v === 'string') urls.push(v);
+            else if (v && typeof v.url === 'string') urls.push(v.url);
+            else if (v && v.image && typeof v.image.url === 'string') urls.push(v.image.url);
+          }
+        }
+        return urls;
+      })
+      .filter(Boolean);
   } else if (typeof d.otherImages === 'string') {
     otherImages = [d.otherImages];
   }
+
+  const galleryRaw = (d.galleryUrls || '').toString();
+  if (galleryRaw) {
+    const split = galleryRaw.split(/\n|,|\s+/).map(s => s.trim()).filter(Boolean);
+    const urlish = split.filter(s => /^(https?:)?\/\//i.test(s));
+    otherImages = otherImages.concat(urlish);
+  }
+
+  const seen = new Set();
+  otherImages = otherImages.filter(u => {
+    if (!u || u === thumb || seen.has(u)) return false;
+    seen.add(u);
+    return true;
+  });
+
   return { id: entry?.id, title, tags: tags.filter(Boolean), thumbnail: thumb, date, slug, description, otherImages };
 }
 
@@ -82,7 +196,7 @@ function projectCardHTML(p) {
       ${tagsText ? `<p class="mt-1 text-xs opacity-90">${tagsText}</p>` : ''}
     </div>
   </article>`;
-  return p.slug ? `<a href="projects.html?slug=${encodeURIComponent(p.slug)}" class="block">${card}</a>` : card;
+  return p.slug ? `<a href="showcase.html?slug=${encodeURIComponent(p.slug)}" class="block">${card}</a>` : card;
 }
 
 function renderGrid(list) {
@@ -124,12 +238,8 @@ function renderFilters(items) {
     if (!btn) return;
     const tag = btn.getAttribute('data-tag');
     STATE.activeTag = tag;
-
-    // filter and render
     STATE.filtered = (tag === 'ALL') ? STATE.all.slice() : STATE.all.filter(i => (i.tags || []).includes(tag));
     renderGrid(STATE.filtered);
-
-    // repaint chips reflecting current selection (listener stays on container)
     paintChips();
   });
 }
@@ -222,46 +332,149 @@ async function loadProjectDetail() {
   const dateText = formatDateHuman(p.date);
   const tagsHtml = (p.tags || []).map(t => `<span class="inline-flex items-center rounded-full border border-zinc-300/60 px-2 py-0.5 text-xs text-zinc-700">${t}</span>`).join(' ');
 
-  // Build gallery grid like Google Maps (2x2, last cell shows +N when >4)
   const allImages = [p.thumbnail, ...(p.otherImages || [])].filter(Boolean);
   const rest = (p.otherImages || []);
-  const previewCells = rest.slice(0, 4).map((url, i) => {
-    const idx = 1 + i; // index in allImages (thumb is 0)
-    const extra = i === 3 && rest.length > 4 ? `<div class="absolute inset-0 bg-black/60 text-white grid place-items-center text-2xl font-medium">+${rest.length - 4}</div>` : '';
-    return `<button data-idx="${idx}" class="relative block w-full"><img src="${url}" class="block aspect-square w-full object-cover"/>${extra}</button>`;
-  }).join('');
+
+  // Create gallery layout based on number of other images
+  let galleryHtml = '';
+  
+  if (rest.length === 1) {
+    // Single image layout - just show one image full width
+    galleryHtml = `
+      <section class="w-full md:w-4/5 md:mx-auto lg:w-3/4 xl:w-2/3 md:px-6 lg:px-8 py-12">
+        <div class="rounded-xl overflow-hidden">
+          <button data-idx="1" class="relative block w-full aspect-square">
+            <img src="${rest[0]}" alt="Project image" class="block w-full h-full object-cover"/>
+          </button>
+        </div>
+      </section>
+    `;
+  } else if (rest.length >= 2) {
+    // Multiple images layout - big image + smaller ones
+    const bigImage = `
+      <button data-idx="1" class="relative block w-full aspect-square overflow-hidden md:rounded-l-xl rounded-t-xl md:rounded-tr-none">
+        <img src="${rest[0]}" alt="Project image" class="block w-full h-full object-cover"/>
+      </button>
+    `;
+
+    const stackedImages = rest.slice(1, 4).map((url, i) => {
+      const idx = i + 2;
+      const isFirst = i === 0;
+      const isLast = i === 2 || i === rest.slice(1, 4).length - 1;
+      const roundedClass = isFirst ? 'md:rounded-tr-xl' : (isLast ? 'md:rounded-br-xl' : '');
+      const extra = (i === 2 && rest.length > 4) ? `<div class="absolute inset-0 bg-black/60 text-white grid place-items-center text-2xl font-medium">+${rest.length - 4}</div>` : '';
+      return `
+        <button data-idx="${idx}" class="relative block w-full aspect-square overflow-hidden ${roundedClass}">
+          <img src="${url}" alt="Project image" class="block w-full h-full object-cover"/>
+          ${extra}
+        </button>
+      `;
+    }).join('');
+
+    galleryHtml = `
+      <section class="w-full md:w-4/5 md:mx-auto lg:w-3/4 xl:w-2/3 md:px-6 lg:px-8 py-12">
+        <div class="rounded-xl overflow-hidden">
+          <div class="hidden md:grid md:grid-cols-[3fr_1fr] md:gap-0">
+            <div>${bigImage}</div>
+            <div class="grid grid-rows-3 md:gap-0">${stackedImages}</div>
+          </div>
+          <div class="md:hidden">
+            ${bigImage}
+            <div class="grid grid-cols-3 gap-1 mt-1">${stackedImages}</div>
+          </div>
+        </div>
+      </section>
+    `;
+  }
 
   root.innerHTML = `
-    ${p.thumbnail ? `<div class="w-full"><img src="${p.thumbnail}" alt="${p.title}" class="block w-full max-h-[60vh] object-cover" /></div>` : ''}
+    <div class="min-h-screen pb-48 md:pb-32">
+      ${p.thumbnail ? `
+        <div class="w-full overflow-hidden">
+          <img data-hero src="${p.thumbnail}" alt="${p.title}" class="block w-full object-cover object-center cursor-pointer" style="max-height:200px;" />
+        </div>
+      ` : ''}
 
-    <article class="mx-auto w-full md:max-w-[900px] px-6 md:px-0 space-y-4 mt-6">
-      <header class="space-y-2">
-        <a href="projects.html" class="text-sm text-zinc-500 hover:underline">&larr; Back to Projects</a>
-        <h1 class="text-3xl font-semibold">${p.title}</h1>
-        ${p.description ? `<p class="text-zinc-600">${p.description}</p>` : ''}
-        <div class="flex flex-wrap gap-2">${tagsHtml}</div>
-        ${dateText ? `<div class="flex items-center gap-2 text-zinc-400 text-sm">${svgIcon('calendar')}<span>${dateText}</span></div>` : ''}
-      </header>
+      <article class="mx-auto w-full md:max-w-[900px] px-4 md:px-6 lg:px-0 space-y-6 mt-6 pt-6 md:pt-12 pb-24">
+        <div id="back-sentinel" class="hidden md:block h-0"></div>
+        <header class="space-y-3">
+          <a href="/projects.html" id="back-button"
+             class="fixed top-4 left-4 z-50 inline-flex items-center gap-1 rounded-full bg-white px-3 py-1.5 text-sm font-medium text-zinc-700 shadow md:static md:bg-transparent md:shadow-none md:text-zinc-500 md:hover:underline transition-colors">
+            <span class="md:hidden">&larr; Back</span>
+            <span class="hidden md:inline">&larr; Back to Projects</span>
+          </a>
+          <h1 class="text-3xl md:text-4xl font-semibold">${p.title}</h1>
+          ${p.description ? `<p class="text-zinc-600 text-lg leading-relaxed">${p.description}</p>` : ''}
+          <div class="flex flex-wrap gap-2">${tagsHtml}</div>
+          ${dateText ? `<div class="flex items-center gap-2 text-zinc-400 text-sm">${svgIcon('calendar')}<span>${dateText}</span></div>` : ''}
+        </header>
 
-      ${rest.length ? `<section class="grid grid-cols-2 gap-2">${previewCells}</section>` : ''}
+        ${galleryHtml}
 
-      ${p.description ? `<section class="prose max-w-none"></section>` : ''}
-    </article>
+        ${p.description ? `<section class="prose max-w-none mt-8 mb-24"></section>` : ''}
+        
+        <!-- Extra spacer to ensure scrolling works -->
+        <div class="h-32"></div>
+      </article>
+    </div>
   `;
 
-  // Wire gallery click -> lightbox
+  const backBtn = document.getElementById('back-button');
+  const sentinel = document.getElementById('back-sentinel');
+  if (backBtn && sentinel) {
+    const io = new IntersectionObserver(([entry]) => {
+      if (window.innerWidth < 768) {
+        // mobile: always floating
+        backBtn.classList.add('back-floating');
+        return;
+      }
+      if (!entry.isIntersecting) {
+        backBtn.classList.add('back-floating');
+      } else {
+        backBtn.classList.remove('back-floating');
+      }
+    }, { threshold: 0 });
+    io.observe(sentinel);
+
+    // keep state correct on resize
+    window.addEventListener('resize', () => {
+      if (window.innerWidth < 768) {
+        backBtn.classList.add('back-floating');
+      }
+    });
+  }
+
+  // Add click handlers for gallery images
   root.querySelectorAll('button[data-idx]').forEach(btn => {
     btn.addEventListener('click', () => {
       const idx = parseInt(btn.getAttribute('data-idx'), 10) || 0;
       openLightbox(allImages, idx);
     });
   });
-  // Also make the hero clickable to open lightbox at 0
-  const hero = root.querySelector('img.block.w-full.max-h-[60vh]');
+
+  // Add click handler for hero image
+  const hero = root.querySelector('img[data-hero]');
   if (hero) hero.addEventListener('click', () => openLightbox(allImages, 0));
 }
 
+// Inject back button floating style
+const style = document.createElement('style');
+style.textContent = `
+  #back-button.back-floating {
+    position: fixed !important;
+    top: 1rem;
+    left: 1rem;
+    background: #ffffff;
+    color: #000 !important;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+    border-radius: 9999px;
+    padding: 0.375rem 0.75rem;
+  }
+`;
+document.head.appendChild(style);
+
 document.addEventListener('DOMContentLoaded', () => {
+  renderGlobalNav();
   if (document.getElementById('projects-grid-3col')) {
     loadProjectsAndRender().catch(err => {
       console.error('[Builder projects] failed:', err);
