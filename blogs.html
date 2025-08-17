@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Blogs – Portfolio</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = { theme: { extend: {} } }
+  </script>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="min-h-dvh bg-zinc-100 antialiased font-['Roboto']">
+  <div id="site-nav"></div>
+
+  <main class="mx-auto w-full md:max-w-[1100px] px-0 md:px-12 py-12 sm:py-12 md:py-24 space-y-4 sm:space-y-4 md:space-y-6">
+    <header class="px-6">
+      <h1 class="text-4xl font-light">I Love <span class="font-medium">Writing</span></h1>
+      <nav id="blogs-filters" class="mt-3 flex flex-wrap items-center gap-4 text-sm"></nav>
+    </header>
+
+    <section id="blogs-list" class="px-6 md:px-0 divide-y divide-zinc-200 bg-white/0"></section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>

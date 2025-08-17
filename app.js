@@ -103,6 +103,7 @@ function renderGlobalNav() {
 // ==================== Builder.io wiring ====================
 const BUILDER_API_KEY = '90c23362a6384ffabd3fd5a5978de250';
 const BUILDER_MODEL_ID = '42feb6c403b14579a7ebc8a38401f07b'; // "projects" model id
+const BLOGS_MODEL_ID = '9bf58fdc2e3e44b98667c3acfbff9600';
 
 async function fetchJson(url) {
   const res = await fetch(url);
@@ -113,11 +114,13 @@ async function fetchJson(url) {
 async function fetchBuilder(model, params = {}) {
   const baseParams = { apiKey: BUILDER_API_KEY, cachebust: Date.now(), ...params };
   const qp = (obj) => new URLSearchParams(obj).toString();
+  // Avoid brittle sort objects (Builder rejects sorts with spaces in field names)
+  if (baseParams.sort && typeof baseParams.sort === 'object') delete baseParams.sort;
 
   const attempts = [
     `https://cdn.builder.io/api/v3/content/${model}?${qp(baseParams)}`,
     `https://cdn.builder.io/api/v3/content/${model.replace(/s$/, '')}?${qp(baseParams)}`,
-    `https://cdn.builder.io/api/v3/content?${qp({ ...baseParams, modelId: BUILDER_MODEL_ID })}`,
+    `https://cdn.builder.io/api/v3/content?${qp({ ...baseParams, modelId: model === 'blogs' ? BLOGS_MODEL_ID : BUILDER_MODEL_ID })}`,
   ];
 
   for (const url of attempts) {
@@ -181,6 +184,140 @@ function normalizeProject(entry) {
   });
 
   return { id: entry?.id, title, tags: tags.filter(Boolean), thumbnail: thumb, date, slug, description, otherImages };
+}
+
+// ==================== BLOGS SUPPORT ====================
+function stripHtml(html = '') {
+  try { return (html || '').replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim(); } catch { return ''; }
+}
+
+function wordsPerMinuteEstimate(text) {
+  const words = (text || '').trim().split(/\s+/).filter(Boolean).length;
+  const minutes = Math.max(1, Math.ceil(words / 220)); // ~220 wpm
+  return { words, minutes };
+}
+
+function normalizeBlog(entry) {
+  const d = entry?.data || {};
+  // Title fallbacks
+  const title = d['Blog title'] || d.blogTitle || d.title || d.name || 'Untitled';
+  // Description fallbacks
+  const description = d['Blog description'] || d.blogDescription || d.description || '';
+  // Date fallbacks (support various casings/keys)
+  const date = d['Blog date'] || d.blogDate || d.date || entry?.lastUpdated || entry?.firstPublished || null;
+  // Tags can be an array of strings or objects
+  let tags = d['Blog tags'] || d.blogTags || d.tags || [];
+  if (Array.isArray(tags)) {
+    tags = tags.map(t => (typeof t === 'string' ? t : (t?.value || t?.name || ''))).filter(Boolean);
+  } else {
+    tags = [];
+  }
+  // Thumbnail can be string or file object
+  let thumb = d.Thumbnail || d.thumbnail || d.coverImage || d.image || '';
+  if (thumb && typeof thumb === 'object') thumb = thumb.url || thumb.src || '';
+  if (typeof thumb !== 'string') thumb = '';
+
+  // Reading time: combine list and html fields, handle objects
+  const listField = d['Blog content'] || d.blogContent || [];
+  const listContent = Array.isArray(listField)
+    ? listField.map(x => (typeof x === 'string' ? x : Object.values(x || {}).join(' '))).join(' ')
+    : '';
+  const htmlContent = typeof d['Blog article'] === 'string' ? d['Blog article'] : (typeof d.blogArticle === 'string' ? d.blogArticle : '');
+  const plain = stripHtml(`${listContent} ${htmlContent}`);
+  const { minutes } = wordsPerMinuteEstimate(plain || description);
+
+  return { id: entry?.id, title, description, date, tags, thumbnail: thumb, minutes };
+}
+
+function formatBlogDate(input) {
+  try {
+    const d = new Date(input);
+    if (isNaN(d)) return '';
+    return d.toLocaleDateString(undefined, { day: '2-digit', month: 'long', year: 'numeric' });
+  } catch { return ''; }
+}
+
+function blogRowHTML(b) {
+  const firstTag = (b.tags && b.tags[0]) ? b.tags[0] : 'General';
+  const author = `Wira Wibisana in ${firstTag}`;
+  const dateText = formatBlogDate(b.date);
+  const thumb = b.thumbnail ? `
+    <img src="${b.thumbnail}" alt="${b.title}" loading="lazy" class="block w-full h-36 md:h-40 object-cover rounded-md"/>
+  ` : '';
+  return `
+    <article class="py-6 md:py-8">
+      <a href="#" class="grid grid-cols-1 md:grid-cols-[1fr_auto] items-start gap-4">
+        <div class="space-y-2">
+          <p class="text-sm text-zinc-600">${author} <span class="align-middle">🏳️‍🌈</span></p>
+          <h2 class="text-2xl md:text-[26px] leading-snug font-semibold text-black">${b.title}</h2>
+          ${b.description ? `<p class="text-zinc-600">${b.description}</p>` : ''}
+          <div class="flex items-center gap-3 text-sm text-zinc-500">
+            <span class="inline-flex items-center gap-2"><span class="opacity-70">★</span>${b.minutes} min read</span>
+            ${dateText ? `<span class="ml-auto md:ml-0 md:pl-0">${dateText}</span>` : ''}
+          </div>
+        </div>
+        ${thumb ? `<div class="w-full md:w-[320px]">${thumb}</div>` : ''}
+      </a>
+    </article>
+  `;
+}
+
+function renderBlogsList(list) {
+  const el = document.getElementById('blogs-list');
+  if (!el) return;
+  el.innerHTML = list.map(blogRowHTML).join('');
+}
+
+function uniqueSortedBlogTags(items) {
+  const set = new Set();
+  items.forEach(i => (i.tags || []).forEach(t => set.add(t)));
+  return Array.from(set).sort((a, b) => a.localeCompare(b));
+}
+
+function renderBlogFilters(items) {
+  const c = document.getElementById('blogs-filters');
+  if (!c) return;
+  const tags = uniqueSortedBlogTags(items);
+  const state = { active: 'ALL' };
+  const paint = () => {
+    const chip = (label, selected = false) => `
+      <button type="button" data-tag="${label}" aria-pressed="${selected ? 'true' : 'false'}"
+        class="rounded-full px-3 py-1 text-sm transition-colors border border-zinc-300/60 hover:bg-black/5 ${selected ? 'bg-black text-white border-black' : 'bg-white/70 text-zinc-700'}">
+        ${label}
+      </button>`;
+    c.innerHTML = [chip('ALL', state.active === 'ALL'), ...tags.map(t => chip(t, state.active === t))].join('');
+  };
+  paint();
+  c.onclick = (e) => {
+    const btn = e.target.closest('button[data-tag]');
+    if (!btn) return;
+    state.active = btn.getAttribute('data-tag');
+    const filtered = state.active === 'ALL' ? items.slice() : items.filter(i => (i.tags || []).includes(state.active));
+    renderBlogsList(filtered);
+    paint();
+  };
+}
+
+async function loadBlogsAndRender() {
+  const listEl = document.getElementById('blogs-list');
+  if (!listEl) return;
+  // Be permissive with params; avoid sort keys that may be rejected by Builder when fields contain spaces
+  const raw = await fetchBuilder('blogs', { limit: 100, includeUnpublished: true });
+  console.log('[blogs raw]', raw);
+  const normalized = raw.map(normalizeBlog).sort((a, b) => (new Date(b.date || 0)) - (new Date(a.date || 0)));
+  if (!normalized.length) {
+    listEl.innerHTML = `<div class="px-6 py-8 text-zinc-600 space-y-2">
+      <p>No blog posts found.</p>
+      <ul class="list-disc pl-5 text-sm">
+        <li>Make sure your entry is <strong>Published</strong> in Builder (not a Draft).</li>
+        <li>Confirm the model name is <code>blogs</code> and the model ID matches.</li>
+        <li>Fields used: <em>Thumbnail</em>, <em>Blog title</em>, <em>Blog description</em>, <em>Blog date</em>, <em>Blog tags</em>.</li>
+      </ul>
+    </div>`;
+    return;
+  }
+  renderBlogFilters(normalized);
+  renderBlogsList(normalized);
 }
 
 function projectCardHTML(p) {
@@ -483,4 +620,5 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
   loadProjectDetail();
+  loadBlogsAndRender();
 });
