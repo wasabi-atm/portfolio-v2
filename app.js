@@ -730,13 +730,13 @@ function projectCardHTML(p) {
 function renderGrid(list) {
   const el = document.getElementById('projects-grid-3col');
   if (!el) return;
-    el.className = [
+  el.className = [
     'w-full md:max-w-[1100px] md:mx-auto',
     'px-0 md:px-4',
     'py-8',
     'grid grid-cols-3 gap-0'
   ].join(' ');
-  
+
   el.style.zIndex = '0';
   el.innerHTML = list.map(projectCardHTML).join('');
 }
@@ -999,6 +999,18 @@ style.textContent = `
     padding: 0.375rem 0.75rem;
   }
   html { scroll-behavior: smooth; }
+  /* Extra bottom margin for footer on mobile, so it clears the fixed bottom nav */
+  @media (max-width: 768px) {
+    footer {
+      margin-bottom: calc(10rem + env(safe-area-inset-bottom));
+    }
+  }
+  /* Additional bottom margin for footer on desktop */
+  @media (min-width: 769px) {
+    footer {
+      margin-bottom: 4rem;
+    }
+  }
 `;
 document.head.appendChild(style);
 
@@ -1014,4 +1026,32 @@ document.addEventListener('DOMContentLoaded', () => {
   loadProjectDetail();
   loadBlogsAndRender();
   loadBlogDetail();
+});
+
+// Inject footer
+document.addEventListener("DOMContentLoaded", function () {
+  const footer = `
+    <footer class="w-full border-t border-zinc-200 mt-12">
+      <div class="mx-auto w-full max-w-[1100px] px-6 sm:px-8 md:px-12 lg:px-24 xl:px-28 2xl:px-32 py-6 md:py-8">
+        <p class="text-lg md:text-xl text-black mb-4">
+          I'm available to chat and collaborate
+        </p>
+        <nav aria-label="Connect links" class="flex flex-wrap gap-4 text-base md:text-lg text-zinc-500">
+          <a href="mailto:hello@example.com"
+             class="underline-offset-4 hover:underline hover:text-black">Email</a>
+          <a href="https://drive.google.com/your-resume-link" target="_blank" rel="noopener"
+             class="underline-offset-4 hover:underline hover:text-black">Resume</a>
+          <a href="https://www.linkedin.com/in/your-handle" target="_blank" rel="noopener"
+             class="underline-offset-4 hover:underline hover:text-black">LinkedIn</a>
+          <a href="https://github.com/your-handle" target="_blank" rel="noopener"
+             class="underline-offset-4 hover:underline hover:text-black">GitHub</a>
+          <a href="https://www.threads.net/@your-handle" target="_blank" rel="noopener"
+             class="underline-offset-4 hover:underline hover:text-black">Threads</a>
+        </nav>
+      </div>
+    </footer>
+  `;
+
+  // Append footer to body
+  document.body.insertAdjacentHTML("beforeend", footer);
 });
