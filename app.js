@@ -78,7 +78,14 @@ function renderGlobalNav() {
       <a role="tab" href="${item.href}" ${isCurrent ? 'aria-current="page"' : ''}
         class="group flex-1 md:flex-none md:px-0 grid place-items-center [grid-auto-flow:row] md:[grid-auto-flow:column] gap-2 md:gap-0 text-center font-normal">
         ${item.icon(isCurrent)}
-        <span class="text-neutral-500 md:text-neutral-500 aria-[current=page]:text-black aria-[current=page]:underline text-sm md:text-l ${isCurrent ? 'font-bold md:text-black md:underline md:decoration-2 md:underline-offset-4' : 'font-medium'} ${item.label === 'Connect' ? 'aria-[current=page]:text-green-700 md:aria-[current=page]:text-black' : ''}">${item.label}</span>
+        ${
+          item.label === 'Connect'
+            ? `<span class="relative inline-block px-2 py-0.5">
+                 <span class="absolute -inset-x-2 -inset-y-1 rounded-full bg-green-600/50 opacity-0 transition-opacity group-hover:opacity-100"></span>
+                 <span class="relative z-10 text-neutral-500 md:text-neutral-500 aria-[current=page]:text-black aria-[current=page]:underline text-sm md:text-l ${isCurrent ? 'font-bold md:text-black md:underline md:decoration-2 md:underline-offset-4' : 'font-medium'} aria-[current=page]:text-green-700 md:aria-[current=page]:text-black">${item.label}</span>
+               </span>`
+            : `<span class="text-neutral-500 md:text-neutral-500 aria-[current=page]:text-black aria-[current=page]:underline text-sm md:text-l ${isCurrent ? 'font-bold md:text-black md:underline md:decoration-2 md:underline-offset-4' : 'font-medium'}">${item.label}</span>`
+        }
       </a>`;
   }).join('');
 
@@ -839,6 +846,51 @@ function openLightbox(images, startAt = 0) {
   document.body.appendChild(overlay);
 }
 
+function initConnectPageAccordion() {
+  const root = document.getElementById('about-accordion');
+  if (!root) return;
+
+  const items = root.querySelectorAll('.acc-item');
+  items.forEach((item) => {
+    const btn = item.querySelector('[data-acc="toggle"]');
+    const panel = item.querySelector('.acc-panel');
+    const chev = item.querySelector('.chev');
+
+    if (!btn || !panel) return;
+
+    // ensure closed at start
+    btn.setAttribute('aria-expanded', 'false');
+    panel.style.maxHeight = '0px';
+
+    const close = () => {
+      item.classList.remove('open');
+      btn.setAttribute('aria-expanded', 'false');
+      panel.style.maxHeight = '0px';
+      if (chev) chev.style.transform = 'rotate(0deg)';
+      panel.style.transition = 'max-height .28s ease';
+    };
+    const open = () => {
+      item.classList.add('open');
+      btn.setAttribute('aria-expanded', 'true');
+      panel.style.maxHeight = panel.scrollHeight + 'px';
+      if (chev) chev.style.transform = 'rotate(90deg)';
+      panel.style.transition = 'max-height .28s ease';
+    };
+
+    btn.addEventListener('click', () => {
+      const isOpen = item.classList.contains('open');
+      isOpen ? close() : open();
+    });
+
+    // keep height correct on resize if open
+    window.addEventListener('resize', () => {
+      if (item.classList.contains('open')) {
+        panel.style.maxHeight = panel.scrollHeight + 'px';
+      }
+    });
+  });
+}
+
 async function loadProjectDetail() {
   const root = document.getElementById('project-detail');
   if (!root) return;
@@ -1016,6 +1068,7 @@ document.head.appendChild(style);
 
 document.addEventListener('DOMContentLoaded', () => {
   renderGlobalNav();
+  initConnectPageAccordion();
   if (document.getElementById('projects-grid-3col')) {
     loadProjectsAndRender().catch(err => {
       console.error('[Builder projects] failed:', err);
