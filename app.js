@@ -90,23 +90,28 @@ function renderGlobalNav() {
   }).join('');
 
   mount.innerHTML = `
-    <fieldset role="tablist" aria-label="Primary navigation"
-      class="
-        fixed left-1/2 -translate-x-1/2 z-50
-        bottom-[calc(env(safe-area-inset-bottom)+36px)]
-        md:bottom-auto md:top-6
-        w-[min(90vw,500px)] md:w-[min(60vw,400px)]
-        flex items-center justify-between
-        rounded-full md:rounded-full
-        bg-white/15 md:bg-zinc-300/20
-        backdrop-blur-xl backdrop-saturate-150 shadow-[0_6px_16px_rgba(0,0,0,0.10)]
-        ring-1 ring-white/30 md:ring-0
-        px-6 py-4 md:px-6 md:py-4
-        gap-4 md:gap-3
-      ">
-      <legend class="sr-only">Navigation</legend>
-      ${links}
-    </fieldset>`;
+    <div class="
+      fixed inset-x-0 z-50
+      bottom-[calc(env(safe-area-inset-bottom)+36px)]
+      md:bottom-auto md:top-6
+    ">
+      <div class="w-full flex justify-center">
+        <fieldset role="tablist" aria-label="Primary navigation"
+          class="
+            w-[min(90vw,500px)] md:w-[min(60vw,400px)]
+            flex items-center justify-between
+            rounded-full md:rounded-full
+            bg-white/15 md:bg-zinc-300/20
+            backdrop-blur-xl backdrop-saturate-150 shadow-[0_6px_16px_rgba(0,0,0,0.10)]
+            ring-1 ring-white/30 md:ring-0
+            px-6 py-4 md:px-6 md:py-4
+            gap-4 md:gap-3
+          ">
+          <legend class="sr-only">Navigation</legend>
+          ${links}
+        </fieldset>
+      </div>
+    </div>`;
 }
 
 // ==================== Builder.io wiring ====================
