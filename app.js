@@ -5,24 +5,11 @@ const NAV_ITEMS = [
     label: 'Home',
     icon: (isCurrent = false) => `
       ${isCurrent
-        ? `<svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 md:hidden text-black" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        ? `<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 md:hidden text-black" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
              <path d="M3 10.5L12 3l9 7.5V20a2 2 0 0 1-2 2h-5v-6h-4v6H5a2 2 0 0 1-2-2v-9.5z"/>
            </svg>`
-        : `<svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 md:hidden text-neutral-500 aria-[current=page]:text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+        : `<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 md:hidden text-neutral-500 group-hover:text-black aria-[current=page]:text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l9-9 9 9M5 10v10h14V10" />
-           </svg>`}
-    `
-  },
-  {
-    href: 'projects.html',
-    label: 'Projects',
-    icon: (isCurrent = false) => `
-      ${isCurrent
-        ? `<svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 md:hidden text-black" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-             <path d="M3 3h8v8H3zM13 3h8v8h-8zM3 13h8v8H3zM13 13h8v8h-8z"/>
-           </svg>`
-        : `<svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 md:hidden text-neutral-500 aria-[current=page]:text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h10M4 18h16" />
            </svg>`}
     `
   },
@@ -31,24 +18,11 @@ const NAV_ITEMS = [
     label: 'Blogs',
     icon: (isCurrent = false) => `
       ${isCurrent
-        ? `<svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 md:hidden text-black" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        ? `<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 md:hidden text-black" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
              <path d="M6 2h9l5 5v15a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2zM15 2v6h6"/>
            </svg>`
-        : `<svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 md:hidden text-neutral-500 aria-[current=page]:text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+        : `<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 md:hidden text-neutral-500 group-hover:text-black aria-[current=page]:text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10l6 6v8a2 2 0 01-2 2z" />
-           </svg>`}
-    `
-  },
-  {
-    href: 'connect.html',
-    label: 'Connect',
-    icon: (isCurrent = false) => `
-      ${isCurrent
-        ? `<svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 md:hidden text-green-700" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-             <path d="M12 12a5 5 0 1 0-5-5 5 5 0 0 0 5 5zm-7 10a7 7 0 0 1 14 0z"/>
-           </svg>`
-        : `<svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 md:hidden text-neutral-500 aria-[current=page]:text-green-700" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 11a4 4 0 108 0m-9 7h10a2 2 0 002-2v-5H5v5a2 2 0 002 2z" />
            </svg>`}
     `
   }
@@ -68,50 +42,196 @@ function renderGlobalNav() {
   const mount = document.getElementById('site-nav');
   if (!mount) return; // page can opt-out by omitting the mount node
 
-  const here = currentFilename();
+  try {
+    const here = currentFilename();
+    const links = NAV_ITEMS.map(item => {
+      const isCurrent = (here === item.href) || (here === 'article.html' && item.href === 'blogs.html');
+      const currentAttr = isCurrent ? 'aria-current="page"' : '';
+      return (
+        `<a role="tab" href="${item.href}" ${currentAttr}
+            class="group flex-none px-0 md:px-0 grid place-items-center [grid-auto-flow:row] md:[grid-auto-flow:column] gap-1 md:gap-0 text-center font-normal">
+          ${item.icon(isCurrent)}
+          <span class="px-4 sm:px-4 py-0.5 sm:py-1 rounded-full transition-colors text-neutral-500 md:text-neutral-500 aria-[current=page]:text-black aria-[current=page]:underline group-hover:bg-zinc-100 group-hover:text-black text-sm md:text-l ${isCurrent ? 'font-bold md:text-black md:underline md:decoration-2 md:underline-offset-4' : 'font-medium'}">${item.label}</span>
+        </a>`
+      );
+    }).join('');
 
-  const links = NAV_ITEMS.map(item => {
-    const isCurrent = (here === item.href)
-      || (here === 'showcase.html' && item.href === 'projects.html')
-      || (here === 'article.html' && item.href === 'blogs.html');
-    return `
-      <a role="tab" href="${item.href}" ${isCurrent ? 'aria-current="page"' : ''}
-        class="group flex-1 md:flex-none md:px-0 grid place-items-center [grid-auto-flow:row] md:[grid-auto-flow:column] gap-2 md:gap-0 text-center font-normal">
-        ${item.icon(isCurrent)}
-        ${
-          item.label === 'Connect'
-            ? `<span class="relative inline-block px-2 py-0.5">
-                 <span class="absolute -inset-x-2 -inset-y-1 rounded-full bg-green-600/50 opacity-0 transition-opacity group-hover:opacity-100"></span>
-                 <span class="relative z-10 text-neutral-500 md:text-neutral-500 aria-[current=page]:text-black aria-[current=page]:underline text-sm md:text-l ${isCurrent ? 'font-bold md:text-black md:underline md:decoration-2 md:underline-offset-4' : 'font-medium'} aria-[current=page]:text-green-700 md:aria-[current=page]:text-black">${item.label}</span>
-               </span>`
-            : `<span class="text-neutral-500 md:text-neutral-500 aria-[current=page]:text-black aria-[current=page]:underline text-sm md:text-l ${isCurrent ? 'font-bold md:text-black md:underline md:decoration-2 md:underline-offset-4' : 'font-medium'}">${item.label}</span>`
+    const connectActive = (here === 'connect.html');
+    const connectAvatar = (
+      '<a href="connect.html" class="group inline-flex items-center justify-center p-1.5 rounded-full bg-white shadow-[0_6px_16px_rgba(0,0,0,0.12)] ring-2 '
+      + (connectActive ? 'ring-green-600' : 'ring-white') + ' overflow-hidden transition-all duration-200 hover:bg-zinc-50 hover:shadow-[0_8px_20px_rgba(0,0,0,0.14)]" aria-label="Connect" id="connect-avatar">'
+      + '<img src="assets/BG%20Placeholder.avif" alt="" class="h-full w-full object-cover rounded-full ring-2 ' + (connectActive ? 'ring-black' : 'ring-transparent') + ' ring-inset transition-transform duration-200 group-hover:scale-[1.03]"/>'
+      + '<span class="sr-only">Connect</span>'
+      + '</a>'
+    );
+
+    mount.innerHTML = (
+      '<div class="fixed inset-x-0 z-50 bottom-6 md:bottom-auto md:top-6">'
+      + '<div class="w-full flex justify-center">'
+      + '<div class="flex items-center gap-2 sm:gap-3 nav-wrap">'
+      + '<fieldset role="tablist" aria-label="Primary navigation" id="primary-nav"'
+      + '  class="w-auto max-w-[94vw] sm:max-w-[88vw] md:w-[180px] flex items-center justify-center rounded-full bg-white shadow-[0_6px_16px_rgba(0,0,0,0.12)] px-3 sm:px-4 py-3 sm:py-3.5 md:px-4 md:py-4 gap-2 sm:gap-3 md:gap-2">'
+      + '<legend class="sr-only">Navigation</legend>'
+      + links
+      + '</fieldset>'
+      + connectAvatar
+      + '</div>'
+      + '</div>'
+      + '</div>'
+    );
+    // Make avatar and capsule responsive (avoid overflow on very small widths)
+    try {
+      const fs = mount.querySelector('#primary-nav');
+      const avatarEl = mount.querySelector('#connect-avatar');
+      const wrap = mount.querySelector('.nav-wrap');
+      const syncNavSizes = () => {
+        if (!fs || !avatarEl || !wrap) return;
+        // Avatar height follows capsule height
+        const h = Math.max(40, Math.round(fs.getBoundingClientRect().height));
+        avatarEl.style.height = h + 'px';
+        avatarEl.style.width = h + 'px';
+        // Capsule max width = viewport - avatar - gap - small margin buffer
+        const gap = parseFloat(getComputedStyle(wrap).columnGap) || 8;
+        const buffer = 16; // small side breathing room
+        const avail = Math.floor(window.innerWidth - avatarEl.getBoundingClientRect().width - gap - buffer);
+        const min = 160;
+        const cap = window.innerWidth >= 768 ? 180 : 240;
+        fs.style.maxWidth = Math.min(cap, Math.max(min, avail)) + 'px';
+      };
+      syncNavSizes();
+      if (window.ResizeObserver) {
+        const ro = new ResizeObserver(syncNavSizes);
+        ro.observe(fs);
+      }
+      window.addEventListener('resize', syncNavSizes);
+    } catch {}
+
+    // Subtle 3D hover tilt for nav capsule (desktop only, reduced motion aware)
+    try {
+      const fs = mount.querySelector('#primary-nav');
+      const wrap = mount.querySelector('.nav-wrap');
+      const prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const pointerFine = window.matchMedia && window.matchMedia('(hover:hover)').matches;
+      if (fs && wrap && !prefersReduced && pointerFine) {
+        wrap.style.perspective = '900px';
+        fs.style.transformStyle = 'preserve-3d';
+        fs.style.willChange = 'transform';
+        let raf = 0;
+        const max = 9; // slightly stronger tilt
+        const onMove = (e) => {
+          if (window.innerWidth < 768) return; // disable on mobile
+          const r = fs.getBoundingClientRect();
+          const x = e.clientX - r.left;
+          const y = e.clientY - r.top;
+          const dx = (x - r.width / 2) / (r.width / 2);
+          const dy = (y - r.height / 2) / (r.height / 2);
+          const rx = -(dy * max);
+          const ry = dx * max;
+          if (!raf) {
+            raf = requestAnimationFrame(() => {
+              raf = 0;
+              const intensity = Math.min(1, Math.hypot(dx, dy));
+              fs.style.transform = `rotateX(${rx}deg) rotateY(${ry}deg) scale(1.01)`;
+              fs.style.boxShadow = `0 10px 28px rgba(0,0,0,${(0.14 + 0.06 * intensity).toFixed(3)})`;
+            });
+          }
+        };
+        const onEnter = () => {
+          if (window.innerWidth < 768) return;
+          fs.style.transition = 'transform 120ms ease-out, box-shadow 150ms ease-out';
+        };
+        const onLeave = () => {
+          fs.style.transition = 'transform 220ms ease, box-shadow 200ms ease';
+          fs.style.transform = 'rotateX(0deg) rotateY(0deg)';
+          fs.style.boxShadow = '0 6px 16px rgba(0,0,0,0.12)';
+        };
+        fs.addEventListener('mousemove', onMove);
+        fs.addEventListener('mouseenter', onEnter);
+        fs.addEventListener('mouseleave', onLeave);
+      }
+    } catch {}
+
+  } catch (e) {
+    console.error('[nav] render failed, using fallback', e);
+    const onConnect = (currentFilename() === 'connect.html');
+    mount.innerHTML = `
+      <div class="fixed inset-x-0 z-50 bottom-[calc(env(safe-area-inset-bottom)+36px)] md:bottom-auto md:top-6">
+        <div class="w-full flex justify-center">
+          <div class="flex items-center gap-2 nav-wrap">
+            <nav id="primary-nav-fallback" class="w-auto max-w-[94vw] sm:max-w-[88vw] md:w-[180px] flex items-center justify-center gap-2 sm:gap-3 rounded-full bg-white shadow-[0_6px_16px_rgba(0,0,0,0.12)] px-3 sm:px-4 py-3 sm:py-3.5 md:px-4 md:py-4">
+              <a href="index.html" class="px-4 sm:px-4 py-0.5 sm:py-1 rounded-full text-sm text-neutral-600 hover:bg-zinc-100 transition-colors">Home</a>
+              <a href="blogs.html" class="px-4 sm:px-4 py-0.5 sm:py-1 rounded-full text-sm text-neutral-600 hover:bg-zinc-100 transition-colors">Blogs</a>
+            </nav>
+            <a href="connect.html" class="group inline-flex items-center justify-center p-1.5 rounded-full bg-white shadow-[0_6px_16px_rgba(0,0,0,0.12)] ring-2 ${onConnect ? 'ring-green-600' : 'ring-white'} overflow-hidden transition-all duration-200 hover:bg-zinc-50 hover:shadow-[0_8px_20px_rgba(0,0,0,0.14)]" aria-label="Connect" id="connect-avatar-fallback">
+                <img src="assets/BG%20Placeholder.avif" alt="" class="h-full w-full object-cover rounded-full ring-2 ring-inset ring-transparent transition-transform duration-200 group-hover:scale-[1.03]"/>
+                <span class="sr-only">Connect</span>
+            </a>
+          </div>
+        </div>
+      </div>`;
+
+    // Fallback: responsive sizing
+    try {
+      const fs = mount.querySelector('#primary-nav-fallback');
+      const avatarEl = mount.querySelector('#connect-avatar-fallback');
+      const wrap = mount.querySelector('.nav-wrap');
+      const syncNavSizes = () => {
+        if (!fs || !avatarEl || !wrap) return;
+        const h = Math.max(40, Math.round(fs.getBoundingClientRect().height));
+        avatarEl.style.height = h + 'px';
+        avatarEl.style.width = h + 'px';
+        const gap = parseFloat(getComputedStyle(wrap).columnGap) || 8;
+        const buffer = 16;
+        const avail = Math.floor(window.innerWidth - avatarEl.getBoundingClientRect().width - gap - buffer);
+        const min = 160;
+        const cap = window.innerWidth >= 768 ? 180 : 240;
+        fs.style.maxWidth = Math.min(cap, Math.max(min, avail)) + 'px';
+      };
+      syncNavSizes();
+      if (window.ResizeObserver) {
+        const ro = new ResizeObserver(syncNavSizes);
+        ro.observe(fs);
+      }
+      window.addEventListener('resize', syncNavSizes);
+      // Fallback tilt (desktop)
+      try {
+        const fsFb = mount.querySelector('#primary-nav-fallback');
+        const wrapFb = mount.querySelector('.nav-wrap');
+        const prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        const pointerFine = window.matchMedia && window.matchMedia('(hover:hover)').matches;
+        if (fsFb && wrapFb && !prefersReduced && pointerFine) {
+          wrapFb.style.perspective = '900px';
+          fsFb.style.transformStyle = 'preserve-3d';
+          fsFb.style.willChange = 'transform';
+          let raf = 0;
+          const max = 9;
+          const onMove = (e) => {
+            if (window.innerWidth < 768) return;
+            const r = fsFb.getBoundingClientRect();
+            const x = e.clientX - r.left;
+            const y = e.clientY - r.top;
+            const dx = (x - r.width / 2) / (r.width / 2);
+            const dy = (y - r.height / 2) / (r.height / 2);
+            const rx = -(dy * max);
+            const ry = dx * max;
+            if (!raf) {
+              raf = requestAnimationFrame(() => {
+                raf = 0;
+                const intensity = Math.min(1, Math.hypot(dx, dy));
+                fsFb.style.transform = `rotateX(${rx}deg) rotateY(${ry}deg) scale(1.01)`;
+                fsFb.style.boxShadow = `0 10px 28px rgba(0,0,0,${(0.14 + 0.06 * intensity).toFixed(3)})`;
+              });
+            }
+          };
+          const onEnter = () => { if (window.innerWidth < 768) return; fsFb.style.transition = 'transform 120ms ease-out, box-shadow 150ms ease-out'; };
+          const onLeave = () => { fsFb.style.transition = 'transform 220ms ease, box-shadow 200ms ease'; fsFb.style.transform = 'rotateX(0deg) rotateY(0deg)'; fsFb.style.boxShadow = '0 6px 16px rgba(0,0,0,0.12)'; };
+          fsFb.addEventListener('mousemove', onMove);
+          fsFb.addEventListener('mouseenter', onEnter);
+          fsFb.addEventListener('mouseleave', onLeave);
         }
-      </a>`;
-  }).join('');
-
-  mount.innerHTML = `
-    <div class="
-      fixed inset-x-0 z-50
-      bottom-[calc(env(safe-area-inset-bottom)+36px)]
-      md:bottom-auto md:top-6
-    ">
-      <div class="w-full flex justify-center">
-        <fieldset role="tablist" aria-label="Primary navigation"
-          class="
-            w-[min(90vw,500px)] md:w-[min(60vw,400px)]
-            flex items-center justify-between
-            rounded-full md:rounded-full
-            bg-white/15 md:bg-zinc-300/20
-            backdrop-blur-xl backdrop-saturate-150 shadow-[0_6px_16px_rgba(0,0,0,0.10)]
-            ring-1 ring-white/30 md:ring-0
-            px-6 py-4 md:px-6 md:py-4
-            gap-4 md:gap-3
-          ">
-          <legend class="sr-only">Navigation</legend>
-          ${links}
-        </fieldset>
-      </div>
-    </div>`;
+      } catch {}
+    } catch {}
+  }
 }
 
 // ==================== Builder.io wiring ====================
@@ -398,6 +518,97 @@ function blogRowHTML(b) {
   `;
 }
 
+// ==================== HOME: PINNED CASE STUDIES ====================
+function isTruthyPinned(data) {
+  if (!data || typeof data !== 'object') return false;
+  const candidates = [
+    data['is pinned'], data['Is pinned'], data['isPinned'], data['pinned'], data['Pinned']
+  ];
+  return candidates.some(v => {
+    if (v === true || v === 1) return true;
+    if (typeof v === 'string') {
+      const t = v.trim().toLowerCase();
+      return t === 'true' || t === '1' || t === 'yes' || t === 'on';
+    }
+    return false;
+  });
+}
+
+function homeCaseStudyCardHTML(b) {
+  const img = b.thumbnail
+    ? `<img src="${b.thumbnail}" alt="${b.title}" class="block w-full aspect-[16/10] md:aspect-[4/3] object-cover transition-transform duration-300 group-hover:scale-[1.03]"/>`
+    : '';
+  return `
+    <a href="article.html?id=${b.id}" aria-label="Read case study: ${b.title}"
+       class="group h-full flex flex-col overflow-hidden rounded-2xl ring-1 ring-zinc-200/70 bg-white/60 hover:ring-zinc-300 hover:bg-white transition-shadow shadow-sm hover:shadow-md">
+      <div class="relative overflow-hidden">${img}</div>
+      <div class="p-3 md:p-4 flex-1 flex flex-col gap-2">
+        <h3 class="text-base md:text-lg font-semibold leading-snug text-black line-clamp-2">${b.title}</h3>
+        ${b.description ? `<p class="text-sm text-zinc-600 line-clamp-3 flex-1">${b.description}</p>` : ''}
+        <div class="text-xs text-zinc-500 mt-1 inline-flex items-center gap-2">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-3.5 h-3.5 opacity-70">
+            <path d="M12 6v12"/>
+            <path d="M12 6c-2.5-1.667-5-2-8-2v12c3 0 5.5.333 8 2"/>
+            <path d="M12 6c2.5-1.667 5-2 8-2v12c-3 0-5.5.333-8 2"/>
+          </svg>
+          <span>${b.minutes} min read</span>
+        </div>
+      </div>
+    </a>
+  `;
+}
+
+async function loadHomePinnedCaseStudies() {
+  const list = document.getElementById('home-pinned-grid');
+  if (!list) return;
+  // Skeleton placeholders (row style)
+  const rowSkel = () => `
+    <div class="py-3 md:py-6">
+      <div class="relative grid grid-cols-[1fr_auto] items-start gap-3 md:gap-4 animate-pulse" aria-busy="true" aria-live="polite">
+        <div class="min-w-0 space-y-2">
+          <div class="h-3.5 bg-zinc-200 rounded w-40"></div>
+          <div class="h-5 bg-zinc-200 rounded w-4/5"></div>
+          <div class="h-3 bg-zinc-200 rounded w-2/3"></div>
+        </div>
+        <div class="block md:hidden w-24 h-24 bg-zinc-200 rounded-md"></div>
+        <div class="hidden md:block w-[320px] h-40 bg-zinc-200 rounded-md"></div>
+      </div>
+    </div>
+    <hr class="border-zinc-200"/>
+  `;
+  list.innerHTML = rowSkel() + rowSkel() + rowSkel();
+  list.style.minHeight = '240px';
+  list.setAttribute('aria-busy', 'true');
+  // Ensure skeleton paints at least once
+  await new Promise(res => requestAnimationFrame(() => setTimeout(res, 150)));
+
+  try {
+    const raw = await fetchBuilder('blogs', { limit: 100, includeUnpublished: true });
+    const pinned = raw.filter(r => isTruthyPinned(r?.data));
+    // Sort newest first using explicit date fallbacks from the raw entry
+    const getWhen = (entry) => {
+      const d = entry?.data || {};
+      return new Date(
+        d['Blog date'] || d.blogDate || d.date || entry?.lastUpdated || entry?.firstPublished || 0
+      ).getTime();
+    };
+    const sorted = pinned.sort((a, b) => getWhen(b) - getWhen(a));
+    // Take at most 3 newest, normalize, and hide date on home
+    const normalized = sorted.slice(0, 3).map(normalizeBlog).map(b => ({ ...b, date: '' }));
+    if (!normalized.length) {
+      list.innerHTML = '<p class="text-sm text-zinc-600">No featured case studies yet.</p>';
+      return;
+    }
+    list.innerHTML = normalized.map(blogRowHTML).join('');
+  } catch (e) {
+    console.error('[Home pinned] fetch failed', e);
+    list.innerHTML = '<p class="text-sm text-red-600">Failed to load featured case studies.</p>';
+  } finally {
+    list.style.minHeight = '';
+    list.removeAttribute('aria-busy');
+  }
+}
+
 // ==================== BLOG DETAIL SUPPORT ====================
 async function loadBlogDetail() {
   const root = document.getElementById('blog-detail');
@@ -567,7 +778,7 @@ async function loadBlogDetail() {
           <div>
             <header class="space-y-3 relative">
               <a href="/blogs.html" id="back-button"
-                 class="fixed top-4 left-4 z-50 inline-flex items-center gap-1 rounded-full bg-white px-3 py-1.5 text-sm font-medium text-zinc-700 shadow md:static md:bg-transparent md:shadow-none md:text-zinc-500 md:hover:underline transition-colors">
+                 class="fixed top-4 left-4 z-50 inline-flex items-center gap-1 rounded-full bg-white px-3 py-1.5 text-sm font-medium text-zinc-700 shadow md:static md:bg-transparent md:shadow-none md:text-zinc-500 transition-colors">
                 <span class="md:hidden">&larr; Back</span>
                 <span class="hidden md:inline">&larr; Back to Blogs</span>
               </a>
@@ -599,28 +810,28 @@ async function loadBlogDetail() {
   const hero = root.querySelector('img[data-hero]');
   if (hero && allImages.length) hero.addEventListener('click', () => openLightbox(allImages, 0));
 
-  // Back button floating logic (same as showcase)
+  // Back button floating logic: avoid stutter by using scroll threshold + rAF throttle
   const backBtn = document.getElementById('back-button');
-  const sentinel = document.getElementById('back-sentinel');
-  if (backBtn && sentinel) {
-    const io = new IntersectionObserver(([entry]) => {
+  if (backBtn) {
+    const apply = () => {
       if (window.innerWidth < 768) {
         backBtn.classList.add('back-floating');
         return;
       }
-      if (!entry.isIntersecting) {
-        backBtn.classList.add('back-floating');
-      } else {
-        backBtn.classList.remove('back-floating');
+      const y = window.scrollY || document.documentElement.scrollTop || 0;
+      if (y > 120) backBtn.classList.add('back-floating');
+      else backBtn.classList.remove('back-floating');
+    };
+    let ticking = false;
+    const onScroll = () => {
+      if (!ticking) {
+        ticking = true;
+        requestAnimationFrame(() => { ticking = false; apply(); });
       }
-    }, { threshold: 0 });
-    io.observe(sentinel);
-
-    window.addEventListener('resize', () => {
-      if (window.innerWidth < 768) {
-        backBtn.classList.add('back-floating');
-      }
-    });
+    };
+    apply();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', apply);
   }
 
   // Build TOC from present chapters
@@ -704,23 +915,69 @@ function renderBlogFilters(items) {
 async function loadBlogsAndRender() {
   const listEl = document.getElementById('blogs-list');
   if (!listEl) return;
-  // Be permissive with params; avoid sort keys that may be rejected by Builder when fields contain spaces
-  const raw = await fetchBuilder('blogs', { limit: 100, includeUnpublished: true });
-  console.log('[blogs raw]', raw);
-  const normalized = raw.map(normalizeBlog).sort((a, b) => (new Date(b.date || 0)) - (new Date(a.date || 0)));
-  if (!normalized.length) {
-    listEl.innerHTML = `<div class="px-6 py-8 text-zinc-600 space-y-2">
-      <p>No blog posts found.</p>
-      <ul class="list-disc pl-5 text-sm">
-        <li>Make sure your entry is <strong>Published</strong> in Builder (not a Draft).</li>
-        <li>Confirm the model name is <code>blogs</code> and the model ID matches.</li>
-        <li>Fields used: <em>Thumbnail</em>, <em>Blog title</em>, <em>Blog description</em>, <em>Blog date</em>, <em>Blog tags</em>.</li>
-      </ul>
-    </div>`;
-    return;
+  const filtersEl = document.getElementById('blogs-filters');
+  // Filters skeleton (rounded chips) while loading
+  if (filtersEl) {
+    const filterSkel = () => `
+      <div class="flex flex-wrap items-center gap-2 animate-pulse" aria-busy="true">
+        <div class="h-7 w-20 bg-zinc-200 rounded-full"></div>
+        <div class="h-7 w-12 bg-zinc-200 rounded-full"></div>
+        <div class="h-7 w-16 bg-zinc-200 rounded-full"></div>
+        <div class="h-7 w-24 bg-zinc-200 rounded-full"></div>
+        <div class="h-7 w-14 bg-zinc-200 rounded-full"></div>
+        <div class="h-7 w-10 bg-zinc-200 rounded-full"></div>
+      </div>`;
+    filtersEl.innerHTML = filterSkel();
+    filtersEl.setAttribute('aria-busy', 'true');
   }
-  renderBlogFilters(normalized);
-  renderBlogsList(normalized);
+  // Render skeleton rows to match list layout while loading
+  const skel = () => `
+    <div class="py-3 md:py-6">
+      <div class="relative grid grid-cols-[1fr_auto] items-start gap-3 md:gap-4 animate-pulse" aria-busy="true">
+        <div class="min-w-0 space-y-2">
+          <div class="h-3.5 bg-zinc-200 rounded w-40"></div>
+          <div class="h-6 bg-zinc-200 rounded w-4/5"></div>
+          <div class="hidden md:block h-4 bg-zinc-200 rounded w-3/5"></div>
+          <div class="h-3 bg-zinc-200 rounded w-24"></div>
+        </div>
+        <div class="block md:hidden w-24 h-24 bg-zinc-200 rounded-md"></div>
+        <div class="hidden md:block w-[320px] h-40 bg-zinc-200 rounded-md"></div>
+      </div>
+    </div>
+    <hr class="border-zinc-200"/>
+  `;
+  listEl.innerHTML = skel() + skel() + skel() + skel() + skel();
+  listEl.style.minHeight = '480px';
+  listEl.setAttribute('aria-busy', 'true');
+  await new Promise(res => requestAnimationFrame(() => setTimeout(res, 150)));
+  // Be permissive with params; avoid sort keys that may be rejected by Builder when fields contain spaces
+  try {
+    const raw = await fetchBuilder('blogs', { limit: 100, includeUnpublished: true });
+    console.log('[blogs raw]', raw);
+    const normalized = raw.map(normalizeBlog).sort((a, b) => (new Date(b.date || 0)) - (new Date(a.date || 0)));
+    if (!normalized.length) {
+      if (filtersEl) { filtersEl.innerHTML = ''; filtersEl.removeAttribute('aria-busy'); }
+      listEl.innerHTML = `<div class="px-6 py-8 text-zinc-600 space-y-2">
+        <p>No blog posts found.</p>
+        <ul class="list-disc pl-5 text-sm">
+          <li>Make sure your entry is <strong>Published</strong> in Builder (not a Draft).</li>
+          <li>Confirm the model name is <code>blogs</code> and the model ID matches.</li>
+          <li>Fields used: <em>Thumbnail</em>, <em>Blog title</em>, <em>Blog description</em>, <em>Blog date</em>, <em>Blog tags</em>.</li>
+        </ul>
+      </div>`;
+      return;
+    }
+    if (filtersEl) { filtersEl.removeAttribute('aria-busy'); }
+    renderBlogFilters(normalized);
+    renderBlogsList(normalized);
+  } catch (e) {
+    console.error('[blogs] fetch failed', e);
+    if (filtersEl) { filtersEl.innerHTML = ''; filtersEl.removeAttribute('aria-busy'); }
+    listEl.innerHTML = `<div class="px-6 py-8 text-red-600">Failed to load blogs.</div>`;
+  } finally {
+    listEl.style.minHeight = '';
+    listEl.removeAttribute('aria-busy');
+  }
 }
 
 function projectCardHTML(p) {
@@ -983,10 +1240,10 @@ async function loadProjectDetail() {
       <article class="mx-auto w-full md:max-w-[900px] px-4 md:px-6 lg:px-0 space-y-6 mt-6 pt-6 md:pt-12 pb-24">
         <div id="back-sentinel" class="hidden md:block h-0"></div>
         <header class="space-y-3">
-          <a href="/projects.html" id="back-button"
-             class="fixed top-4 left-4 z-50 inline-flex items-center gap-1 rounded-full bg-white px-3 py-1.5 text-sm font-medium text-zinc-700 shadow md:static md:bg-transparent md:shadow-none md:text-zinc-500 md:hover:underline transition-colors">
+          <a href="/index.html" id="back-button"
+             class="fixed top-4 left-4 z-50 inline-flex items-center gap-1 rounded-full bg-white px-3 py-1.5 text-sm font-medium text-zinc-700 shadow md:static md:bg-transparent md:shadow-none md:text-zinc-500 transition-colors">
             <span class="md:hidden">&larr; Back</span>
-            <span class="hidden md:inline">&larr; Back to Projects</span>
+            <span class="hidden md:inline">&larr; Back to Home</span>
           </a>
           <h1 class="text-3xl md:text-4xl font-semibold">${p.title}</h1>
           ${p.description ? `<p class="text-zinc-600 text-lg leading-relaxed">${p.description}</p>` : ''}
@@ -1005,28 +1262,26 @@ async function loadProjectDetail() {
   `;
 
   const backBtn = document.getElementById('back-button');
-  const sentinel = document.getElementById('back-sentinel');
-  if (backBtn && sentinel) {
-    const io = new IntersectionObserver(([entry]) => {
+  if (backBtn) {
+    const apply = () => {
       if (window.innerWidth < 768) {
-        // mobile: always floating
         backBtn.classList.add('back-floating');
         return;
       }
-      if (!entry.isIntersecting) {
-        backBtn.classList.add('back-floating');
-      } else {
-        backBtn.classList.remove('back-floating');
+      const y = window.scrollY || document.documentElement.scrollTop || 0;
+      if (y > 120) backBtn.classList.add('back-floating');
+      else backBtn.classList.remove('back-floating');
+    };
+    let ticking = false;
+    const onScroll = () => {
+      if (!ticking) {
+        ticking = true;
+        requestAnimationFrame(() => { ticking = false; apply(); });
       }
-    }, { threshold: 0 });
-    io.observe(sentinel);
-
-    // keep state correct on resize
-    window.addEventListener('resize', () => {
-      if (window.innerWidth < 768) {
-        backBtn.classList.add('back-floating');
-      }
-    });
+    };
+    apply();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', apply);
   }
 
   // Add click handlers for gallery images
@@ -1047,13 +1302,51 @@ const style = document.createElement('style');
 style.textContent = `
   #back-button.back-floating {
     position: fixed !important;
-    top: 1rem;
-    left: 1rem;
+    top: 1rem; /* mobile top offset */
+    left: 1.5rem; /* match base container px-6 */
     background: #ffffff;
     color: #000 !important;
     box-shadow: 0 4px 16px rgba(0,0,0,0.15);
     border-radius: 9999px;
     padding: 0.375rem 0.75rem;
+  }
+  /* Intro greeting overlay */
+  #intro-greeting {
+    position: fixed;
+    inset: 0;
+    background: #000;
+    color: #fff;
+    display: grid;
+    place-items: center;
+    z-index: 9999;
+    opacity: 1;
+    transition: opacity .6s ease;
+  }
+  #intro-greeting.hide { opacity: 0; pointer-events: none; }
+  #intro-greeting .bubble {
+    transform: translateY(8px) scale(.98);
+    opacity: 0;
+    animation: intro-pop .6s ease forwards .15s;
+    text-align: center;
+  }
+  @keyframes intro-pop {
+    to { transform: translateY(0) scale(1); opacity: 1; }
+  }
+  /* Align left offset to container padding across breakpoints */
+  @media (min-width: 640px) { /* sm:px-8 => 2rem */
+    #back-button.back-floating { left: 2rem; }
+  }
+  @media (min-width: 768px) { /* md: top matches nav (md:top-6 => 1.5rem), md:px-12 => 3rem */
+    #back-button.back-floating { top: 1.5rem; left: 3rem; }
+  }
+  @media (min-width: 1024px) { /* lg:px-24 => 6rem */
+    #back-button.back-floating { left: 6rem; }
+  }
+  @media (min-width: 1280px) { /* xl:px-28 => 7rem */
+    #back-button.back-floating { left: 7rem; }
+  }
+  @media (min-width: 1536px) { /* 2xl:px-32 => 8rem */
+    #back-button.back-floating { left: 8rem; }
   }
   html { scroll-behavior: smooth; }
   /* Extra bottom margin for footer on mobile, so it clears the fixed bottom nav */
@@ -1072,8 +1365,36 @@ style.textContent = `
 document.head.appendChild(style);
 
 document.addEventListener('DOMContentLoaded', () => {
+  // Intro greeting (first visit in session, home only)
+  try {
+    const here = currentFilename();
+    const firstTime = !sessionStorage.getItem('intro_greeted');
+    if (here === 'index.html' && firstTime) {
+      const overlay = document.createElement('div');
+      overlay.id = 'intro-greeting';
+      overlay.innerHTML = `
+        <div class="bubble">
+          <div style="font-size: clamp(22px,4vw,36px); font-weight: 600; letter-spacing: .2px;">Om Swastyastu 🙏🏻</div>
+        </div>
+      `;
+      document.body.appendChild(overlay);
+      // Show for a brief moment, then fade
+      requestAnimationFrame(() => {
+        setTimeout(() => {
+          overlay.classList.add('hide');
+          setTimeout(() => overlay.remove(), 700);
+        }, 1000);
+      });
+      sessionStorage.setItem('intro_greeted', '1');
+    }
+  } catch {}
+
   renderGlobalNav();
   initConnectPageAccordion();
+  // Home: render pinned case studies (blogs with a truthy "is pinned" field)
+  if (document.getElementById('home-pinned-grid')) {
+    loadHomePinnedCaseStudies().catch(err => console.error('[Home pinned] failed:', err));
+  }
   if (document.getElementById('projects-grid-3col')) {
     loadProjectsAndRender().catch(err => {
       console.error('[Builder projects] failed:', err);
@@ -1090,7 +1411,7 @@ document.addEventListener('DOMContentLoaded', () => {
 document.addEventListener("DOMContentLoaded", function () {
   const footer = `
     <footer class="w-full border-t border-zinc-200 mt-12">
-      <div class="mx-auto w-full max-w-[1100px] px-6 sm:px-8 md:px-12 lg:px-24 xl:px-28 2xl:px-32 py-6 md:py-8">
+      <div class="mx-auto w-full max-w-[1100px] px-6 sm:px-8 md:px-12 lg:px-24 xl:px-28 2xl:px-32 pt-6 pb-20 md:pt-8 md:pb-24">
         <p class="text-lg md:text-xl text-black mb-4">
           I'm available to chat and collaborate
         </p>
