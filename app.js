@@ -4,26 +4,22 @@ const NAV_ITEMS = [
     href: 'index.html',
     label: 'Home',
     icon: (isCurrent = false) => `
-      ${isCurrent
-        ? `<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 md:hidden text-black" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-             <path d="M3 10.5L12 3l9 7.5V20a2 2 0 0 1-2 2h-5v-6h-4v6H5a2 2 0 0 1-2-2v-9.5z"/>
-           </svg>`
-        : `<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 md:hidden text-neutral-500 group-hover:text-black aria-[current=page]:text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l9-9 9 9M5 10v10h14V10" />
-           </svg>`}
+      <svg xmlns="http://www.w3.org/2000/svg"
+           class="w-5 h-5 md:hidden ${isCurrent ? 'text-black' : 'text-neutral-500 group-hover:text-black aria-[current=page]:text-black'}"
+           viewBox="0 0 24 24" ${isCurrent ? 'fill="currentColor"' : 'fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"'} aria-hidden="true">
+        <path d="M3 10.5L12 3l9 7.5V20a2 2 0 0 1-2 2h-5v-6h-4v6H5a2 2 0 0 1-2-2v-9.5z"/>
+      </svg>
     `
   },
   {
     href: 'blogs.html',
     label: 'Blogs',
     icon: (isCurrent = false) => `
-      ${isCurrent
-        ? `<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 md:hidden text-black" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-             <path d="M6 2h9l5 5v15a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2zM15 2v6h6"/>
-           </svg>`
-        : `<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 md:hidden text-neutral-500 group-hover:text-black aria-[current=page]:text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10l6 6v8a2 2 0 01-2 2z" />
-           </svg>`}
+      <svg xmlns="http://www.w3.org/2000/svg"
+           class="w-5 h-5 md:hidden ${isCurrent ? 'text-black' : 'text-neutral-500 group-hover:text-black aria-[current=page]:text-black'}"
+           viewBox="0 0 24 24" ${isCurrent ? 'fill="currentColor"' : 'fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"'} aria-hidden="true">
+        <path d="M6 2h9l5 5v15a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2zM15 2v6h6"/>
+      </svg>
     `
   }
 ];
@@ -51,7 +47,7 @@ function renderGlobalNav() {
         `<a role="tab" href="${item.href}" ${currentAttr}
             class="group flex-none px-0 md:px-0 grid place-items-center [grid-auto-flow:row] md:[grid-auto-flow:column] gap-1 md:gap-0 text-center font-normal">
           ${item.icon(isCurrent)}
-          <span class="px-4 sm:px-4 py-0.5 sm:py-1 rounded-full transition-colors text-neutral-500 md:text-neutral-500 aria-[current=page]:text-black aria-[current=page]:underline group-hover:bg-zinc-100 group-hover:text-black text-sm md:text-l ${isCurrent ? 'font-bold md:text-black md:underline md:decoration-2 md:underline-offset-4' : 'font-medium'}">${item.label}</span>
+          <span class="px-4 sm:px-4 py-0.5 sm:py-1 rounded-full transition-colors text-neutral-500 md:text-neutral-500 aria-[current=page]:text-black aria-[current=page]:underline group-hover:bg-zinc-100 group-hover:text-black text-sm md:text-l ${isCurrent ? 'md:text-black md:underline md:decoration-2 md:underline-offset-4' : ''}">${item.label}</span>
         </a>`
       );
     }).join('');
@@ -486,7 +482,7 @@ function blogRowHTML(b) {
           </p>
 
           <!-- Tight title on mobile; larger on desktop; clamp to prevent tall cards -->
-          <h2 class="text-base sm:text-lg md:text-[26px] leading-snug font-semibold text-black line-clamp-2">
+          <h2 class="text-base sm:text-lg md:text-[26px] leading-snug text-black line-clamp-2">
             ${b.title}
           </h2>
 
@@ -543,8 +539,8 @@ function homeCaseStudyCardHTML(b) {
        class="group h-full flex flex-col overflow-hidden rounded-2xl ring-1 ring-zinc-200/70 bg-white/60 hover:ring-zinc-300 hover:bg-white transition-shadow shadow-sm hover:shadow-md">
       <div class="relative overflow-hidden">${img}</div>
       <div class="p-3 md:p-4 flex-1 flex flex-col gap-2">
-        <h3 class="text-base md:text-lg font-semibold leading-snug text-black line-clamp-2">${b.title}</h3>
-        ${b.description ? `<p class="text-sm text-zinc-600 line-clamp-3 flex-1">${b.description}</p>` : ''}
+        <h3 class="text-base md:text-lg leading-snug text-black font-semibold line-clamp-2">${b.title}</h3>
+        ${b.description ? `<p class="text-sm text-zinc-400 line-clamp-3 flex-1">${b.description}</p>` : ''}
         <div class="text-xs text-zinc-500 mt-1 inline-flex items-center gap-2">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-3.5 h-3.5 opacity-70">
             <path d="M12 6v12"/>
@@ -759,7 +755,7 @@ async function loadBlogDetail() {
   const linksPills = renderLinkPills(b.links);
 
   // Build chips for tags
-  const tagsHtml = (b.tags || []).map(t => `<span class="inline-flex items-center rounded-full border border-zinc-300/60 px-2 py-0.5 text-xs text-zinc-700">${t}</span>`).join(' ');
+  const tagsHtml = (b.tags || []).map(t => `<span class="inline-flex items-center rounded-full border border-zinc-300/60 px-2 py-0.5 text-xs text-zinc-400">${t}</span>`).join(' ');
 
   // Assemble top hero image list for lightbox (thumbnail first)
   const allImages = [b.thumbnail, ...galleryImages].filter(Boolean);
@@ -778,13 +774,13 @@ async function loadBlogDetail() {
           <div>
             <header class="space-y-3 relative">
               <a href="/blogs.html" id="back-button"
-                 class="fixed top-4 left-4 z-50 inline-flex items-center gap-1 rounded-full bg-white px-3 py-1.5 text-sm font-medium text-zinc-700 shadow md:static md:bg-transparent md:shadow-none md:text-zinc-500 transition-colors">
+                 class="fixed top-4 left-4 z-50 inline-flex items-center gap-1 rounded-full bg-white px-3 py-1.5 text-sm font-medium text-zinc-600 shadow md:static md:bg-transparent md:shadow-none md:text-zinc-500 transition-colors">
                 <span class="md:hidden">&larr; Back</span>
                 <span class="hidden md:inline">&larr; Back to Blogs</span>
               </a>
-              <p class="text-sm text-zinc-600">${author}</p>
+              <p class="text-sm text-zinc-400">${author}</p>
               <h1 class="text-3xl md:text-4xl font-semibold">${b.title}</h1>
-              ${b.description ? `<p class="text-zinc-600 text-lg leading-relaxed">${b.description}</p>` : ''}
+              ${b.description ? `<p class="text-zinc-400 text-lg leading-relaxed">${b.description}</p>` : ''}
               ${tagsHtml ? `<div class="flex flex-wrap gap-2">${tagsHtml}</div>` : ''}
               ${linksPills || ''}
               ${b.date ? `<div class="flex items-center gap-2 text-zinc-400 text-sm">${svgIcon('calendar')}<span class="md:hidden">${dateShort}</span><span class="hidden md:inline">${dateLong}</span></div>` : ''}
@@ -839,7 +835,7 @@ async function loadBlogDetail() {
   if (toc) {
     const sections = Array.from(document.querySelectorAll('section[id]'))
       .filter(sec => ['overview','background','empathize','desk-research','user-interview','ideate','prototype','final-result','reflections'].includes(sec.id));
-    toc.innerHTML = sections.map(sec => `<a href="#${sec.id}" data-id="${sec.id}" class="py-1 text-zinc-600 hover:text-black">${sec.querySelector('h2')?.textContent || sec.id}</a>`).join('');
+    toc.innerHTML = sections.map(sec => `<a href="#${sec.id}" data-id="${sec.id}" class="py-1 text-zinc-400 hover:text-black">${sec.querySelector('h2')?.textContent || sec.id}</a>`).join('');
 
     // Smooth scroll
     toc.addEventListener('click', (e) => {
@@ -896,7 +892,7 @@ function renderBlogFilters(items) {
   const paint = () => {
     const chip = (label, selected = false) => `
       <button type="button" data-tag="${label}" aria-pressed="${selected ? 'true' : 'false'}"
-        class="rounded-full px-3 py-1 text-sm transition-colors border border-zinc-300/60 hover:bg-black/5 ${selected ? 'bg-black text-white border-black' : 'bg-white/70 text-zinc-700'}">
+        class="rounded-full px-3 py-1 text-sm transition-colors border border-zinc-300/60 hover:bg-black/5 ${selected ? 'bg-black text-white border-black' : 'bg-white/70 text-zinc-400'}">
         ${label}
       </button>`;
     c.innerHTML = [chip('ALL', state.active === 'ALL'), ...tags.map(t => chip(t, state.active === t))].join('');
@@ -957,7 +953,7 @@ async function loadBlogsAndRender() {
     const normalized = raw.map(normalizeBlog).sort((a, b) => (new Date(b.date || 0)) - (new Date(a.date || 0)));
     if (!normalized.length) {
       if (filtersEl) { filtersEl.innerHTML = ''; filtersEl.removeAttribute('aria-busy'); }
-      listEl.innerHTML = `<div class="px-6 py-8 text-zinc-600 space-y-2">
+      listEl.innerHTML = `<div class="px-6 py-8 text-zinc-400 space-y-2">
         <p>No blog posts found.</p>
         <ul class="list-disc pl-5 text-sm">
           <li>Make sure your entry is <strong>Published</strong> in Builder (not a Draft).</li>
@@ -1023,7 +1019,7 @@ function renderFilters(items) {
   function paintChips() {
     const chip = (label, selected = false) => `
       <button type="button" data-tag="${label}" aria-pressed="${selected ? 'true' : 'false'}"
-        class="rounded-full px-3 py-1 text-sm transition-colors border border-zinc-300/60 hover:bg-black/5 ${selected ? 'bg-black text-white border-black' : 'bg-white/70 text-zinc-700'}">
+        class="rounded-full px-3 py-1 text-sm transition-colors border border-zinc-300/60 hover:bg-black/5 ${selected ? 'bg-black text-white border-black' : 'bg-white/70 text-zinc-400'}">
         ${label}
       </button>`;
     c.innerHTML = [chip('ALL', STATE.activeTag === 'ALL'), ...tags.map(t => chip(t, STATE.activeTag === t))].join('');
@@ -1046,7 +1042,7 @@ async function loadProjectsAndRender() {
   const normalized = raw.map(normalizeProject).sort((a, b) => (new Date(b.date || 0)) - (new Date(a.date || 0)));
   if (!raw.length) {
     const grid = document.getElementById('projects-grid-3col');
-    if (grid) grid.innerHTML = `<p class="px-6 py-8 text-zinc-600">No projects found. Make sure your Builder space has published entries in the <code>projects</code> model and that the API key matches this space.</p>`;
+    if (grid) grid.innerHTML = `<p class=\"px-6 py-8 text-zinc-400\">No projects found. Make sure your Builder space has published entries in the <code>projects</code> model and that the API key matches this space.</p>`;
   }
   STATE.all = normalized;
   STATE.filtered = normalized.slice();
@@ -1160,13 +1156,13 @@ async function loadProjectDetail() {
   const params = new URLSearchParams(location.search);
   const slug = params.get('slug');
   if (!slug) {
-    root.innerHTML = `<p class="px-6 py-8 text-zinc-600">Missing <code>slug</code> in URL.</p>`;
+    root.innerHTML = `<p class="px-6 py-8 text-zinc-400">Missing <code>slug</code> in URL.</p>`;
     return;
   }
 
   const rows = await fetchBuilder('projects', { limit: 1, 'query.data.slug': slug });
   if (!rows.length) {
-    root.innerHTML = `<p class="px-6 py-8 text-zinc-600">No project found for slug: <code>${slug}</code>.</p>`;
+    root.innerHTML = `<p class="px-6 py-8 text-zinc-400">No project found for slug: <code>${slug}</code>.</p>`;
     return;
   }
   const p = normalizeProject(rows[0]);
@@ -1241,12 +1237,12 @@ async function loadProjectDetail() {
         <div id="back-sentinel" class="hidden md:block h-0"></div>
         <header class="space-y-3">
           <a href="/index.html" id="back-button"
-             class="fixed top-4 left-4 z-50 inline-flex items-center gap-1 rounded-full bg-white px-3 py-1.5 text-sm font-medium text-zinc-700 shadow md:static md:bg-transparent md:shadow-none md:text-zinc-500 transition-colors">
+             class="fixed top-4 left-4 z-50 inline-flex items-center gap-1 rounded-full bg-white px-3 py-1.5 text-sm font-medium text-zinc-400 shadow md:static md:bg-transparent md:shadow-none md:text-zinc-500 transition-colors">
             <span class="md:hidden">&larr; Back</span>
             <span class="hidden md:inline">&larr; Back to Home</span>
           </a>
           <h1 class="text-3xl md:text-4xl font-semibold">${p.title}</h1>
-          ${p.description ? `<p class="text-zinc-600 text-lg leading-relaxed">${p.description}</p>` : ''}
+          ${p.description ? `<p class="text-zinc-400 text-lg leading-relaxed">${p.description}</p>` : ''}
           <div class="flex flex-wrap gap-2">${tagsHtml}</div>
           ${dateText ? `<div class="flex items-center gap-2 text-zinc-400 text-sm">${svgIcon('calendar')}<span>${dateText}</span></div>` : ''}
         </header>
