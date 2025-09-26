@@ -8,8 +8,8 @@
 
 ## Build, Test, and Development Commands
 - Install deps: `npm install`
-- Build CSS once: `npx @tailwindcss/cli -i src/input.css -o dist/output.css`
-- Watch CSS: `npx @tailwindcss/cli -i src/input.css -o dist/output.css --watch`
+- Build CSS once: `npm run build:css` (or `npx @tailwindcss/cli -i src/input.css -o dist/output.css`)
+- Watch CSS: `npm run watch:css` (or `npx @tailwindcss/cli -i src/input.css -o dist/output.css --watch`)
 - Run locally: open `index.html` in a browser, or use any static server (e.g., `npx http-server .`).
 - Tests: none yet (`npm test` is a placeholder).
 

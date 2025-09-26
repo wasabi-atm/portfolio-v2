@@ -1,1 +1,84 @@
 @import "tailwindcss";
+
+/* Tailwind v4 theme tokens for CLI build */
+@theme {
+  --color-content: #000000;
+  --color-muted: #6A6A6A;
+  --color-connect: #2A9320;
+}
+
+/* Minimal prose styles for article readability */
+.prose { color: var(--color-content); line-height: 1.7; }
+.prose p { margin: 0.75em 0; }
+.prose p:first-child { margin-top: 0; }
+.prose h1, .prose h2, .prose h3, .prose h4 { line-height: 1.25; margin: 1.2em 0 0.5em; font-weight: 600; }
+.prose h1 { font-size: clamp(1.75rem, 3.2vw, 2.25rem); }
+.prose h2 { font-size: clamp(1.375rem, 2.6vw, 1.875rem); }
+.prose h3 { font-size: clamp(1.125rem, 2.2vw, 1.5rem); }
+.prose ul, .prose ol { padding-left: 1.25rem; margin: 0.6em 0 0.8em; }
+.prose ul { list-style: disc outside; }
+.prose ol { list-style: decimal outside; }
+.prose li { margin: 0.35em 0; }
+.prose li > ul, .prose li > ol { margin-top: 0.35em; }
+.prose a { color: #0f172a; text-decoration: underline; text-underline-offset: 3px; }
+.prose img { display: block; max-width: 100%; height: auto; margin: 1rem 0; border-radius: 0.5rem; }
+.prose figure { margin: 1rem 0; }
+.prose figcaption { color: var(--color-muted); font-size: 0.9em; margin-top: 0.25rem; }
+.prose blockquote { border-left: 3px solid #e5e7eb; padding-left: 1rem; color: #525252; margin: 1rem 0; font-style: italic; }
+
+/* Image skeleton for loading embedded images */
+.img-skel { position: relative; }
+.img-skel::before {
+  content: "";
+  display: block;
+  width: 100%;
+  height: var(--img-skel-h, 220px);
+  border-radius: 0.5rem;
+  background: linear-gradient(90deg, #e5e7eb 0%, #f3f4f6 40%, #e5e7eb 80%);
+  background-size: 200% 100%;
+  animation: img-skel 1.2s linear infinite;
+}
+.img-skel > img { display: block; width: 100%; height: auto; border-radius: 0.5rem; }
+.img-skel.loading > img { opacity: 0; }
+.img-skel.loaded::before { display: none; }
+@keyframes img-skel {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* Subtle horizontal shake for nav if re-clicking current page */
+@keyframes shake-x {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-4px); }
+  40% { transform: translateX(4px); }
+  60% { transform: translateX(-3px); }
+  80% { transform: translateX(3px); }
+}
+.shake-x { animation: shake-x 420ms ease; }
+
+/* iOS-like ephemeral toast */
+.ios-toast {
+  position: fixed;
+  left: 50%;
+  bottom: calc(env(safe-area-inset-bottom) + 96px);
+  transform: translateX(-50%);
+  background: rgba(255,255,255,0.8);
+  -webkit-backdrop-filter: saturate(180%) blur(16px);
+  backdrop-filter: saturate(180%) blur(16px);
+  color: #111827;
+  border: 1px solid rgba(0,0,0,0.08);
+  border-radius: 9999px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+  padding: 10px 14px;
+  font-size: 14px;
+  line-height: 1;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 200ms ease, transform 240ms ease;
+  z-index: 60;
+}
+@media (min-width: 768px) {
+  .ios-toast { bottom: auto; top: 22px; }
+}
+.ios-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+.ios-toast.hide { opacity: 0; }

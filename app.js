@@ -75,6 +75,61 @@ function renderGlobalNav() {
       + '</div>'
       + '</div>'
     );
+
+    // Intercept clicks on current page to avoid reload and give feedback
+    const intercept = (e) => {
+      const a = e.target.closest('a');
+      if (!a) return;
+      const href = a.getAttribute('href') || '';
+      const dest = href.split('#')[0];
+      const samePage = dest && here === dest;
+      // Only block when this click would reload the same page,
+      // or when clicking the connect avatar while already on connect.html
+      const isConnectAvatar = (here === 'connect.html') && (a.id === 'connect-avatar' || /connect\.html$/.test(dest));
+      if (!(samePage || isConnectAvatar)) return;
+      e.preventDefault();
+      const fs = mount.querySelector('#primary-nav');
+      if (fs) {
+        fs.classList.remove('shake-x');
+        void fs.offsetWidth; // restart animation
+        fs.classList.add('shake-x');
+        setTimeout(() => fs.classList.remove('shake-x'), 520);
+      }
+      // Also shake the avatar for extra feedback
+      const avatar = mount.querySelector('#connect-avatar');
+      if (avatar) {
+        avatar.classList.remove('shake-x');
+        void avatar.offsetWidth;
+        avatar.classList.add('shake-x');
+        setTimeout(() => avatar.classList.remove('shake-x'), 520);
+      }
+      let toast = document.getElementById('already-here-toast');
+      if (!toast) {
+        toast = document.createElement('div');
+        toast.id = 'already-here-toast';
+        toast.className = 'ios-toast';
+        toast.textContent = "You're already here";
+        document.body.appendChild(toast);
+      }
+      // Position toast relative to nav: below when nav on top; above when nav at bottom
+      const navWrap = mount.querySelector('.nav-wrap');
+      const rect = (navWrap || fs).getBoundingClientRect();
+      toast.style.bottom = 'auto';
+      toast.style.top = '0px';
+      toast.style.left = (rect.left + rect.width / 2) + 'px';
+      toast.style.transform = 'translateX(-50%)';
+      toast.classList.remove('hide');
+      // Ensure in DOM then measure height
+      requestAnimationFrame(() => {
+        const tRect = toast.getBoundingClientRect();
+        const isTopNav = window.innerWidth >= 768; // nav at top on md+
+        const top = isTopNav ? (rect.bottom + 10) : (rect.top - tRect.height - 10);
+        toast.style.top = Math.max(10, top) + 'px';
+        toast.classList.add('show');
+        setTimeout(() => { toast.classList.add('hide'); toast.classList.remove('show'); }, 1400);
+      });
+    };
+    mount.addEventListener('click', intercept);
     // Make avatar and capsule responsive (avoid overflow on very small widths)
     try {
       const fs = mount.querySelector('#primary-nav');
@@ -224,8 +279,63 @@ function renderGlobalNav() {
           fsFb.addEventListener('mousemove', onMove);
           fsFb.addEventListener('mouseenter', onEnter);
           fsFb.addEventListener('mouseleave', onLeave);
+      }
+    } catch {}
+
+    // Fallback: intercept clicks on current link
+    try {
+      const here = currentFilename();
+      const intercept = (e) => {
+        const a = e.target.closest('a');
+        if (!a) return;
+        const href = a.getAttribute('href') || '';
+        const dest = href.split('#')[0];
+        const samePage = dest && here === dest;
+        const isConnectAvatar = (here === 'connect.html') && (a.id === 'connect-avatar-fallback' || /connect\.html$/.test(dest));
+        if (!(samePage || isConnectAvatar)) return;
+        e.preventDefault();
+        const fs = mount.querySelector('#primary-nav-fallback');
+        if (fs) {
+          fs.classList.remove('shake-x');
+          void fs.offsetWidth;
+          fs.classList.add('shake-x');
+          setTimeout(() => fs.classList.remove('shake-x'), 520);
         }
-      } catch {}
+        const avatar = mount.querySelector('#connect-avatar-fallback');
+        if (avatar) {
+          avatar.classList.remove('shake-x');
+          void avatar.offsetWidth;
+          avatar.classList.add('shake-x');
+          setTimeout(() => avatar.classList.remove('shake-x'), 520);
+        }
+        let toast = document.getElementById('already-here-toast');
+        if (!toast) {
+          toast = document.createElement('div');
+          toast.id = 'already-here-toast';
+          toast.className = 'ios-toast';
+          toast.textContent = "You're already here";
+          document.body.appendChild(toast);
+        }
+        // Position relative to bottom nav (fallback is identical layout)
+        const navWrap = mount.querySelector('.nav-wrap');
+        const rect = (navWrap || fs).getBoundingClientRect();
+        toast.style.bottom = 'auto';
+        toast.style.top = '0px';
+        toast.style.left = (rect.left + rect.width / 2) + 'px';
+        toast.style.transform = 'translateX(-50%)';
+        toast.classList.remove('hide');
+        requestAnimationFrame(() => {
+          const tRect = toast.getBoundingClientRect();
+          // Fallback nav is also bottom on mobile and top on desktop; mirror logic
+          const isTopNav = window.innerWidth >= 768;
+          const top = isTopNav ? (rect.bottom + 10) : (rect.top - tRect.height - 10);
+          toast.style.top = Math.max(10, top) + 'px';
+          toast.classList.add('show');
+          setTimeout(() => { toast.classList.add('hide'); toast.classList.remove('show'); }, 1400);
+        });
+      };
+      mount.addEventListener('click', intercept);
+    } catch {}
     } catch {}
   }
 }
@@ -456,6 +566,31 @@ function formatBlogDateShort(input) {
   } catch { return ''; }
 }
 
+// Helpers to render richer article content from plain text inputs
+function normalizeArticleHtml(input) {
+  let s = (input || '').toString();
+  if (!s) return '';
+
+  // 1) Unescape specifically-escaped <img> tags (e.g., &lt;img ...&gt;)
+  s = s.replace(/&lt;(img\b[^>]*?)\/?&gt;/gi, '<$1>');
+  s = s.replace(/&lt;(img\b[^>]*?)\s*\/?&gt;/gi, '<$1>');
+
+  // 2) If content already contains HTML tags, keep as-is (browsers render <img> natively)
+  const hasHtml = /<[^>]+>/.test(s);
+  if (hasHtml) return s;
+
+  // 3) Plain text: convert markdown image syntax and bare image URLs into <img>
+  // Markdown image: ![alt](url)
+  s = s.replace(/!\[(.*?)\]\((https?:[^\s)]+)\)/g, (_m, alt, url) => `<img src="${url}" alt="${alt || ''}">`);
+  // Bare image URLs -> <img>
+  s = s.replace(/(https?:\/\/[^\s)]+\.(?:png|jpe?g|gif|webp|svg|avif)(?:\?[^\s)]+)?)/gi, (m) => `<img src="${m}" alt="">`);
+
+  // 4) Paragraphs: split on blank lines; single newlines become <br>
+  const parts = s.split(/\n{2,}/).map(t => t.trim()).filter(Boolean);
+  if (!parts.length) return s;
+  return parts.map(p => `<p>${p.replace(/\n/g, '<br/>')}</p>`).join('');
+}
+
 function blogRowHTML(b) {
   const firstTag = (b.tags && b.tags[0]) ? b.tags[0] : 'General';
   const author = `<strong>Wira Wibisana</strong> in <strong>${firstTag}</strong>`;
@@ -465,14 +600,14 @@ function blogRowHTML(b) {
 
   const thumb = hasThumb ? `
     <div class="relative z-10 shrink-0 w-24 h-24 md:w-[320px] md:h-40">
-      <img src="${b.thumbnail}" alt="${b.title}" loading="lazy"
+      <img src="${b.thumbnail}" alt="${b.title}" loading="lazy" data-thumb
            class="block w-24 h-24 md:w-[320px] md:h-40 object-cover rounded-md"/>
     </div>
   ` : '';
 
   return `
     <article class="py-3 md:py-6">
-      <a href="article.html?id=${b.id}" class="group relative grid grid-cols-[1fr_auto] items-start gap-3 md:gap-4 rounded-xl px-3 py-2 md:px-3 md:py-3 transition-colors duration-200 hover:bg-zinc-200/60 hover:ring-1 hover:ring-zinc-300 focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:bg-zinc-200/50">
+      <a href="article.html?id=${b.id}" class="group relative grid grid-cols-[1fr_auto] items-start gap-3 md:gap-4 rounded-xl px-3 py-2 md:px-3 md:py-3 transition-colors duration-200 hover:bg-zinc-200/60 hover:ring-1 hover:ring-zinc-300 focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:bg-zinc-200/50" data-card="blog-row">
         <div class="relative z-10 min-w-0 space-y-1 md:space-y-2">
           <p class="text-xs md:text-sm text-zinc-600">
             ${author}
@@ -482,12 +617,12 @@ function blogRowHTML(b) {
           </p>
 
           <!-- Tight title on mobile; larger on desktop; clamp to prevent tall cards -->
-          <h2 class="text-base sm:text-lg md:text-[26px] leading-snug text-black line-clamp-2">
+          <h2 class="text-base sm:text-lg md:text-[26px] leading-snug text-black line-clamp-2" data-title>
             ${b.title}
           </h2>
 
-          <!-- Hide description on mobile; show on md+ -->
-          ${b.description ? `<p class="hidden md:block text-zinc-600">${b.description}</p>` : ''}
+          <!-- Hide description on mobile; show on md+; dynamically clamped to thumbnail height -->
+          ${b.description ? `<p class="hidden md:block text-zinc-600" data-desc>${b.description}</p>` : ''}
 
           <!-- Compact meta on mobile -->
           <div class="flex items-center gap-3 text-[11px] md:text-sm text-zinc-500">
@@ -532,15 +667,15 @@ function isTruthyPinned(data) {
 
 function homeCaseStudyCardHTML(b) {
   const img = b.thumbnail
-    ? `<img src="${b.thumbnail}" alt="${b.title}" class="block w-full aspect-[16/10] md:aspect-[4/3] object-cover transition-transform duration-300 group-hover:scale-[1.03]"/>`
+    ? `<img src="${b.thumbnail}" alt="${b.title}" data-thumb class="block w-full aspect-[16/10] md:aspect-[4/3] object-cover transition-transform duration-300 group-hover:scale-[1.03]"/>`
     : '';
   return `
     <a href="article.html?id=${b.id}" aria-label="Read case study: ${b.title}"
-       class="group h-full flex flex-col overflow-hidden rounded-2xl ring-1 ring-zinc-200/70 bg-white/60 hover:ring-zinc-300 hover:bg-white transition-shadow shadow-sm hover:shadow-md">
+       class="group h-full flex flex-col overflow-hidden rounded-2xl ring-1 ring-zinc-200/70 bg-white/60 hover:ring-zinc-300 hover:bg-white transition-shadow shadow-sm hover:shadow-md" data-card="case-card">
       <div class="relative overflow-hidden">${img}</div>
       <div class="p-3 md:p-4 flex-1 flex flex-col gap-2">
-        <h3 class="text-base md:text-lg leading-snug text-black font-semibold line-clamp-2">${b.title}</h3>
-        ${b.description ? `<p class="text-sm text-zinc-400 line-clamp-3 flex-1">${b.description}</p>` : ''}
+        <h3 class="text-base md:text-lg leading-snug text-black font-semibold line-clamp-2" data-title>${b.title}</h3>
+        ${b.description ? `<p class="text-sm text-zinc-400 flex-1" data-desc>${b.description}</p>` : ''}
         <div class="text-xs text-zinc-500 mt-1 inline-flex items-center gap-2">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-3.5 h-3.5 opacity-70">
             <path d="M12 6v12"/>
@@ -596,6 +731,7 @@ async function loadHomePinnedCaseStudies() {
       return;
     }
     list.innerHTML = normalized.map(blogRowHTML).join('');
+    applyDynamicDescClamps(list);
   } catch (e) {
     console.error('[Home pinned] fetch failed', e);
     list.innerHTML = '<p class="text-sm text-red-600">Failed to load featured case studies.</p>';
@@ -723,14 +859,14 @@ async function loadBlogDetail() {
     return `
       <section id="${keyId}" class="scroll-mt-24 border-t border-zinc-200 pt-10 mt-10">
         <h2 class="text-xl md:text-2xl font-semibold mb-3">${label}</h2>
-        <div class="prose max-w-none">${typeof html === 'string' ? html : ''}</div>
+        <div class="prose max-w-none">${typeof html === 'string' ? normalizeArticleHtml(html) : ''}</div>
       </section>`;
   }
 
   const chaptersHtml = CHAPTERS.map(([id, label]) => chapterHtml(id, label)).filter(Boolean).join('');
 
   // Assemble final body: optional raw Html article first, then gallery, then chapters
-  const bodyHtml = `${htmlContent || ''}${galleryHtml}${chaptersHtml}` || (b.description ? `<p>${b.description}</p>` : '<p></p>');
+  const bodyHtml = `${normalizeArticleHtml(htmlContent) || ''}${galleryHtml}${chaptersHtml}` || (b.description ? `<p>${b.description}</p>` : '<p></p>');
 
   const firstTag = (b.tags && b.tags[0]) ? b.tags[0] : 'General';
   const author = `<strong>Wira Wibisana</strong> in <strong>${firstTag}</strong>
@@ -764,7 +900,7 @@ async function loadBlogDetail() {
     <div class="min-h-screen pb-48 md:pb-32">
       ${b.thumbnail ? `
         <div class="w-full overflow-hidden">
-          <img data-hero src="${b.thumbnail}" alt="${b.title}" class="block w-full object-cover object-center cursor-pointer" style="max-height:200px;" />
+          <img data-hero src="${b.thumbnail}" alt="${b.title}" class="block w-full object-cover object-center cursor-pointer blur-md grayscale" style="max-height:200px; transform: scale(1.2); transform-origin: center;" />
         </div>
       ` : ''}
 
@@ -773,7 +909,7 @@ async function loadBlogDetail() {
         <div class="grid grid-cols-1 md:grid-cols-[minmax(0,1fr)_280px] gap-8">
           <div>
             <header class="space-y-3 relative">
-              <a href="/blogs.html" id="back-button"
+              <a href="blogs.html" id="back-button"
                  class="fixed top-4 left-4 z-50 inline-flex items-center gap-1 rounded-full bg-white px-3 py-1.5 text-sm font-medium text-zinc-600 shadow md:static md:bg-transparent md:shadow-none md:text-zinc-500 transition-colors">
                 <span class="md:hidden">&larr; Back</span>
                 <span class="hidden md:inline">&larr; Back to Blogs</span>
@@ -806,6 +942,76 @@ async function loadBlogDetail() {
   const hero = root.querySelector('img[data-hero]');
   if (hero && allImages.length) hero.addEventListener('click', () => openLightbox(allImages, 0));
 
+  // Build TOC from chapters and, if present, H2 headings in Blog article content
+  const toc = document.getElementById('toc-links');
+  if (toc) {
+    // Slugify helper to create stable ids from headings
+    const slugify = (s) => (s || '')
+      .toString()
+      .trim()
+      .toLowerCase()
+      .replace(/<[^>]*>/g, '')
+      .replace(/&[a-z]+;|&#\d+;/gi, '-')
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-+|-+$/g, '') || 'section';
+
+    // Known chapter sections
+    const chapterIds = ['overview','background','empathize','desk-research','user-interview','ideate','prototype','final-result','reflections'];
+    const chapterSections = Array.from(document.querySelectorAll('section[id]')).filter(sec => chapterIds.includes(sec.id));
+
+    // Headings from Blog article content (if any)
+    const articleContainer = root.querySelector('section.prose');
+    const headingEls = [];
+    const rawArticle = (typeof d['Blog article'] === 'string' ? d['Blog article'] : (typeof d.blogArticle === 'string' ? d.blogArticle : ''));
+    if (articleContainer && rawArticle) {
+      const h2s = Array.from(articleContainer.querySelectorAll('h2'));
+      const seen = new Set();
+      h2s.forEach(h => {
+        const text = h.textContent || 'section';
+        let id = h.id || slugify(text);
+        let suffix = 2;
+        while (seen.has(id) || document.getElementById(id)) { id = `${id}-${suffix++}`; }
+        seen.add(id);
+        h.id = id;
+        h.classList.add('scroll-mt-24');
+        headingEls.push(h);
+      });
+    }
+
+    // Paint combined TOC
+    const entries = [
+      ...chapterSections.map(sec => ({ id: sec.id, label: sec.querySelector('h2')?.textContent || sec.id })),
+      ...headingEls.map(h => ({ id: h.id, label: h.textContent || h.id }))
+    ];
+    toc.innerHTML = entries.map(e => `<a href="#${e.id}" data-id="${e.id}" class="py-1 text-zinc-400 hover:text-black">${e.label}</a>`).join('');
+
+    // Smooth scroll
+    toc.addEventListener('click', (e) => {
+      const a = e.target.closest('a[data-id]');
+      if (!a) return;
+      e.preventDefault();
+      const id = a.getAttribute('data-id');
+      const target = document.getElementById(id);
+      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+
+    // Active link highlight via IntersectionObserver
+    const byId = Object.fromEntries([...toc.querySelectorAll('a[data-id]')].map(a => [a.getAttribute('data-id'), a]));
+    const observeTargets = [...chapterSections, ...headingEls];
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        const id = entry.target.id;
+        const link = byId[id];
+        if (!link) return;
+        if (entry.isIntersecting) {
+          Object.values(byId).forEach(el => el.classList.remove('text-black','font-medium'));
+          link.classList.add('text-black','font-medium');
+        }
+      });
+    }, { rootMargin: '-40% 0px -55% 0px', threshold: [0, 1] });
+    observeTargets.forEach(t => obs.observe(t));
+  }
+
   // Back button floating logic: avoid stutter by using scroll threshold + rAF throttle
   const backBtn = document.getElementById('back-button');
   if (backBtn) {
@@ -830,38 +1036,6 @@ async function loadBlogDetail() {
     window.addEventListener('resize', apply);
   }
 
-  // Build TOC from present chapters
-  const toc = document.getElementById('toc-links');
-  if (toc) {
-    const sections = Array.from(document.querySelectorAll('section[id]'))
-      .filter(sec => ['overview','background','empathize','desk-research','user-interview','ideate','prototype','final-result','reflections'].includes(sec.id));
-    toc.innerHTML = sections.map(sec => `<a href="#${sec.id}" data-id="${sec.id}" class="py-1 text-zinc-400 hover:text-black">${sec.querySelector('h2')?.textContent || sec.id}</a>`).join('');
-
-    // Smooth scroll
-    toc.addEventListener('click', (e) => {
-      const a = e.target.closest('a[data-id]');
-      if (!a) return;
-      e.preventDefault();
-      const id = a.getAttribute('data-id');
-      const target = document.getElementById(id);
-      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    });
-
-    // Active link highlight via IntersectionObserver
-    const byId = Object.fromEntries([...toc.querySelectorAll('a[data-id]')].map(a => [a.getAttribute('data-id'), a]));
-    const obs = new IntersectionObserver(entries => {
-      entries.forEach(entry => {
-        const id = entry.target.id;
-        const link = byId[id];
-        if (!link) return;
-        if (entry.isIntersecting) {
-          Object.values(byId).forEach(el => el.classList.remove('text-black','font-medium'));
-          link.classList.add('text-black','font-medium');
-        }
-      });
-    }, { rootMargin: '-40% 0px -55% 0px', threshold: [0, 1] });
-    sections.forEach(sec => obs.observe(sec));
-  }
 
   // Click handlers for gallery thumbnails (if any)
   document.querySelectorAll('button[data-idx]').forEach(btn => {
@@ -870,12 +1044,52 @@ async function loadBlogDetail() {
       openLightbox(allImages, idx);
     });
   });
+
+  // Add skeletons for embedded images inside article content
+  try {
+    root.querySelectorAll('.prose').forEach(enhanceArticleImages);
+  } catch {}
+}
+
+// Wrap images with a skeleton placeholder until they load
+function enhanceArticleImages(scope) {
+  const imgs = scope.querySelectorAll('img');
+  imgs.forEach((img) => {
+    if (img.closest('.img-skel')) return; // already enhanced
+    const wrap = document.createElement('div');
+    wrap.className = 'img-skel loading';
+    // Reserve height if the tag includes height attr; else fallback
+    const hAttr = parseInt(img.getAttribute('height') || '', 10);
+    if (Number.isFinite(hAttr) && hAttr > 0) {
+      wrap.style.setProperty('--img-skel-h', `${hAttr}px`);
+    } else {
+      // Use current computed height if any; else fallback
+      const ch = Math.round(img.getBoundingClientRect().height);
+      if (ch) wrap.style.setProperty('--img-skel-h', `${ch}px`);
+    }
+    img.parentNode.insertBefore(wrap, img);
+    wrap.appendChild(img);
+
+    const markLoaded = () => {
+      wrap.classList.remove('loading');
+      wrap.classList.add('loaded');
+      wrap.style.removeProperty('--img-skel-h');
+    };
+    if (img.complete && img.naturalWidth > 0) {
+      markLoaded();
+    } else {
+      img.addEventListener('load', markLoaded, { once: true });
+      img.addEventListener('error', markLoaded, { once: true });
+    }
+  });
 }
 
 function renderBlogsList(list) {
   const el = document.getElementById('blogs-list');
   if (!el) return;
   el.innerHTML = list.map(blogRowHTML).join('');
+  // After render, clamp descriptions to thumbnail height
+  applyDynamicDescClamps(el);
 }
 
 function uniqueSortedBlogTags(items) {
@@ -974,6 +1188,85 @@ async function loadBlogsAndRender() {
     listEl.style.minHeight = '';
     listEl.removeAttribute('aria-busy');
   }
+}
+
+// ==================== Dynamic multi-line clamp (bound to image height) ====================
+function computeLineHeightPx(el) {
+  const cs = getComputedStyle(el);
+  let lh = cs.lineHeight;
+  if (lh === 'normal' || !lh) {
+    const fs = parseFloat(cs.fontSize) || 16;
+    // Approximate "normal" line-height
+    return Math.round(fs * 1.5);
+  }
+  const n = parseFloat(lh);
+  return Number.isFinite(n) ? n : 20;
+}
+
+function clampDescForCard(card) {
+  const img = card.querySelector('img[data-thumb]');
+  const desc = card.querySelector('[data-desc]');
+  const title = card.querySelector('[data-title]');
+  if (!desc) return;
+  const descCS = getComputedStyle(desc);
+  if (descCS.display === 'none' || descCS.visibility === 'hidden') return;
+
+  // Reset any previous inline clamp to measure correctly
+  desc.style.webkitLineClamp = '';
+  desc.style.display = '';
+
+  let lines = Infinity;
+
+  // If we have a thumbnail, compute available lines by image height
+  if (img) {
+    const imgH = img.getBoundingClientRect().height;
+    if (imgH) {
+      let remaining = imgH;
+      if (title) {
+        const titleCS = getComputedStyle(title);
+        if (titleCS.display !== 'none' && titleCS.visibility !== 'hidden') {
+          remaining -= title.getBoundingClientRect().height;
+        }
+      }
+      const mt = parseFloat(descCS.marginTop) || 0;
+      remaining -= mt;
+      const lh = computeLineHeightPx(desc);
+      lines = Math.floor(remaining / lh);
+    }
+  }
+
+  // Desktop rule: cap to 3 lines max on md+ (>=768px)
+  const isDesktop = window.innerWidth >= 768;
+  if (isDesktop) {
+    // If no image-derived limit, enforce exactly 3 lines. Otherwise, cap at 3.
+    lines = Math.min(3, Number.isFinite(lines) ? lines : 3);
+  }
+
+  if (!Number.isFinite(lines) || lines < 1) {
+    // Hide if nothing fits
+    desc.style.display = 'none';
+    return;
+  }
+
+  // Apply WebKit multi-line clamp inline to ensure cross-page availability
+  desc.style.display = '-webkit-box';
+  desc.style.webkitBoxOrient = 'vertical';
+  desc.style.overflow = 'hidden';
+  desc.style.webkitLineClamp = String(lines);
+}
+
+function applyDynamicDescClamps(scope = document) {
+  const cards = scope.querySelectorAll('a[data-card="blog-row"], a[data-card="case-card"]');
+  cards.forEach((card) => clampDescForCard(card));
+  // Re-apply when thumbnails load
+  scope.querySelectorAll('img[data-thumb]').forEach((img) => {
+    if (img.__clampBound) return;
+    img.__clampBound = true;
+    img.addEventListener('load', () => {
+      const card = img.closest('a[data-card]');
+      if (card) clampDescForCard(card);
+    });
+  });
 }
 
 function projectCardHTML(p) {
@@ -1236,7 +1529,7 @@ async function loadProjectDetail() {
       <article class="mx-auto w-full md:max-w-[900px] px-4 md:px-6 lg:px-0 space-y-6 mt-6 pt-6 md:pt-12 pb-24">
         <div id="back-sentinel" class="hidden md:block h-0"></div>
         <header class="space-y-3">
-          <a href="/index.html" id="back-button"
+          <a href="index.html" id="back-button"
              class="fixed top-4 left-4 z-50 inline-flex items-center gap-1 rounded-full bg-white px-3 py-1.5 text-sm font-medium text-zinc-400 shadow md:static md:bg-transparent md:shadow-none md:text-zinc-500 transition-colors">
             <span class="md:hidden">&larr; Back</span>
             <span class="hidden md:inline">&larr; Back to Home</span>
@@ -1401,6 +1694,16 @@ document.addEventListener('DOMContentLoaded', () => {
   loadProjectDetail();
   loadBlogsAndRender();
   loadBlogDetail();
+
+  // Re-clamp on resize (debounced via rAF)
+  let __clampRaf = 0;
+  window.addEventListener('resize', () => {
+    if (__clampRaf) return;
+    __clampRaf = requestAnimationFrame(() => {
+      __clampRaf = 0;
+      applyDynamicDescClamps(document);
+    });
+  });
 });
 
 // Inject footer
