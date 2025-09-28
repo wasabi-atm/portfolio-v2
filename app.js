@@ -47,7 +47,7 @@ function renderGlobalNav() {
         `<a role="tab" href="${item.href}" ${currentAttr}
             class="group flex-none px-0 md:px-0 grid place-items-center [grid-auto-flow:row] md:[grid-auto-flow:column] gap-1 md:gap-0 text-center font-normal">
           ${item.icon(isCurrent)}
-          <span class="px-4 sm:px-4 py-0.5 sm:py-1 rounded-full transition-colors text-neutral-500 md:text-neutral-500 aria-[current=page]:text-black aria-[current=page]:underline group-hover:bg-zinc-100 group-hover:text-black text-sm md:text-l ${isCurrent ? 'md:text-black md:underline md:decoration-2 md:underline-offset-4' : ''}">${item.label}</span>
+          <span class="px-4 sm:px-4 py-0.5 sm:py-1 rounded-full transition-colors text-neutral-500 md:text-neutral-500 aria-[current=page]:text-black group-hover:bg-zinc-100 group-hover:text-black text-sm md:text-l nav-underline">${item.label}</span>
         </a>`
       );
     }).join('');
@@ -137,8 +137,8 @@ function renderGlobalNav() {
       const wrap = mount.querySelector('.nav-wrap');
       const syncNavSizes = () => {
         if (!fs || !avatarEl || !wrap) return;
-        // Avatar height follows capsule height
-        const h = Math.max(40, Math.round(fs.getBoundingClientRect().height));
+        // Avatar height follows capsule height (use offsetHeight to ignore transforms)
+        const h = Math.max(40, Math.round(fs.offsetHeight || fs.getBoundingClientRect().height));
         avatarEl.style.height = h + 'px';
         avatarEl.style.width = h + 'px';
         // Capsule max width = viewport - avatar - gap - small margin buffer
@@ -202,6 +202,50 @@ function renderGlobalNav() {
       }
     } catch {}
 
+    // Subtle magnetic translation for the whole nav capsule (desktop)
+    try {
+      const fs = mount.querySelector('#primary-nav');
+      const wrap = mount.querySelector('.nav-wrap');
+      const prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const pointerFine = window.matchMedia && window.matchMedia('(hover:hover)').matches;
+      if (fs && wrap && !prefersReduced && pointerFine) {
+        let raf2 = 0;
+        let hovering = false;
+        const maxT = 1; // max 1px translate (very subtle)
+        // augment existing handlers if present
+        const onEnter = () => { if (window.innerWidth < 768) return; hovering = true; };
+        const onLeave = () => { hovering = false; };
+        fs.addEventListener('mouseenter', onEnter);
+        fs.addEventListener('mouseleave', onLeave);
+
+        const onMag = (e) => {
+          if (hovering) return; // tilt handler will compose translation itself
+          if (raf2) return;
+          raf2 = requestAnimationFrame(() => {
+            raf2 = 0;
+            const r = fs.getBoundingClientRect();
+            const cx = r.left + r.width / 2;
+            const cy = r.top + r.height / 2;
+            const dx = e.clientX - cx;
+            const dy = e.clientY - cy;
+            const dist = Math.hypot(dx, dy);
+            const radius = 120;
+            if (dist < radius && window.innerWidth >= 768) {
+              const t = 1 - dist / radius;
+              const mag = maxT * t;
+              const inv = dist === 0 ? 0 : (mag / dist);
+              const tx = dx * inv;
+              const ty = dy * inv;
+              fs.style.transform = `translate(${tx.toFixed(2)}px, ${ty.toFixed(2)}px)`;
+            } else {
+              fs.style.transform = '';
+            }
+          });
+        };
+        window.addEventListener('mousemove', onMag, { passive: true });
+      }
+    } catch {}
+
   } catch (e) {
     console.error('[nav] render failed, using fallback', e);
     const onConnect = (currentFilename() === 'connect.html');
@@ -210,8 +254,8 @@ function renderGlobalNav() {
         <div class="w-full flex justify-center">
           <div class="flex items-center gap-2 nav-wrap">
             <nav id="primary-nav-fallback" class="w-auto max-w-[94vw] sm:max-w-[88vw] md:w-[180px] flex items-center justify-center gap-2 sm:gap-3 rounded-full bg-white shadow-[0_6px_16px_rgba(0,0,0,0.12)] px-3 sm:px-4 py-3 sm:py-3.5 md:px-4 md:py-4">
-              <a href="index.html" class="px-4 sm:px-4 py-0.5 sm:py-1 rounded-full text-sm text-neutral-600 hover:bg-zinc-100 transition-colors">Home</a>
-              <a href="blogs.html" class="px-4 sm:px-4 py-0.5 sm:py-1 rounded-full text-sm text-neutral-600 hover:bg-zinc-100 transition-colors">Blogs</a>
+              <a href="index.html" class="px-4 sm:px-4 py-0.5 sm:py-1 rounded-full text-sm text-neutral-600 hover:bg-zinc-100 transition-colors nav-underline">Home</a>
+              <a href="blogs.html" class="px-4 sm:px-4 py-0.5 sm:py-1 rounded-full text-sm text-neutral-600 hover:bg-zinc-100 transition-colors nav-underline">Blogs</a>
             </nav>
             <a href="connect.html" class="group inline-flex items-center justify-center p-1.5 rounded-full bg-white shadow-[0_6px_16px_rgba(0,0,0,0.12)] ring-2 ${onConnect ? 'ring-green-600' : 'ring-white'} overflow-hidden transition-all duration-200 hover:bg-zinc-50 hover:shadow-[0_8px_20px_rgba(0,0,0,0.14)]" aria-label="Connect" id="connect-avatar-fallback">
                 <img src="assets/BG%20Placeholder.avif" alt="" class="h-full w-full object-cover rounded-full ring-2 ring-inset ring-transparent transition-transform duration-200 group-hover:scale-[1.03]"/>
@@ -228,7 +272,7 @@ function renderGlobalNav() {
       const wrap = mount.querySelector('.nav-wrap');
       const syncNavSizes = () => {
         if (!fs || !avatarEl || !wrap) return;
-        const h = Math.max(40, Math.round(fs.getBoundingClientRect().height));
+        const h = Math.max(40, Math.round(fs.offsetHeight || fs.getBoundingClientRect().height));
         avatarEl.style.height = h + 'px';
         avatarEl.style.width = h + 'px';
         const gap = parseFloat(getComputedStyle(wrap).columnGap) || 8;
@@ -279,6 +323,45 @@ function renderGlobalNav() {
           fsFb.addEventListener('mousemove', onMove);
           fsFb.addEventListener('mouseenter', onEnter);
           fsFb.addEventListener('mouseleave', onLeave);
+      }
+    } catch {}
+
+    // Fallback: subtle magnetic translation for nav capsule
+    try {
+      const fsFb = mount.querySelector('#primary-nav-fallback');
+      const prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const pointerFine = window.matchMedia && window.matchMedia('(hover:hover)').matches;
+      if (fsFb && !prefersReduced && pointerFine) {
+        let raf2 = 0;
+        let hovering = false;
+        const maxT = 1; // subtler
+        fsFb.addEventListener('mouseenter', () => { if (window.innerWidth < 768) return; hovering = true; });
+        fsFb.addEventListener('mouseleave', () => { hovering = false; });
+        const onMag = (e) => {
+          if (hovering) return;
+          if (raf2) return;
+          raf2 = requestAnimationFrame(() => {
+            raf2 = 0;
+            const r = fsFb.getBoundingClientRect();
+            const cx = r.left + r.width / 2;
+            const cy = r.top + r.height / 2;
+            const dx = e.clientX - cx;
+            const dy = e.clientY - cy;
+            const dist = Math.hypot(dx, dy);
+            const radius = 120;
+            if (dist < radius && window.innerWidth >= 768) {
+              const t = 1 - dist / radius;
+              const mag = maxT * t;
+              const inv = dist === 0 ? 0 : (mag / dist);
+              const tx = dx * inv;
+              const ty = dy * inv;
+              fsFb.style.transform = `translate(${tx.toFixed(2)}px, ${ty.toFixed(2)}px)`;
+            } else {
+              fsFb.style.transform = '';
+            }
+          });
+        };
+        window.addEventListener('mousemove', onMag, { passive: true });
       }
     } catch {}
 
@@ -879,7 +962,8 @@ async function loadBlogDetail() {
       return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4"><path d="M12 .5A11.5 11.5 0 0 0 .5 12.3c0 5.2 3.4 9.6 8.1 11.2.6.1.8-.3.8-.6v-2c-3.3.8-4-1.4-4-1.4-.6-1.5-1.4-1.9-1.4-1.9-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1.1 1.8 2.9 1.3 3.6 1 .1-.8.4-1.3.7-1.6-2.6-.3-5.3-1.3-5.3-5.8 0-1.3.5-2.4 1.2-3.2-.1-.3-.5-1.6.1-3.3 0 0 1-.3 3.3 1.2.9-.2 1.8-.3 2.7-.3.9 0 1.8.1 2.7.3 2.2-1.5 3.3-1.2 3.3-1.2.6 1.7.2 3 .1 3.3.8.8 1.2 1.9 1.2 3.2 0 4.5-2.7 5.4-5.3 5.8.4.3.7 1 .7 2v3c0 .3.2.7.8.6A11.5 11.5 0 0 0 23.5 12.3 11.5 11.5 0 0 0 12 .5z"/></svg>`;
     }
     if (k.includes('figma')) {
-      return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4"><path d="M12 9a3 3 0 000-6H9v6h3zM6 3h3v6H6a3 3 0 010-6zm6 6H9v6h3a3 3 0 000-6zm0 6H9v6h3a3 3 0 000-6zm1.5-3A3 3 0 1015 6a3 3 0 00-1.5 5.7z"/></svg>`;
+      // Minimal, balanced 5-dot Figma mark in monochrome for clarity at small sizes
+      return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4"><circle cx="9" cy="6" r="3"/><circle cx="15" cy="6" r="3"/><circle cx="9" cy="12" r="3"/><circle cx="15" cy="12" r="3"/><circle cx="9" cy="18" r="3"/></svg>`;
     }
     // Apple/App Store logo (simplified apple)
     return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4"><path d="M16.7 13.4c0-2.7 2.2-3.9 2.3-4-1.3-1.9-3.3-2.2-4-2.3-1.7-.2-3.3 1-4.1 1-.9 0-2.1-1-3.4-1-1.7 0-3.3 1-4.2 2.5-1.8 3.1-.5 7.7 1.3 10.2.9 1.3 2 2.7 3.4 2.7 1.3-.1 1.8-.9 3.4-.9s2 .9 3.4.9c1.4 0 2.5-1.3 3.4-2.7.6-.9.9-1.9 1.2-2.9-3.1-1.2-3.7-4-3.7-4.5zM14.9 5.3c.7-.9 1.1-2 1-3.1-1 .1-2.1.7-2.8 1.6-.6.8-1.1 1.9-1 3 1 .1 2.1-.6 2.8-1.5z"/></svg>`;
@@ -995,7 +1079,7 @@ async function loadBlogDetail() {
       if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
     });
 
-    // Active link highlight via IntersectionObserver
+    // Active link highlight via IntersectionObserver (use explicit class for strong override)
     const byId = Object.fromEntries([...toc.querySelectorAll('a[data-id]')].map(a => [a.getAttribute('data-id'), a]));
     const observeTargets = [...chapterSections, ...headingEls];
     const obs = new IntersectionObserver(entries => {
@@ -1004,8 +1088,8 @@ async function loadBlogDetail() {
         const link = byId[id];
         if (!link) return;
         if (entry.isIntersecting) {
-          Object.values(byId).forEach(el => el.classList.remove('text-black','font-medium'));
-          link.classList.add('text-black','font-medium');
+          Object.values(byId).forEach(el => el.classList.remove('toc-active'));
+          link.classList.add('toc-active');
         }
       });
     }, { rootMargin: '-40% 0px -55% 0px', threshold: [0, 1] });
@@ -1430,7 +1514,25 @@ function initConnectPageAccordion() {
 
     btn.addEventListener('click', () => {
       const isOpen = item.classList.contains('open');
-      isOpen ? close() : open();
+      if (isOpen) {
+        close();
+        return;
+      }
+      // Close other open items for focused reading
+      root.querySelectorAll('.acc-item.open').forEach((other) => {
+        if (other === item) return;
+        const oBtn = other.querySelector('[data-acc="toggle"]');
+        const oPanel = other.querySelector('.acc-panel');
+        const oChev = other.querySelector('.chev');
+        other.classList.remove('open');
+        if (oBtn) oBtn.setAttribute('aria-expanded', 'false');
+        if (oPanel) {
+          oPanel.style.maxHeight = '0px';
+          oPanel.style.transition = 'max-height .28s ease';
+        }
+        if (oChev) oChev.style.transform = 'rotate(0deg)';
+      });
+      open();
     });
 
     // keep height correct on resize if open

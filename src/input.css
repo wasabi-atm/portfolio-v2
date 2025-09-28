@@ -82,3 +82,44 @@
 }
 .ios-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 .ios-toast.hide { opacity: 0; }
+
+/* Animated center-growing underline for nav labels */
+.nav-underline {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-repeat: no-repeat;
+  background-position: 50% 100%;
+  background-size: 0% 2px;
+  padding-bottom: 2px; /* space for underline */
+  transition: background-size 180ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+/* Hover/focus grow */
+a:hover .nav-underline,
+a:focus-visible .nav-underline,
+.nav-underline:hover,
+.nav-underline:focus-visible,
+a.nav-underline:hover,
+a.nav-underline:focus-visible { background-size: 70% 2px; }
+/* Active (current page) */
+a[aria-current="page"] .nav-underline,
+a[aria-current="page"].nav-underline { background-size: 70% 2px; }
+
+/* Article TOC active state: strong contrast */
+#toc-links a.toc-active { color: #000 !important; font-weight: 600; }
+
+/* Connect page accordion emphasis */
+#about-accordion .acc-btn {
+  color: #a1a1aa; /* zinc-400 – lighter default */
+  transition: color .18s ease;
+}
+#about-accordion .acc-item:hover .acc-btn,
+#about-accordion .acc-btn:focus-visible {
+  color: #71717a; /* zinc-500 – subtle hover */
+}
+#about-accordion .acc-item.open .acc-btn {
+  color: #3f3f46; /* zinc-700 – clear focus without going to 800 */
+}
+#about-accordion .acc-panel { color: #a1a1aa; /* zinc-400 – default calm */ }
+#about-accordion .acc-item.open .acc-panel { color: #a1a1aa !important; }
+
+/* Emphasis utility for select accordion content */
+#about-accordion .acc-panel .acc-strong { color: #52525b !important; } /* zinc-600 */

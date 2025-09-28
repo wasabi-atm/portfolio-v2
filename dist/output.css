@@ -1029,6 +1029,10 @@
     --tw-blur: blur(var(--blur-md));
     filter: var(--tw-blur,) var(--tw-brightness,) var(--tw-contrast,) var(--tw-grayscale,) var(--tw-hue-rotate,) var(--tw-invert,) var(--tw-saturate,) var(--tw-sepia,) var(--tw-drop-shadow,);
   }
+  .grayscale {
+    --tw-grayscale: grayscale(100%);
+    filter: var(--tw-blur,) var(--tw-brightness,) var(--tw-contrast,) var(--tw-grayscale,) var(--tw-hue-rotate,) var(--tw-invert,) var(--tw-saturate,) var(--tw-sepia,) var(--tw-drop-shadow,);
+  }
   .transition {
     transition-property: color, background-color, border-color, outline-color, text-decoration-color, fill, stroke, --tw-gradient-from, --tw-gradient-via, --tw-gradient-to, opacity, box-shadow, transform, translate, scale, rotate, filter, -webkit-backdrop-filter, backdrop-filter, display, visibility, content-visibility, overlay, pointer-events;
     transition-timing-function: var(--tw-ease, var(--default-transition-timing-function));
@@ -1243,11 +1247,6 @@
   .aria-\[current\=page\]\:text-black {
     &[aria-current="page"] {
       color: var(--color-black);
-    }
-  }
-  .aria-\[current\=page\]\:underline {
-    &[aria-current="page"] {
-      text-decoration-line: underline;
     }
   }
   .sm\:my-6 {
@@ -1662,11 +1661,6 @@
       font-size: 34px;
     }
   }
-  .md\:text-black {
-    @media (width >= 48rem) {
-      color: var(--color-black);
-    }
-  }
   .md\:text-neutral-500 {
     @media (width >= 48rem) {
       color: var(--color-neutral-500);
@@ -1675,21 +1669,6 @@
   .md\:text-zinc-500 {
     @media (width >= 48rem) {
       color: var(--color-zinc-500);
-    }
-  }
-  .md\:underline {
-    @media (width >= 48rem) {
-      text-decoration-line: underline;
-    }
-  }
-  .md\:decoration-2 {
-    @media (width >= 48rem) {
-      text-decoration-thickness: 2px;
-    }
-  }
-  .md\:underline-offset-4 {
-    @media (width >= 48rem) {
-      text-underline-offset: 4px;
     }
   }
   .md\:shadow-none {
@@ -1905,6 +1884,43 @@
 }
 .ios-toast.hide {
   opacity: 0;
+}
+.nav-underline {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-repeat: no-repeat;
+  background-position: 50% 100%;
+  background-size: 0% 2px;
+  padding-bottom: 2px;
+  transition: background-size 180ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+a:hover .nav-underline, a:focus-visible .nav-underline, .nav-underline:hover, .nav-underline:focus-visible, a.nav-underline:hover, a.nav-underline:focus-visible {
+  background-size: 70% 2px;
+}
+a[aria-current="page"] .nav-underline, a[aria-current="page"].nav-underline {
+  background-size: 70% 2px;
+}
+#toc-links a.toc-active {
+  color: #000 !important;
+  font-weight: 600;
+}
+#about-accordion .acc-btn {
+  color: #a1a1aa;
+  transition: color .18s ease;
+}
+#about-accordion .acc-item:hover .acc-btn, #about-accordion .acc-btn:focus-visible {
+  color: #71717a;
+}
+#about-accordion .acc-item.open .acc-btn {
+  color: #3f3f46;
+}
+#about-accordion .acc-panel {
+  color: #a1a1aa;
+}
+#about-accordion .acc-item.open .acc-panel {
+  color: #a1a1aa !important;
+}
+#about-accordion .acc-panel .acc-strong {
+  color: #52525b !important;
 }
 @property --tw-translate-x {
   syntax: "*";
