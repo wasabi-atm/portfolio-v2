@@ -38,29 +38,72 @@
     <div class="justify-start leading-tight tracking-tight">
       <span class="text-zinc-400 text-2xl">Ready to craft products people </span><span class="text-black text-2xl">truly love</span>
     </div>
+
+    <!-- CTA: Case Studies -->
+    <div class="pt-2 sm:pt-3 md:pt-4">
+      <a href="blogs.html?tag=Case%20Studies" aria-label="View Case Studies"
+         class="inline-flex items-center rounded-full border border-zinc-300/70 bg-white/70 text-zinc-800 px-5 py-2 text-sm sm:text-base font-medium hover:bg-zinc-100 hover:text-black hover:border-zinc-400 focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2 focus:ring-offset-zinc-100 transition-colors">
+        Case Studies &gt;
+      </a>
+    </div>
   </main>
 
   <!-- Section separator -->
   <hr class="mx-auto w-full max-w-[1100px] border-t border-zinc-200/80 my-4 sm:my-6 md:my-10" />
 
 
-  <!-- Design works grid: 1 wide + 2 half -->
+  <!-- Design works grid: 2x2 -->
   <section class="mx-auto w-full max-w-[1100px] px-6 sm:px-8 md:px-12 lg:px-24 xl:px-28 2xl:px-32 py-16 md:py-24">
     <h2 class="text-xl sm:text-2xl leading-snug text-content mb-6 md:mb-8">Design Showcase</h2>
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
-      <!-- Wide tile (spans 2 cols on md+) -->
-      <figure class="md:col-span-2 overflow-hidden rounded-2xl">
-        <img src="assets/Video Mockup WebP from ezgif.webp" alt="Design work" class="block w-full aspect-video object-cover rounded-2xl" />
-        <figcaption class="mt-2 text-sm sm:text-base text-muted leading-snug pl-3 md:pl-4">Brief description of this design piece goes here.</figcaption>
+      <figure class="rounded-2xl relative">
+        <video class="block w-full aspect-[4/3] object-cover rounded-2xl" src="assets/Swisekai.mp4" autoplay muted loop playsinline preload="metadata" poster="assets/Swisekai.webp" aria-label="Swisekai demo"></video>
+        <figcaption class="mt-2 text-sm sm:text-base text-muted leading-snug pl-3 md:pl-4">
+          SwiSekai is an 
+          <span class="relative inline-block group">
+            <span class="underline underline-offset-4 decoration-zinc-400 group-hover:decoration-black cursor-help">Ultra-responsive</span>
+            <span role="tooltip" class="pointer-events-none absolute left-1/2 top-full z-50 mt-2 w-[min(90vw,260px)] -translate-x-1/2 translate-y-1 opacity-0 group-hover:opacity-100 group-hover:translate-y-0 transition duration-200">
+              <span class="block rounded-md border border-zinc-200 bg-white px-3 py-2 text-xs text-zinc-700 shadow-md">
+                Ultra-responsive means buttery-smooth interactions, minimal input latency, and layouts that adapt instantly across window sizes and system settings.
+              </span>
+            </span>
+          </span>
+          <b>MacOS app</b> designed to be a companion for new programmers.
+        </figcaption>
       </figure>
-      <!-- Two 50:50 tiles -->
-      <figure class="overflow-hidden rounded-2xl">
-        <img src="assets/Video Mockup WebP from ezgif.webp" alt="Design work" class="block w-full aspect-video object-cover rounded-2xl" />
-        <figcaption class="mt-2 text-sm sm:text-base text-muted leading-snug pl-3 md:pl-4">Short description or context for this animation.</figcaption>
+      <figure class="rounded-2xl relative">
+        <video class="block w-full aspect-[4/3] object-cover rounded-2xl" src="assets/Carte.mp4" autoplay muted loop playsinline preload="metadata" aria-label="Carte demo"></video>
+        <figcaption class="mt-2 text-sm sm:text-base text-muted leading-snug pl-3 md:pl-4">
+          Carte is an <b>iOS app</b> that uses Apple's newest 
+          <span class="relative inline-block group">
+            <span class="underline underline-offset-4 decoration-zinc-400 group-hover:decoration-black cursor-help">Liquid Glass</span>
+            <span role="tooltip" class="pointer-events-none absolute left-1/2 top-full z-50 mt-2 w-[min(90vw,260px)] -translate-x-1/2 translate-y-1 opacity-0 group-hover:opacity-100 group-hover:translate-y-0 transition duration-200">
+              <span class="block rounded-md border border-zinc-200 bg-white px-3 py-2 text-xs text-zinc-700 shadow-md">
+                Liquid Glass is a dynamic, translucent material with depth, subtle blur, and specular highlights that responds to motion and context.
+              </span>
+            </span>
+          </span>
+          design.
+        </figcaption>
       </figure>
-      <figure class="overflow-hidden rounded-2xl">
-        <img src="assets/Video Mockup WebP from ezgif.webp" alt="Design work" class="block w-full aspect-video object-cover rounded-2xl" />
-        <figcaption class="mt-2 text-sm sm:text-base text-muted leading-snug pl-3 md:pl-4">Another placeholder description to explain the outcome.</figcaption>
+      <figure class="rounded-2xl relative">
+        <video class="block w-full aspect-[4/3] object-cover rounded-2xl" src="assets/Stoa.mp4" autoplay muted loop playsinline preload="metadata" aria-label="Stoa demo"></video>
+        <figcaption class="mt-2 text-sm sm:text-base text-muted leading-snug pl-3 md:pl-4">
+          Stoa is an 
+          <span class="relative inline-block group">
+            <span class="underline underline-offset-4 decoration-zinc-400 group-hover:decoration-black cursor-help">accessibility friendly</span>
+            <span role="tooltip" class="pointer-events-none absolute left-1/2 top-full z-50 mt-2 w-[min(90vw,260px)] -translate-x-1/2 translate-y-1 opacity-0 group-hover:opacity-100 group-hover:translate-y-0 transition duration-200">
+              <span class="block rounded-md border border-zinc-200 bg-white px-3 py-2 text-xs text-zinc-700 shadow-md">
+                Designed with inclusive color contrast, large tap targets, Dynamic Type, VoiceOver labels, and reduced motion support.
+              </span>
+            </span>
+          </span>
+          &nbsp;<b>iOS app</b> for mindfulness with stoic philosophy.
+        </figcaption>
+      </figure>
+      <figure class="rounded-2xl relative">
+        <img src="assets/Video Mockup WebP from ezgif.webp" alt="Design work" class="block w-full aspect-[4/3] object-cover rounded-2xl" />
+        <figcaption class="mt-2 text-sm sm:text-base text-muted leading-snug pl-3 md:pl-4">Showcase item four description.</figcaption>
       </figure>
     </div>
   </section>

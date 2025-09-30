@@ -26,7 +26,7 @@
     <section class="grid grid-cols-1 md:grid-cols-[1fr_1.25fr] gap-6 md:gap-12 items-start">
       <!-- Left: portrait -->
       <div>
-        <img src="assets/BG Placeholder.avif" alt="Portrait / coffee desk" class="w-full max-w-sm sm:max-w-md md:max-w-full aspect-[4/5] object-cover rounded-[30px] mx-auto" />
+        <img id="connect-portrait" src="assets/profile.jpg" data-default-src="assets/profile.jpg" alt="Portrait / coffee desk" class="w-full max-w-sm sm:max-w-md md:max-w-full aspect-[4/5] object-cover rounded-[30px] mx-auto" />
       </div>
       <!-- Right: text + accordion -->
       <div>
@@ -35,7 +35,7 @@
         <div id="about-accordion" class="mt-4 border-t border-zinc-200">
           <!-- Row 1 -->
           <div class="acc-item border-b border-zinc-200">
-            <button class="acc-btn w-full grid grid-cols-[1fr_auto] items-center gap-4 py-4 text-left" aria-expanded="false" data-acc="toggle">
+            <button class="acc-btn w-full grid grid-cols-[1fr_auto] items-center gap-4 py-4 text-left" aria-expanded="false" data-acc="toggle" data-portrait-swap="assets/internationalRelations.JPG">
               <span class="text-base md:text-lg">Educational background in <b>International Relations</b></span>
               <svg class="chev w-5 h-5 text-zinc-500 transition-transform" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M7 5l6 5-6 5V5z"/></svg>
             </button>
@@ -47,7 +47,7 @@
           </div>
           <!-- Row 2 -->
           <div class="acc-item border-b border-zinc-200">
-            <button class="acc-btn w-full grid grid-cols-[1fr_auto] items-center gap-4 py-4 text-left" aria-expanded="false" data-acc="toggle">
+            <button class="acc-btn w-full grid grid-cols-[1fr_auto] items-center gap-4 py-4 text-left" aria-expanded="false" data-acc="toggle" data-portrait-swap="assets/volunteering.jpg">
               <span class="text-base md:text-lg">I love <b>volunteering</b> and <b>supporting social causes</b></span>
               <svg class="chev w-5 h-5 text-zinc-500 transition-transform" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M7 5l6 5-6 5V5z"/></svg>
             </button>
@@ -59,7 +59,7 @@
           </div>
           <!-- Row 3 -->
           <div class="acc-item border-b border-zinc-200">
-            <button class="acc-btn w-full grid grid-cols-[1fr_auto] items-center gap-4 py-4 text-left" aria-expanded="false" data-acc="toggle">
+            <button class="acc-btn w-full grid grid-cols-[1fr_auto] items-center gap-4 py-4 text-left" aria-expanded="false" data-acc="toggle" data-portrait-swap="assets/design.jpg">
               <span class="text-base md:text-lg">I design to <b>solve real problems</b></span>
               <svg class="chev w-5 h-5 text-zinc-500 transition-transform" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M7 5l6 5-6 5V5z"/></svg>
             </button>

@@ -54,9 +54,9 @@ function renderGlobalNav() {
 
     const connectActive = (here === 'connect.html');
     const connectAvatar = (
-      '<a href="connect.html" class="group inline-flex items-center justify-center p-1.5 rounded-full bg-white shadow-[0_6px_16px_rgba(0,0,0,0.12)] ring-2 '
+      '<a href="connect.html" class="group inline-flex items-center justify-center p-1.5 rounded-full bg-white/80 backdrop-blur-md border border-zinc-200/80 shadow-[0_6px_16px_rgba(0,0,0,0.12)] ring-2 '
       + (connectActive ? 'ring-green-600' : 'ring-white') + ' overflow-hidden transition-all duration-200 hover:bg-zinc-50 hover:shadow-[0_8px_20px_rgba(0,0,0,0.14)]" aria-label="Connect" id="connect-avatar">'
-      + '<img src="assets/BG%20Placeholder.avif" alt="" class="h-full w-full object-cover rounded-full ring-2 ' + (connectActive ? 'ring-black' : 'ring-transparent') + ' ring-inset transition-transform duration-200 group-hover:scale-[1.03]"/>'
+      + '<img src="assets/profilePinkGreen.png" alt="" class="h-full w-full object-cover rounded-full ring-2 ' + (connectActive ? 'ring-black' : 'ring-transparent') + ' ring-inset transition-transform duration-200 group-hover:scale-[1.03]"/>'
       + '<span class="sr-only">Connect</span>'
       + '</a>'
     );
@@ -66,7 +66,7 @@ function renderGlobalNav() {
       + '<div class="w-full flex justify-center">'
       + '<div class="flex items-center gap-2 sm:gap-3 nav-wrap">'
       + '<fieldset role="tablist" aria-label="Primary navigation" id="primary-nav"'
-      + '  class="w-auto max-w-[94vw] sm:max-w-[88vw] md:w-[180px] flex items-center justify-center rounded-full bg-white shadow-[0_6px_16px_rgba(0,0,0,0.12)] px-3 sm:px-4 py-3 sm:py-3.5 md:px-4 md:py-4 gap-2 sm:gap-3 md:gap-2">'
+      + '  class="w-auto max-w-[94vw] sm:max-w-[88vw] md:w-[180px] flex items-center justify-center rounded-full bg-white/80 backdrop-blur-md border border-zinc-200/80 shadow-[0_6px_16px_rgba(0,0,0,0.12)] px-3 sm:px-4 py-3 sm:py-3.5 md:px-4 md:py-4 gap-2 sm:gap-3 md:gap-2">'
       + '<legend class="sr-only">Navigation</legend>'
       + links
       + '</fieldset>'
@@ -88,6 +88,18 @@ function renderGlobalNav() {
       const isConnectAvatar = (here === 'connect.html') && (a.id === 'connect-avatar' || /connect\.html$/.test(dest));
       if (!(samePage || isConnectAvatar)) return;
       e.preventDefault();
+      // If already on Blogs and the Blogs tab is clicked, reset filters to ALL
+      try {
+        if (here === 'blogs.html' && /blogs\.html$/.test(dest)) {
+          if (window.__blogFilters && typeof window.__blogFilters.setActive === 'function') {
+            window.__blogFilters.setActive('ALL');
+            // Clean the URL params for a canonical ALL state
+            const base = location.pathname.split('/').pop() || 'blogs.html';
+            const url = base + (location.hash || '');
+            history.replaceState(null, '', url);
+          }
+        }
+      } catch {}
       const fs = mount.querySelector('#primary-nav');
       if (fs) {
         fs.classList.remove('shake-x');
@@ -253,12 +265,12 @@ function renderGlobalNav() {
       <div class="fixed inset-x-0 z-50 bottom-[calc(env(safe-area-inset-bottom)+36px)] md:bottom-auto md:top-6">
         <div class="w-full flex justify-center">
           <div class="flex items-center gap-2 nav-wrap">
-            <nav id="primary-nav-fallback" class="w-auto max-w-[94vw] sm:max-w-[88vw] md:w-[180px] flex items-center justify-center gap-2 sm:gap-3 rounded-full bg-white shadow-[0_6px_16px_rgba(0,0,0,0.12)] px-3 sm:px-4 py-3 sm:py-3.5 md:px-4 md:py-4">
+            <nav id="primary-nav-fallback" class="w-auto max-w-[94vw] sm:max-w-[88vw] md:w-[180px] flex items-center justify-center gap-2 sm:gap-3 rounded-full bg-white/80 backdrop-blur-md border border-zinc-200/80 shadow-[0_6px_16px_rgba(0,0,0,0.12)] px-3 sm:px-4 py-3 sm:py-3.5 md:px-4 md:py-4">
               <a href="index.html" class="px-4 sm:px-4 py-0.5 sm:py-1 rounded-full text-sm text-neutral-600 hover:bg-zinc-100 transition-colors nav-underline">Home</a>
               <a href="blogs.html" class="px-4 sm:px-4 py-0.5 sm:py-1 rounded-full text-sm text-neutral-600 hover:bg-zinc-100 transition-colors nav-underline">Blogs</a>
             </nav>
-            <a href="connect.html" class="group inline-flex items-center justify-center p-1.5 rounded-full bg-white shadow-[0_6px_16px_rgba(0,0,0,0.12)] ring-2 ${onConnect ? 'ring-green-600' : 'ring-white'} overflow-hidden transition-all duration-200 hover:bg-zinc-50 hover:shadow-[0_8px_20px_rgba(0,0,0,0.14)]" aria-label="Connect" id="connect-avatar-fallback">
-                <img src="assets/BG%20Placeholder.avif" alt="" class="h-full w-full object-cover rounded-full ring-2 ring-inset ring-transparent transition-transform duration-200 group-hover:scale-[1.03]"/>
+            <a href="connect.html" class="group inline-flex items-center justify-center p-1.5 rounded-full bg-white/80 backdrop-blur-md border border-zinc-200/80 shadow-[0_6px_16px_rgba(0,0,0,0.12)] ring-2 ${onConnect ? 'ring-green-600' : 'ring-white'} overflow-hidden transition-all duration-200 hover:bg-zinc-50 hover:shadow-[0_8px_20px_rgba(0,0,0,0.14)]" aria-label="Connect" id="connect-avatar-fallback">
+                <img src="assets/profilePinkGreen.png" alt="" class="h-full w-full object-cover rounded-full ring-2 ring-inset ring-transparent transition-transform duration-200 group-hover:scale-[1.03]"/>
                 <span class="sr-only">Connect</span>
             </a>
           </div>
@@ -531,7 +543,10 @@ function normalizeBlog(entry) {
   // Tags can be an array of strings or objects
   let tags = d['Blog tags'] || d.blogTags || d.tags || [];
   if (Array.isArray(tags)) {
-    tags = tags.map(t => (typeof t === 'string' ? t : (t?.value || t?.name || ''))).filter(Boolean);
+    tags = tags
+      .map(t => (typeof t === 'string' ? t : (t?.value || t?.name || '')))
+      .map(s => (s || '').trim())
+      .filter(Boolean);
   } else {
     tags = [];
   }
@@ -700,7 +715,7 @@ function blogRowHTML(b) {
           </p>
 
           <!-- Tight title on mobile; larger on desktop; clamp to prevent tall cards -->
-          <h2 class="text-base sm:text-lg md:text-[26px] leading-snug text-black line-clamp-2" data-title>
+          <h2 class="text-base sm:text-lg md:text-[26px] leading-relaxed text-black font-bold line-clamp-2" data-title>
             ${b.title}
           </h2>
 
@@ -1186,23 +1201,44 @@ function renderBlogFilters(items) {
   const c = document.getElementById('blogs-filters');
   if (!c) return;
   const tags = uniqueSortedBlogTags(items);
-  const state = { active: 'ALL' };
+  const state = (window.__blogFilterState = window.__blogFilterState || { active: 'ALL' });
+  const canon = (s) => (s || '').toString().trim().toLowerCase();
   const paint = () => {
     const chip = (label, selected = false) => `
       <button type="button" data-tag="${label}" aria-pressed="${selected ? 'true' : 'false'}"
-        class="rounded-full px-3 py-1 text-sm transition-colors border border-zinc-300/60 hover:bg-black/5 ${selected ? 'bg-black text-white border-black' : 'bg-white/70 text-zinc-400'}">
+        class="rounded-full px-3 py-1 text-sm transition-colors border focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2 focus:ring-offset-zinc-100 ${selected ? 'bg-black text-white border-black hover:bg-black/90' : 'bg-white/70 text-zinc-400 border-zinc-300/60 hover:bg-zinc-100 hover:text-black hover:border-zinc-400'}">
         ${label}
       </button>`;
     c.innerHTML = [chip('ALL', state.active === 'ALL'), ...tags.map(t => chip(t, state.active === t))].join('');
+  };
+  const resolveTag = (tag) => {
+    const want = canon(tag);
+    if (!want || want === 'all') return 'ALL';
+    // exact match first
+    let match = tags.find(t => canon(t) === want);
+    if (match) return match;
+    // then partial match (contains)
+    match = tags.find(t => canon(t).includes(want) || want.includes(canon(t)));
+    return match || 'ALL';
+  };
+  const applyFilter = (tag) => {
+    state.active = resolveTag(tag);
+    const filtered = state.active === 'ALL'
+      ? items.slice()
+      : items.filter(i => (i.tags || []).some(t => canon(t) === canon(state.active)));
+    renderBlogsList(filtered);
+    paint();
+  };
+  // Expose global controls for navbar and deep links
+  window.__blogFilters = {
+    setActive: applyFilter,
+    getActive: () => state.active,
   };
   paint();
   c.onclick = (e) => {
     const btn = e.target.closest('button[data-tag]');
     if (!btn) return;
-    state.active = btn.getAttribute('data-tag');
-    const filtered = state.active === 'ALL' ? items.slice() : items.filter(i => (i.tags || []).includes(state.active));
-    renderBlogsList(filtered);
-    paint();
+    applyFilter(btn.getAttribute('data-tag'));
   };
 }
 
@@ -1262,8 +1298,15 @@ async function loadBlogsAndRender() {
       return;
     }
     if (filtersEl) { filtersEl.removeAttribute('aria-busy'); }
+    // Initialize filters and optionally apply URL-provided tag
     renderBlogFilters(normalized);
-    renderBlogsList(normalized);
+    const params = new URLSearchParams(location.search);
+    const initialTag = params.get('tag');
+    if (window.__blogFilters && typeof window.__blogFilters.setActive === 'function') {
+      window.__blogFilters.setActive(initialTag || 'ALL');
+    } else {
+      renderBlogsList(normalized);
+    }
   } catch (e) {
     console.error('[blogs] fetch failed', e);
     if (filtersEl) { filtersEl.innerHTML = ''; filtersEl.removeAttribute('aria-busy'); }
@@ -1486,10 +1529,57 @@ function initConnectPageAccordion() {
   if (!root) return;
 
   const items = root.querySelectorAll('.acc-item');
+  const portrait = document.getElementById('connect-portrait');
+  const defaultPortrait = portrait ? (portrait.getAttribute('data-default-src') || portrait.getAttribute('src')) : '';
+  // Debounced hover preview state (enter/leave)
+  let __hoverEnterTimer = 0;
+  let __hoverLeaveTimer = 0;
+  let __hoverArmedFor = null;
+  let __swapToken = 0;
+  const setPortrait = (src) => {
+    if (!portrait || !src) return;
+    if (portrait.getAttribute('src') === src) return; // no-op
+    const token = ++__swapToken;
+    const preload = new Image();
+    preload.onload = () => {
+      if (token !== __swapToken) return; // superseded
+      const onFadeOut = () => {
+        portrait.removeEventListener('transitionend', onFadeOut);
+        if (token !== __swapToken) return;
+        portrait.src = src;
+        // Allow the browser to apply the new image, then fade back in
+        requestAnimationFrame(() => { if (token === __swapToken) portrait.style.opacity = '1'; });
+      };
+      // Fallback in case transitionend doesn't fire
+      const fallback = setTimeout(() => {
+        if (token !== __swapToken) return;
+        onFadeOut();
+      }, 180);
+      const wrapped = () => { clearTimeout(fallback); onFadeOut(); };
+      portrait.addEventListener('transitionend', wrapped, { once: true });
+      // Trigger fade out
+      portrait.style.opacity = '0';
+    };
+    preload.onerror = () => {
+      if (token !== __swapToken) return;
+      portrait.src = src; // fallback without fade if preload fails
+      portrait.style.opacity = '1';
+    };
+    preload.src = src;
+  };
+  const getActivePortrait = () => {
+    const openBtn = root.querySelector('.acc-item.open [data-acc="toggle"][data-portrait-swap]');
+    return (openBtn && openBtn.getAttribute('data-portrait-swap')) || defaultPortrait;
+  };
+  const setToActivePortrait = () => {
+    const src = getActivePortrait();
+    if (src) setPortrait(src);
+  };
   items.forEach((item) => {
     const btn = item.querySelector('[data-acc="toggle"]');
     const panel = item.querySelector('.acc-panel');
     const chev = item.querySelector('.chev');
+    const swapSrc = btn ? btn.getAttribute('data-portrait-swap') : '';
 
     if (!btn || !panel) return;
 
@@ -1503,6 +1593,8 @@ function initConnectPageAccordion() {
       panel.style.maxHeight = '0px';
       if (chev) chev.style.transform = 'rotate(0deg)';
       panel.style.transition = 'max-height .28s ease';
+      // When closing, revert to any other open item's portrait (or default)
+      if (swapSrc) setToActivePortrait();
     };
     const open = () => {
       item.classList.add('open');
@@ -1510,6 +1602,8 @@ function initConnectPageAccordion() {
       panel.style.maxHeight = panel.scrollHeight + 'px';
       if (chev) chev.style.transform = 'rotate(90deg)';
       panel.style.transition = 'max-height .28s ease';
+      // Swap portrait when this item opens
+      if (swapSrc) setPortrait(swapSrc);
     };
 
     btn.addEventListener('click', () => {
@@ -1518,6 +1612,10 @@ function initConnectPageAccordion() {
         close();
         return;
       }
+      // Cancel any pending hover timers when explicitly opening
+      if (__hoverEnterTimer) { clearTimeout(__hoverEnterTimer); __hoverEnterTimer = 0; }
+      if (__hoverLeaveTimer) { clearTimeout(__hoverLeaveTimer); __hoverLeaveTimer = 0; }
+      __hoverArmedFor = null;
       // Close other open items for focused reading
       root.querySelectorAll('.acc-item.open').forEach((other) => {
         if (other === item) return;
@@ -1541,6 +1639,31 @@ function initConnectPageAccordion() {
         panel.style.maxHeight = panel.scrollHeight + 'px';
       }
     });
+
+    // Hover effect: preview portrait swap while hovering button
+    if (swapSrc) {
+      btn.addEventListener('mouseenter', () => {
+        __hoverArmedFor = item;
+        if (__hoverLeaveTimer) { clearTimeout(__hoverLeaveTimer); __hoverLeaveTimer = 0; }
+        if (__hoverEnterTimer) clearTimeout(__hoverEnterTimer);
+        __hoverEnterTimer = setTimeout(() => {
+          __hoverEnterTimer = 0;
+          if (__hoverArmedFor === item && !item.classList.contains('open')) {
+            setPortrait(swapSrc);
+          }
+        }, 250);
+      });
+      btn.addEventListener('mouseleave', () => {
+        if (__hoverEnterTimer) { clearTimeout(__hoverEnterTimer); __hoverEnterTimer = 0; }
+        __hoverArmedFor = null;
+        if (__hoverLeaveTimer) clearTimeout(__hoverLeaveTimer);
+        __hoverLeaveTimer = setTimeout(() => {
+          __hoverLeaveTimer = 0;
+          // Revert to the currently open item's portrait, or default, if this item isn't open
+          if (!item.classList.contains('open')) setToActivePortrait();
+        }, 250);
+      });
+    }
   });
 }
 
@@ -1691,6 +1814,8 @@ async function loadProjectDetail() {
 // Inject back button floating style
 const style = document.createElement('style');
 style.textContent = `
+  /* Smooth portrait cross-fade on Connect */
+  #connect-portrait { transition: opacity .25s ease; opacity: 1; }
   #back-button.back-floating {
     position: fixed !important;
     top: 1rem; /* mobile top offset */
