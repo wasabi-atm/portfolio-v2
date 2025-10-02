@@ -673,24 +673,50 @@ function normalizeArticleHtml(input) {
   s = s.replace(/&lt;(img\b[^>]*?)\/?&gt;/gi, '<$1>');
   s = s.replace(/&lt;(img\b[^>]*?)\s*\/?&gt;/gi, '<$1>');
 
-  // 2) If content already contains HTML tags, keep as-is (browsers render <img> natively)
+  // 2) Convert plain text to simple HTML blocks and images when no tags present
   const hasHtml = /<[^>]+>/.test(s);
-  if (hasHtml) return s;
+  if (!hasHtml) {
+    // Markdown image: ![alt](url)
+    s = s.replace(/!\[(.*?)\]\((https?:[^\s)]+)\)/g, (_m, alt, url) => `<img src="${url}" alt="${alt || ''}">`);
+    // Bare image URLs -> <img>
+    s = s.replace(/(https?:\/\/[^\s)]+\.(?:png|jpe?g|gif|webp|svg|avif)(?:\?[^\s)]+)?)/gi, (m) => `<img src="${m}" alt="">`);
+    // Paragraphs: split on blank lines; single newlines become <br>
+    const parts = s.split(/\n{2,}/).map(t => t.trim()).filter(Boolean);
+    if (parts.length) s = parts.map(p => `<p>${p.replace(/\n/g, '<br/>')}</p>`).join('');
+  }
 
-  // 3) Plain text: convert markdown image syntax and bare image URLs into <img>
-  // Markdown image: ![alt](url)
-  s = s.replace(/!\[(.*?)\]\((https?:[^\s)]+)\)/g, (_m, alt, url) => `<img src="${url}" alt="${alt || ''}">`);
-  // Bare image URLs -> <img>
-  s = s.replace(/(https?:\/\/[^\s)]+\.(?:png|jpe?g|gif|webp|svg|avif)(?:\?[^\s)]+)?)/gi, (m) => `<img src="${m}" alt="">`);
+  // 3) Enforce reasonable image sizing on desktop for any <img> tags
+  // Add or extend class to include responsive constraints
+  const injectImgClasses = (attrs = '') => {
+    const needed = 'mx-auto block max-w-full h-auto md:max-h-[40vh] object-contain rounded-[40px]';
+    const clsRe = /\bclass\s*=\s*"([^"]*)"/i;
+    const m = attrs.match(clsRe);
+    if (m) {
+      const current = m[1] || '';
+      const merged = `${current} ${needed}`.trim();
+      return attrs.replace(clsRe, `class="${merged}"`);
+    }
+    return `${attrs} class="${needed}"`;
+  };
+  s = s.replace(/<img\b([^>]*)>/gi, (_m, attrs) => `<img ${injectImgClasses((attrs || '').trim())}>`);
 
-  // 4) Paragraphs: split on blank lines; single newlines become <br>
-  const parts = s.split(/\n{2,}/).map(t => t.trim()).filter(Boolean);
-  if (!parts.length) return s;
-  return parts.map(p => `<p>${p.replace(/\n/g, '<br/>')}</p>`).join('');
+  // Ensure a hard 40pt border radius inline, even if height changes later
+  s = s.replace(/<img\b([^>]*)>/gi, (m) => {
+    if (/style=\"[^\"]*border-radius\s*:\s*40pt/i.test(m)) return m;
+    if (/style=\"/i.test(m)) return m.replace(/style=\"/i, 'style="border-radius:40pt; ');
+    return m.replace('<img ', '<img style="border-radius:40pt" ');
+  });
+
+  return s;
 }
 
 function blogRowHTML(b) {
   const firstTag = (b.tags && b.tags[0]) ? b.tags[0] : 'General';
+  function typeBadgeForTag(tag) {
+    const t = (tag || '').toLowerCase();
+    if (t.includes('case')) return 'assets/caseStudyGradient.jpeg';
+    return 'assets/BG%20Placeholder.avif';
+  }
   const author = `<strong>Wira Wibisana</strong> in <strong>${firstTag}</strong>`;
   const dateText = formatBlogDate(b.date);
   const dateTextShort = formatBlogDateShort(b.date);
@@ -709,7 +735,7 @@ function blogRowHTML(b) {
         <div class="relative z-10 min-w-0 space-y-1 md:space-y-2">
           <p class="text-xs md:text-sm text-zinc-600">
             ${author}
-            <img src="assets/BG%20Placeholder.avif" alt=""
+            <img src="${typeBadgeForTag(firstTag)}" alt="${firstTag} type"
                  class="inline-block align-middle h-[1em] w-[1em] object-cover"
                  loading="lazy" decoding="async"/>
           </p>
@@ -952,12 +978,65 @@ async function loadBlogDetail() {
   ];
 
   function chapterHtml(keyId, label, source) {
-    const html = (contentItem && (contentItem[label] || contentItem[label.toLowerCase()] || contentItem[label.replace(/\s+/g,'')])) || '';
+    if (!contentItem) return '';
+
+    // Build robust key variants to match Builder fields regardless of casing/format
+    const toCamel = (s = '') => s
+      .toString()
+      .toLowerCase()
+      .replace(/[\s_-]+([a-z0-9])/g, (_m, c) => c.toUpperCase());
+    const toPascal = (s = '') => {
+      const c = toCamel(s);
+      return c ? c[0].toUpperCase() + c.slice(1) : c;
+    };
+
+    const labelLower = (label || '').toString().toLowerCase();
+    const fromLabelNoSpaces = (label || '').toString().replace(/\s+/g, '');
+    const fromIdNoHyphen = (keyId || '').toString().replace(/[-_]+/g, ' ');
+
+    const variants = [
+      label,
+      labelLower,
+      fromLabelNoSpaces,
+      // Common separators
+      labelLower.replace(/\s+/g, '-'), // desk-research
+      labelLower.replace(/\s+/g, '_'), // desk_research
+      toCamel(label),                   // deskResearch
+      toPascal(label),                  // DeskResearch
+      // Also derive from the id to be safe
+      keyId,
+      fromIdNoHyphen,
+      toCamel(fromIdNoHyphen),
+      toPascal(fromIdNoHyphen),
+      fromIdNoHyphen.replace(/\s+/g, ''),
+      fromIdNoHyphen.replace(/\s+/g, '_'),
+      fromIdNoHyphen.replace(/\s+/g, '-'),
+    ].filter(Boolean);
+
+    // Find first matching non-empty value, allowing rich-text objects
+    let raw = '';
+    for (const k of variants) {
+      if (Object.prototype.hasOwnProperty.call(contentItem, k) && contentItem[k]) {
+        raw = contentItem[k];
+        break;
+      }
+    }
+    if (!raw) return '';
+
+    // Coerce to string if Builder returns a rich-text object
+    let html = '';
+    if (typeof raw === 'string') html = raw;
+    else if (raw && typeof raw === 'object') html = raw.html || raw.text || raw.value || '';
     if (!html) return '';
+
     return `
-      <section id="${keyId}" class="scroll-mt-24 border-t border-zinc-200 pt-10 mt-10">
-        <h2 class="text-xl md:text-2xl font-semibold mb-3">${label}</h2>
-        <div class="prose max-w-none">${typeof html === 'string' ? normalizeArticleHtml(html) : ''}</div>
+      <section id="${keyId}" class="scroll-mt-24 pt-10 mt-10">
+        <div class="flex items-center gap-3 my-6">
+          <div class="h-px bg-zinc-200 flex-1"></div>
+          <h2 class="shrink-0 px-3 text-xl md:text-2xl font-semibold text-center">${label}</h2>
+          <div class="h-px bg-zinc-200 flex-1"></div>
+        </div>
+        <div class="prose max-w-none">${normalizeArticleHtml(html)}</div>
       </section>`;
   }
 
@@ -967,8 +1046,13 @@ async function loadBlogDetail() {
   const bodyHtml = `${normalizeArticleHtml(htmlContent) || ''}${galleryHtml}${chaptersHtml}` || (b.description ? `<p>${b.description}</p>` : '<p></p>');
 
   const firstTag = (b.tags && b.tags[0]) ? b.tags[0] : 'General';
+  function typeBadgeForTag(tag) {
+    const t = (tag || '').toLowerCase();
+    if (t.includes('case')) return 'assets/caseStudyGradient.jpeg';
+    return 'assets/BG%20Placeholder.avif';
+  }
   const author = `<strong>Wira Wibisana</strong> in <strong>${firstTag}</strong>
-    <img src="assets/BG%20Placeholder.avif" alt="" class="inline-block align-middle h-[1em] w-[1em] object-cover" loading="lazy" decoding="async"/>`;
+    <img src="${typeBadgeForTag(firstTag)}" alt="${firstTag} type" class="inline-block align-middle h-[1em] w-[1em] object-cover" loading="lazy" decoding="async"/>`;
   const dateLong = formatBlogDate(b.date);
   const dateShort = formatBlogDateShort(b.date);
   function svgBrand(label) {
@@ -1109,6 +1193,19 @@ async function loadBlogDetail() {
       });
     }, { rootMargin: '-40% 0px -55% 0px', threshold: [0, 1] });
     observeTargets.forEach(t => obs.observe(t));
+  }
+
+  // Enable full-screen preview on any images within the article content
+  const articleSection = root.querySelector('section.prose');
+  if (articleSection) {
+    const imgEls = Array.from(articleSection.querySelectorAll('img'));
+    const imgSrcs = imgEls.map(img => img.getAttribute('src')).filter(Boolean);
+    if (imgEls.length && imgSrcs.length) {
+      imgEls.forEach((img, idx) => {
+        img.classList.add('cursor-zoom-in');
+        img.addEventListener('click', () => openLightbox(imgSrcs, idx));
+      });
+    }
   }
 
   // Back button floating logic: avoid stutter by using scroll threshold + rAF throttle
@@ -1400,16 +1497,31 @@ function projectCardHTML(p) {
   const img = p.thumbnail || '';
   const title = p.title || 'Untitled';
   const tagsText = p.tags?.length ? p.tags.join(' · ') : '';
-  const card = `
-  <article class="group relative overflow-hidden bg-zinc-200">
-    ${img ? `<img src="${img}" alt="${title}" loading="lazy" class="block aspect-square w-full object-cover transition-transform duration-300 group-hover:scale-105" />` : `<div class="aspect-square w-full bg-zinc-300"></div>`}
-    <div class="pointer-events-none absolute inset-0 bg-black/0 transition-colors duration-300 group-hover:bg-black/40"></div>
-    <div class="absolute inset-x-0 bottom-0 p-4 text-white transition-all duration-300 translate-y-2 opacity-0 group-hover:translate-y-0 group-hover:opacity-100">
-      <h3 class="text-lg font-medium">${title}</h3>
-      ${tagsText ? `<p class="mt-1 text-xs opacity-90">${tagsText}</p>` : ''}
-    </div>
-  </article>`;
-  return p.slug ? `<a href="showcase.html?slug=${encodeURIComponent(p.slug)}" class="block">${card}</a>` : card;
+
+  const inner = `
+    <div class="relative overflow-hidden">
+      ${img
+        ? `<img src="${img}" alt="${title}" loading="lazy"
+               class="block w-full aspect-square object-cover transition-transform duration-300 group-hover:scale-[1.03]" />`
+        : `<div class=\"aspect-square w-full bg-zinc-300\"></div>`}
+      <div class="pointer-events-none absolute inset-0 bg-black/0 transition-colors duration-300 group-hover:bg-black/10"></div>
+      <div class="absolute inset-x-0 bottom-0 p-4 text-white transition-all duration-300 translate-y-2 opacity-0 group-hover:translate-y-0 group-hover:opacity-100">
+        <h3 class="text-base md:text-lg font-semibold">${title}</h3>
+        ${tagsText ? `<p class="mt-1 text-xs md:text-sm opacity-90">${tagsText}</p>` : ''}
+      </div>
+    </div>`;
+
+  const wrapperClasses = [
+    'group h-full flex flex-col overflow-hidden rounded-2xl',
+    'ring-1 ring-zinc-200/70 bg-white/60 hover:ring-zinc-300 hover:bg-white',
+    'transition-shadow shadow-sm hover:shadow-md',
+    'focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2 focus:ring-offset-white'
+  ].join(' ');
+
+  if (p.slug) {
+    return `<a href="showcase.html?slug=${encodeURIComponent(p.slug)}" class="${wrapperClasses}" data-card="case-card">${inner}</a>`;
+  }
+  return `<div class="${wrapperClasses} cursor-pointer" data-card="case-card">${inner}</div>`;
 }
 
 function renderGrid(list) {
@@ -1876,6 +1988,19 @@ style.textContent = `
     footer {
       margin-bottom: 4rem;
     }
+  }
+  /* Article typography: headings serif, body sans */
+  #blog-detail h1, #blog-detail h2, #blog-detail h3,
+  #blog-detail h4, #blog-detail h5, #blog-detail h6 {
+    font-family: 'Lora', ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+    letter-spacing: .1px;
+  }
+  #blog-detail .prose,
+  #blog-detail .prose p,
+  #blog-detail .prose li,
+  #blog-detail .prose span,
+  #blog-detail .prose div {
+    font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji", sans-serif;
   }
 `;
 document.head.appendChild(style);
