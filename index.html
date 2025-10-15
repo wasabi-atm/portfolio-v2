@@ -26,7 +26,7 @@
   <div id="site-nav"></div>
 
   <!-- Greeting (hero) -->
-  <main class="mx-auto w-full max-w-[1100px] px-6 sm:px-8 md:px-12 lg:px-24 xl:px-28 2xl:px-32 mt-12 sm:mt-16 md:mt-24 lg:mt-28 py-12 sm:py-12 md:py-24 lg:py-32 space-y-2 sm:space-y-4 md:space-y-6 lg:space-y-8">
+  <main class="mx-auto w-full max-w-[1100px] px-6 sm:px-8 md:px-12 lg:px-24 xl:px-28 2xl:px-32 mt-12 sm:mt-16 md:mt-24 lg:mt-28 py-10 sm:py-10 md:py-20 lg:py-28 space-y-2 sm:space-y-4 md:space-y-6 lg:space-y-8">
     <div class="justify-start leading-tight tracking-tight">
       <span class="text-zinc-400 text-2xl">Hi, I’m </span><span class="text-black text-2xl">Wira Wibisana</span>
     </div>
@@ -47,6 +47,44 @@
         Case Studies &gt;
       </a>
     </div>
+
+    <!-- App icon stack / mobile grid -->
+    <div class="pt-2">
+      <!-- Mobile/Tablet: horizontal row with fixed spacing (no hover) -->
+      <div class="lg:hidden">
+        <div class="flex items-center gap-4">
+          <a href="https://swiftsekai.framer.website/" target="_blank" rel="noopener" aria-label="Open Swisekai website"
+             class="flex items-center justify-center h-16 w-16 rounded-2xl border border-zinc-300/70 bg-white/80 hover:bg-zinc-100 active:bg-zinc-200 transition">
+            <img src="assets/Swisekai.png" alt="Swisekai app icon" class="h-10 w-10 object-contain" />
+          </a>
+          <a href="carte.html" aria-label="Open Carte case study"
+             class="flex items-center justify-center h-16 w-16 rounded-2xl border border-zinc-300/70 bg-white/80 hover:bg-zinc-100 active:bg-zinc-200 transition">
+            <img src="assets/carteIcon.png" alt="Carte app icon" class="h-10 w-10 object-contain" />
+          </a>
+        </div>
+      </div>
+
+      <!-- Desktop (lg+): stacked icons that expand on hover -->
+      <div class="hidden lg:inline-block relative -m-3 pl-3 pr-20 sm:pr-24 md:pr-28 pt-1 group">
+        <div class="relative w-14 sm:w-16 md:w-20 aspect-square">
+          <!-- Left (Swisekai) -->
+          <a href="https://swiftsekai.framer.website/" title="Swisekai" aria-label="Open Swisekai website" target="_blank" rel="noopener" class="absolute inset-0 m-auto flex items-center justify-center h-[64%] w-[64%] z-10 opacity-80 rotate-[14deg] -translate-x-1 -translate-y-1 scale-95 transition-all duration-300 ease-out group-hover:opacity-100 group-hover:rotate-0 group-hover:translate-x-[90%] group-hover:translate-y-0 group-hover:scale-100">
+            <img src="assets/Swisekai.png" alt="Swisekai app icon" class="peer h-full w-full object-contain" />
+            <span role="tooltip" class="pointer-events-none absolute left-1/2 top-full z-50 mt-2 -translate-x-1/2 translate-y-1 opacity-0 transition duration-200 peer-hover:opacity-100 peer-hover:translate-y-0 peer-focus-visible:opacity-100">
+              <span class="block rounded-md border border-zinc-200 bg-white px-3 py-2 text-xs text-zinc-700 shadow-md whitespace-nowrap">Swisekai - an engaging way to learn Swift</span>
+            </span>
+          </a>
+          <!-- Center (Carte) -->
+          <a href="carte.html" aria-label="Open Carte case study" class="absolute inset-0 m-auto flex items-center justify-center h-[64%] w-[64%] z-20 rotate-[-2deg] transition-all duration-300 ease-out group-hover:rotate-0 group-hover:translate-x-0">
+            <img src="assets/carteIcon.png" alt="Carte app icon" class="peer h-full w-full object-contain" />
+            <span role="tooltip" class="pointer-events-none absolute left-1/2 top-full z-50 mt-2 -translate-x-1/2 translate-y-1 opacity-0 transition duration-200 peer-hover:opacity-100 peer-hover:translate-y-0 peer-focus-visible:opacity-100">
+              <span class="block rounded-md border border-zinc-200 bg-white px-3 py-2 text-xs text-zinc-700 shadow-md whitespace-nowrap">Scan Business Cards - Carte</span>
+            </span>
+          </a>
+          <!-- Right placeholder removed as requested -->
+        </div>
+      </div>
+    </div>
   </main>
 
   <!-- Section separator -->
@@ -54,24 +92,27 @@
 
 
   <!-- Design works grid: 2x2 -->
-  <section class="mx-auto w-full max-w-[1100px] px-6 sm:px-8 md:px-12 lg:px-24 xl:px-28 2xl:px-32 py-16 md:py-24">
+  <section class="mx-auto w-full max-w-[1100px] px-6 sm:px-8 md:px-12 lg:px-24 xl:px-28 2xl:px-32 py-12 md:py-20">
     <h2 class="text-xl sm:text-2xl leading-snug text-content mb-6 md:mb-8">Design Showcase</h2>
     <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-10 md:gap-x-8 md:gap-y-8">
+      <!-- 1: Carte 1.1 -->
       <figure class="rounded-2xl relative">
-        <video class="block w-full aspect-[4/3] object-cover rounded-2xl" src="assets/Swisekai.mp4" autoplay muted loop playsinline preload="metadata" poster="assets/Swisekai.webp" aria-label="Swisekai demo"></video>
+        <video class="block w-full aspect-[4/3] object-cover rounded-2xl" src="assets/Carte1.1Showcase.mp4" autoplay muted loop playsinline preload="metadata" aria-label="Carte 1.1 demo"></video>
         <figcaption class="mt-2 text-sm sm:text-base text-muted leading-snug pl-3 md:pl-4">
-          SwiSekai is an 
+          Carte 1.1: Notification UX,
           <span class="relative inline-block group">
-            <span class="underline underline-offset-4 decoration-zinc-400 group-hover:decoration-black cursor-help">Ultra-responsive</span>
+            <span class="underline underline-offset-4 decoration-zinc-400 group-hover:decoration-black cursor-help">Camera Control</span>
             <span role="tooltip" class="pointer-events-none absolute left-1/2 top-full z-50 mt-2 w-[min(90vw,260px)] -translate-x-1/2 translate-y-1 opacity-0 group-hover:opacity-100 group-hover:translate-y-0 transition duration-200">
               <span class="block rounded-md border border-zinc-200 bg-white px-3 py-2 text-xs text-zinc-700 shadow-md">
-                Ultra-responsive means buttery-smooth interactions, minimal input latency, and layouts that adapt instantly across window sizes and system settings.
+                The iPhone 16 family and up has a dedicated Camera Control button on the right side of the device that functions as a physical shutter button
               </span>
             </span>
           </span>
-          <b>MacOS app</b> designed to be a companion for new programmers.
+          , more Liquid Glass.
         </figcaption>
       </figure>
+
+      <!-- 2: Carte -->
       <figure class="rounded-2xl relative">
         <video class="block w-full aspect-[4/3] object-cover rounded-2xl" src="assets/Carte.mp4" autoplay muted loop playsinline preload="metadata" aria-label="Carte demo"></video>
         <figcaption class="mt-2 text-sm sm:text-base text-muted leading-snug pl-3 md:pl-4">
@@ -87,6 +128,8 @@
           design.
         </figcaption>
       </figure>
+
+      <!-- 3: Stoa -->
       <figure class="rounded-2xl relative">
         <video class="block w-full aspect-[4/3] object-cover rounded-2xl" src="assets/Stoa.mp4" autoplay muted loop playsinline preload="metadata" aria-label="Stoa demo"></video>
         <figcaption class="mt-2 text-sm sm:text-base text-muted leading-snug pl-3 md:pl-4">
@@ -102,9 +145,22 @@
           &nbsp;<b>iOS app</b> for mindfulness with stoic philosophy.
         </figcaption>
       </figure>
+
+      <!-- 4: Swisekai -->
       <figure class="rounded-2xl relative">
-        <img src="assets/Video Mockup WebP from ezgif.webp" alt="Design work" class="block w-full aspect-[4/3] object-cover rounded-2xl" />
-        <figcaption class="mt-2 text-sm sm:text-base text-muted leading-snug pl-3 md:pl-4">Showcase item four description.</figcaption>
+        <video class="block w-full aspect-[4/3] object-cover rounded-2xl" src="assets/Swisekai.mp4" autoplay muted loop playsinline preload="metadata" poster="assets/Swisekai.webp" aria-label="Swisekai demo"></video>
+        <figcaption class="mt-2 text-sm sm:text-base text-muted leading-snug pl-3 md:pl-4">
+          SwiSekai is an 
+          <span class="relative inline-block group">
+            <span class="underline underline-offset-4 decoration-zinc-400 group-hover:decoration-black cursor-help">Ultra-responsive</span>
+            <span role="tooltip" class="pointer-events-none absolute left-1/2 top-full z-50 mt-2 w-[min(90vw,260px)] -translate-x-1/2 translate-y-1 opacity-0 group-hover:opacity-100 group-hover:translate-y-0 transition duration-200">
+              <span class="block rounded-md border border-zinc-200 bg-white px-3 py-2 text-xs text-zinc-700 shadow-md">
+                Ultra-responsive means buttery-smooth interactions, minimal input latency, and layouts that adapt instantly across window sizes and system settings.
+              </span>
+            </span>
+          </span>
+          <b>MacOS app</b> designed to be a companion for new programmers.
+        </figcaption>
       </figure>
     </div>
   </section>
@@ -112,8 +168,10 @@
   <!-- Section separator -->
   <hr class="mx-auto w-full max-w-[1100px] border-t border-zinc-200/80 my-8 sm:my-10 md:my-14" />
 
+  
+
   <!-- Case studies (pinned from Builder) -->
-  <section class="mx-auto w-full max-w-[1100px] px-6 sm:px-8 md:px-12 lg:px-24 xl:px-28 2xl:px-32 pt-8 md:pt-12 pb-8 md:pb-14">
+  <section class="mx-auto w-full max-w-[1100px] px-6 sm:px-8 md:px-12 lg:px-24 xl:px-28 2xl:px-32 pt-6 md:pt-10 pb-6 md:pb-12">
     <div class="flex items-baseline justify-between mb-4 md:mb-6">
       <h2 class="text-xl sm:text-2xl leading-snug text-content">Favorite Case Studies</h2>
       <a href="blogs.html" class="text-sm md:text-base text-zinc-500 hover:text-black underline-offset-4 hover:underline">See All →</a>

@@ -686,9 +686,9 @@ function normalizeArticleHtml(input) {
   }
 
   // 3) Enforce reasonable image sizing on desktop for any <img> tags
-  // Add or extend class to include responsive constraints
+  // Add or extend class to include responsive constraints (no forced corner radius)
   const injectImgClasses = (attrs = '') => {
-    const needed = 'mx-auto block max-w-full h-auto md:max-h-[40vh] object-contain rounded-[40px]';
+    const needed = 'mx-auto block max-w-full h-auto md:max-h-[40vh] object-contain';
     const clsRe = /\bclass\s*=\s*"([^"]*)"/i;
     const m = attrs.match(clsRe);
     if (m) {
@@ -700,12 +700,7 @@ function normalizeArticleHtml(input) {
   };
   s = s.replace(/<img\b([^>]*)>/gi, (_m, attrs) => `<img ${injectImgClasses((attrs || '').trim())}>`);
 
-  // Ensure a hard 40pt border radius inline, even if height changes later
-  s = s.replace(/<img\b([^>]*)>/gi, (m) => {
-    if (/style=\"[^\"]*border-radius\s*:\s*40pt/i.test(m)) return m;
-    if (/style=\"/i.test(m)) return m.replace(/style=\"/i, 'style="border-radius:40pt; ');
-    return m.replace('<img ', '<img style="border-radius:40pt" ');
-  });
+  // Removed forced 40px border radius to avoid clipping issues on resized images
 
   return s;
 }
