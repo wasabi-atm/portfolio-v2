@@ -763,9 +763,10 @@ function blogRowHTML(b) {
   ` : '';
 
   const BLOG_BASE = 'https://wirawibisana.com';
+  const pathSeg = b.slug || b.id;
   return `
     <article class="py-3 md:py-6">
-      <a href="${BLOG_BASE}/blogs/article/${b.id}" class="group relative grid grid-cols-[1fr_auto] items-start gap-3 md:gap-4 rounded-xl px-3 py-2 md:px-3 md:py-3 transition-colors duration-200 hover:bg-zinc-200/60 hover:ring-1 hover:ring-zinc-300 focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:bg-zinc-200/50" data-card="blog-row">
+      <a href="${BLOG_BASE}/blogs/article/${pathSeg}" class="group relative grid grid-cols-[1fr_auto] items-start gap-3 md:gap-4 rounded-xl px-3 py-2 md:px-3 md:py-3 transition-colors duration-200 hover:bg-zinc-200/60 hover:ring-1 hover:ring-zinc-300 focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:bg-zinc-200/50" data-card="blog-row">
         <div class="relative z-10 min-w-0 space-y-1 md:space-y-2">
           <p class="text-xs md:text-sm text-zinc-600">
             ${author}
@@ -828,8 +829,9 @@ function homeCaseStudyCardHTML(b) {
     ? `<img src="${b.thumbnail}" alt="${b.title}" data-thumb class="block w-full aspect-[16/10] md:aspect-[4/3] object-cover transition-transform duration-300 group-hover:scale-[1.03]"/>`
     : '';
   const BLOG_BASE = 'https://wirawibisana.com';
+  const pathSeg = b.slug || b.id;
   return `
-    <a href="${BLOG_BASE}/blogs/article/${b.id}" aria-label="Read case study: ${b.title}"
+    <a href="${BLOG_BASE}/blogs/article/${pathSeg}" aria-label="Read case study: ${b.title}"
        class="group h-full flex flex-col overflow-hidden rounded-2xl ring-1 ring-zinc-200/70 bg-white/60 hover:ring-zinc-300 hover:bg-white transition-shadow shadow-sm hover:shadow-md" data-card="case-card">
       <div class="relative overflow-hidden">${img}</div>
       <div class="p-3 md:p-4 flex-1 flex flex-col gap-2">
@@ -906,30 +908,36 @@ async function loadBlogDetail() {
   if (!root) return;
 
   const params = new URLSearchParams(location.search);
+  let slug = params.get('slug');
   let id = params.get('id');
-  if (!id) {
+  if (!slug && !id) {
     try {
       const segs = (location.pathname || '').split('/').filter(Boolean);
       const idx = segs.findIndex(s => s === 'blogs');
       if (idx !== -1 && segs[idx + 1] === 'article' && segs[idx + 2]) {
-        id = segs[idx + 2];
+        slug = segs[idx + 2];
       }
     } catch {}
   }
-  if (!id) {
-    root.innerHTML = `<p class="px-6 py-8 text-zinc-600">Missing <code>id</code> in URL.</p>`;
+  if (!slug && !id) {
+    root.innerHTML = `<p class="px-6 py-8 text-zinc-600">Missing <code>slug</code> in URL.</p>`;
     return;
   }
 
-  // Try by ids first (Builder supports ids param); verify match, else fall back strategies
-  let rows = await fetchBuilder('blogs', { limit: 1, ids: id });
-  if (!rows.length || rows[0]?.id !== id) {
-    rows = await fetchBuilder('blogs', { limit: 1, 'query.id': id });
+  // Try by slug first; fall back to id
+  let rows = [];
+  if (slug) {
+    rows = await fetchBuilder('blogs', { limit: 1, 'query.data.slug': slug });
   }
-  if (!rows.length || rows[0]?.id !== id) {
-    // Final fallback: fetch a larger set and find by exact id client-side
-    const many = await fetchBuilder('blogs', { limit: 200, includeUnpublished: true });
-    rows = many.filter(r => r?.id === id);
+  if ((!rows || !rows.length) && id) {
+    rows = await fetchBuilder('blogs', { limit: 1, ids: id });
+    if (!rows.length || rows[0]?.id !== id) {
+      rows = await fetchBuilder('blogs', { limit: 1, 'query.id': id });
+    }
+    if (!rows.length || rows[0]?.id !== id) {
+      const many = await fetchBuilder('blogs', { limit: 200, includeUnpublished: true });
+      rows = many.filter(r => r?.id === id);
+    }
   }
 
   if (!rows.length) {
