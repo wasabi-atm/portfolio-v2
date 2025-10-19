@@ -100,7 +100,28 @@ function renderGlobalNav() {
       if (!a) return;
       const href = a.getAttribute('href') || '';
       const dest = href.split('#')[0];
-      const samePage = dest && here === dest;
+      // Normalize destination to our internal filename mapping
+      const toPage = (path = '') => {
+        try {
+          const p = path.replace(/[?#].*$/, '').replace(/\/+$/, '');
+          if (!p || p === '/') return 'index.html';
+          if (/^(https?:)?\/\//.test(p)) {
+            const u = new URL(p, location.origin);
+            return toPage(u.pathname);
+          }
+          const segs = p.split('/').filter(Boolean);
+          const first = segs[0];
+          if (first === 'blogs') {
+            if (segs[1] === 'article') return 'article.html';
+            return 'blogs.html';
+          }
+          if (first === 'connect') return 'connect.html';
+          if (first === 'showcase') return 'showcase.html';
+          if (p.endsWith('.html')) return p.split('/').pop();
+          return 'index.html';
+        } catch { return 'index.html'; }
+      };
+      const samePage = dest && (here === toPage(dest));
       // Only block when this click would reload the same page,
       // or when clicking the connect avatar while already on connect.html
       const isConnectAvatar = (here === 'connect.html') && (a.id === 'connect-avatar' || /(?:connect\.html|\/connect)$/.test(dest));
@@ -112,8 +133,7 @@ function renderGlobalNav() {
           if (window.__blogFilters && typeof window.__blogFilters.setActive === 'function') {
             window.__blogFilters.setActive('ALL');
             // Clean the URL params for a canonical ALL state
-            const base = location.pathname.split('/').pop() || 'blogs.html';
-            const url = base + (location.hash || '');
+            const url = '/blogs' + (location.hash || '');
             history.replaceState(null, '', url);
           }
         }
@@ -2091,16 +2111,10 @@ document.addEventListener("DOMContentLoaded", function () {
           I'm available to chat and collaborate
         </p>
         <nav aria-label="Connect links" class="flex flex-wrap gap-4 text-base md:text-lg text-zinc-500">
-          <a href="mailto:hello@example.com"
-             class="underline-offset-4 hover:underline hover:text-black">Email</a>
-          <a href="https://drive.google.com/your-resume-link" target="_blank" rel="noopener"
-             class="underline-offset-4 hover:underline hover:text-black">Resume</a>
-          <a href="https://www.linkedin.com/in/your-handle" target="_blank" rel="noopener"
-             class="underline-offset-4 hover:underline hover:text-black">LinkedIn</a>
-          <a href="https://github.com/your-handle" target="_blank" rel="noopener"
-             class="underline-offset-4 hover:underline hover:text-black">GitHub</a>
-          <a href="https://www.threads.net/@your-handle" target="_blank" rel="noopener"
-             class="underline-offset-4 hover:underline hover:text-black">Threads</a>
+          <a href="mailto:hello@wirawibisana.com" class="underline-offset-4 hover:underline hover:text-black">Send Feedback</a>
+          <a href="https://www.linkedin.com/in/wira29/" target="_blank" rel="noopener" class="underline-offset-4 hover:underline hover:text-black">LinkedIn</a>
+          <a href="https://www.threads.com/@wira.wibisana" target="_blank" rel="noopener" class="underline-offset-4 hover:underline hover:text-black">Threads</a>
+          <a href="https://github.com/wasabi-atm" target="_blank" rel="noopener" class="underline-offset-4 hover:underline hover:text-black">GitHub</a>
         </nav>
       </div>
     </footer>
