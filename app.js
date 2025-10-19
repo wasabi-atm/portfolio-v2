@@ -763,10 +763,10 @@ function blogRowHTML(b) {
   ` : '';
 
   const BLOG_BASE = 'https://wirawibisana.com';
-  const pathSeg = b.slug || b.id;
+  const q = b.slug ? `slug=${encodeURIComponent(b.slug)}` : `id=${encodeURIComponent(b.id)}`;
   return `
     <article class="py-3 md:py-6">
-      <a href="${BLOG_BASE}/blogs/article/${pathSeg}" class="group relative grid grid-cols-[1fr_auto] items-start gap-3 md:gap-4 rounded-xl px-3 py-2 md:px-3 md:py-3 transition-colors duration-200 hover:bg-zinc-200/60 hover:ring-1 hover:ring-zinc-300 focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:bg-zinc-200/50" data-card="blog-row">
+      <a href="${BLOG_BASE}/article.html?${q}" class="group relative grid grid-cols-[1fr_auto] items-start gap-3 md:gap-4 rounded-xl px-3 py-2 md:px-3 md:py-3 transition-colors duration-200 hover:bg-zinc-200/60 hover:ring-1 hover:ring-zinc-300 focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:bg-zinc-200/50" data-card="blog-row">
         <div class="relative z-10 min-w-0 space-y-1 md:space-y-2">
           <p class="text-xs md:text-sm text-zinc-600">
             ${author}
@@ -829,9 +829,9 @@ function homeCaseStudyCardHTML(b) {
     ? `<img src="${b.thumbnail}" alt="${b.title}" data-thumb class="block w-full aspect-[16/10] md:aspect-[4/3] object-cover transition-transform duration-300 group-hover:scale-[1.03]"/>`
     : '';
   const BLOG_BASE = 'https://wirawibisana.com';
-  const pathSeg = b.slug || b.id;
+  const q = b.slug ? `slug=${encodeURIComponent(b.slug)}` : `id=${encodeURIComponent(b.id)}`;
   return `
-    <a href="${BLOG_BASE}/blogs/article/${pathSeg}" aria-label="Read case study: ${b.title}"
+    <a href="${BLOG_BASE}/article.html?${q}" aria-label="Read case study: ${b.title}"
        class="group h-full flex flex-col overflow-hidden rounded-2xl ring-1 ring-zinc-200/70 bg-white/60 hover:ring-zinc-300 hover:bg-white transition-shadow shadow-sm hover:shadow-md" data-card="case-card">
       <div class="relative overflow-hidden">${img}</div>
       <div class="p-3 md:p-4 flex-1 flex flex-col gap-2">
@@ -938,6 +938,17 @@ async function loadBlogDetail() {
       const many = await fetchBuilder('blogs', { limit: 200, includeUnpublished: true });
       rows = many.filter(r => r?.id === id);
     }
+  }
+  // Final fallback for slug: fetch many and match by slug in data
+  if ((!rows || !rows.length) && slug) {
+    try {
+      const many = await fetchBuilder('blogs', { limit: 200, includeUnpublished: true });
+      const want = (slug || '').toString().trim().toLowerCase();
+      rows = many.filter(r => {
+        const s = (r?.data?.slug || r?.data?.Slug || '').toString().trim().toLowerCase();
+        return s && s === want;
+      });
+    } catch {}
   }
 
   if (!rows.length) {
