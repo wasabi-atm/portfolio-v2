@@ -19,7 +19,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&amp;display=swap" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link href="./dist/output.css" rel="stylesheet">
-  <link rel="icon" type="image/png" href="assets/favicon.png">
+  <link id="site-favicon" rel="icon" type="image/png" href="assets/favicon.png">
   <script>
     // Fallback guard: if this deployment serves the Carte subdomain,
     // force-route to the Carte page even without server rewrites.
@@ -28,6 +28,20 @@
         if (/^carte\./.test(location.hostname) && location.pathname !== '/carte.html') {
           location.replace('/carte.html');
         }
+      } catch (e) {}
+    })();
+    (function () {
+      try {
+        var link = document.querySelector('link#site-favicon');
+        if (!link) {
+          link = document.createElement('link');
+          link.id = 'site-favicon';
+          link.rel = 'icon';
+          link.type = 'image/png';
+          document.head.appendChild(link);
+        }
+        var onCarte = /^carte\./i.test(location.hostname) || /(^|\.)carte\.wirawibisana\.com$/i.test(location.hostname);
+        link.href = onCarte ? 'assets/carteFavicon.png' : 'assets/favicon.png';
       } catch (e) {}
     })();
   </script>

@@ -8,8 +8,24 @@
   <!-- Using local compiled Tailwind from dist/output.css; no CDN runtime needed -->
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Lora:wght@400;600;700&display=swap" rel="stylesheet">
   <link href="./dist/output.css" rel="stylesheet">
-  <link rel="icon" type="image/png" href="assets/favicon.png">
+  <link id="site-favicon" rel="icon" type="image/png" href="assets/favicon.png">
   <link rel="apple-touch-icon" href="assets/carteIcon.png">
+  <script>
+    (function () {
+      try {
+        var link = document.querySelector('link#site-favicon');
+        if (!link) {
+          link = document.createElement('link');
+          link.id = 'site-favicon';
+          link.rel = 'icon';
+          link.type = 'image/png';
+          document.head.appendChild(link);
+        }
+        var onCarte = /^carte\./i.test(location.hostname) || /(^|\.)carte\.wirawibisana\.com$/i.test(location.hostname);
+        link.href = onCarte ? 'assets/carteFavicon.png' : 'assets/favicon.png';
+      } catch (e) {}
+    })();
+  </script>
   <style>
     @keyframes fadeInUp {
       from {
