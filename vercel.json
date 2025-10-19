@@ -3,12 +3,13 @@
   "cleanUrls": true,
   "trailingSlash": false,
   "rewrites": [
-    { "source": "/:any*", "destination": "/carte.html", "has": [{ "type": "host", "value": "carte.wirawibisana.com" }] },
+    { "source": "/", "destination": "/carte.html", "has": [{ "type": "host", "value": "carte.wirawibisana.com" }] },
+    { "source": "/(.*)", "destination": "/carte.html", "has": [{ "type": "host", "value": "carte.wirawibisana.com" }] },
+    { "source": "/blogs/article/:id", "destination": "/article.html?id=:id" },
     { "source": "/", "destination": "/index.html" },
     { "source": "/blogs", "destination": "/blogs.html" },
     { "source": "/connect", "destination": "/connect.html" },
-    { "source": "/showcase", "destination": "/showcase.html" },
-    { "source": "/blogs/article/:id", "destination": "/article.html?id=:id" }
+    { "source": "/showcase", "destination": "/showcase.html" }
   ],
   "redirects": [
     { "source": "/index.html", "destination": "/", "permanent": true },

@@ -2111,7 +2111,7 @@ document.addEventListener("DOMContentLoaded", function () {
           I'm available to chat and collaborate
         </p>
         <nav aria-label="Connect links" class="flex flex-wrap gap-4 text-base md:text-lg text-zinc-500">
-          <a href="mailto:hello@wirawibisana.com" class="underline-offset-4 hover:underline hover:text-black">Send Feedback</a>
+          <a href="mailto:hello@wirawibisana.com" class="underline-offset-4 hover:underline hover:text-black">Contact</a>
           <a href="https://www.linkedin.com/in/wira29/" target="_blank" rel="noopener" class="underline-offset-4 hover:underline hover:text-black">LinkedIn</a>
           <a href="https://www.threads.com/@wira.wibisana" target="_blank" rel="noopener" class="underline-offset-4 hover:underline hover:text-black">Threads</a>
           <a href="https://github.com/wasabi-atm" target="_blank" rel="noopener" class="underline-offset-4 hover:underline hover:text-black">GitHub</a>
