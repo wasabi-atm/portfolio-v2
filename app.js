@@ -740,7 +740,6 @@ function blogRowHTML(b) {
   ` : '';
 
   const BLOG_BASE = (typeof location !== 'undefined' && /carte\./.test(location.hostname)) ? 'https://wirawibisana.com' : '';
-  const BLOG_BASE = (typeof location !== 'undefined' && /carte\./.test(location.hostname)) ? 'https://wirawibisana.com' : '';
   return `
     <article class="py-3 md:py-6">
       <a href="${BLOG_BASE}/blogs/article/${b.id}" class="group relative grid grid-cols-[1fr_auto] items-start gap-3 md:gap-4 rounded-xl px-3 py-2 md:px-3 md:py-3 transition-colors duration-200 hover:bg-zinc-200/60 hover:ring-1 hover:ring-zinc-300 focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:bg-zinc-200/50" data-card="blog-row">
@@ -805,6 +804,7 @@ function homeCaseStudyCardHTML(b) {
   const img = b.thumbnail
     ? `<img src="${b.thumbnail}" alt="${b.title}" data-thumb class="block w-full aspect-[16/10] md:aspect-[4/3] object-cover transition-transform duration-300 group-hover:scale-[1.03]"/>`
     : '';
+  const BLOG_BASE = (typeof location !== 'undefined' && /carte\./.test(location.hostname)) ? 'https://wirawibisana.com' : '';
   return `
     <a href="${BLOG_BASE}/blogs/article/${b.id}" aria-label="Read case study: ${b.title}"
        class="group h-full flex flex-col overflow-hidden rounded-2xl ring-1 ring-zinc-200/70 bg-white/60 hover:ring-zinc-300 hover:bg-white transition-shadow shadow-sm hover:shadow-md" data-card="case-card">
@@ -883,7 +883,16 @@ async function loadBlogDetail() {
   if (!root) return;
 
   const params = new URLSearchParams(location.search);
-  const id = params.get('id');
+  let id = params.get('id');
+  if (!id) {
+    try {
+      const segs = (location.pathname || '').split('/').filter(Boolean);
+      const idx = segs.findIndex(s => s === 'blogs');
+      if (idx !== -1 && segs[idx + 1] === 'article' && segs[idx + 2]) {
+        id = segs[idx + 2];
+      }
+    } catch {}
+  }
   if (!id) {
     root.innerHTML = `<p class="px-6 py-8 text-zinc-600">Missing <code>id</code> in URL.</p>`;
     return;
