@@ -26,12 +26,27 @@ const NAV_ITEMS = [
 
 function currentFilename() {
   try {
-    const parts = location.pathname.split('/');
-    let name = parts[parts.length - 1] || 'index.html';
-    // Handle root path ("/") – assume index.html
-    if (!name.includes('.')) name = 'index.html';
-    return name;
-  } catch { return 'index.html'; }
+    const path = (location.pathname || '/').replace(/\/+$/, ''); // strip trailing slashes
+    const segs = path.split('/').filter(Boolean);
+    if (segs.length === 0) return 'index.html';
+
+    // Map clean URLs to their source HTML files
+    const first = segs[0];
+    if (first === 'blogs') {
+      // /blogs or /blogs/article/:id
+      if (segs[1] === 'article') return 'article.html';
+      return 'blogs.html';
+    }
+    if (first === 'connect') return 'connect.html';
+    if (first === 'showcase') return 'showcase.html';
+    if (first === 'carte') return 'carte.html';
+
+    const last = segs[segs.length - 1];
+    if (last && last.includes('.')) return last;
+    return 'index.html';
+  } catch {
+    return 'index.html';
+  }
 }
 
 function renderGlobalNav() {
@@ -724,9 +739,11 @@ function blogRowHTML(b) {
     </div>
   ` : '';
 
+  const BLOG_BASE = (typeof location !== 'undefined' && /carte\./.test(location.hostname)) ? 'https://wirawibisana.com' : '';
+  const BLOG_BASE = (typeof location !== 'undefined' && /carte\./.test(location.hostname)) ? 'https://wirawibisana.com' : '';
   return `
     <article class="py-3 md:py-6">
-      <a href="/blogs/article/${b.id}" class="group relative grid grid-cols-[1fr_auto] items-start gap-3 md:gap-4 rounded-xl px-3 py-2 md:px-3 md:py-3 transition-colors duration-200 hover:bg-zinc-200/60 hover:ring-1 hover:ring-zinc-300 focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:bg-zinc-200/50" data-card="blog-row">
+      <a href="${BLOG_BASE}/blogs/article/${b.id}" class="group relative grid grid-cols-[1fr_auto] items-start gap-3 md:gap-4 rounded-xl px-3 py-2 md:px-3 md:py-3 transition-colors duration-200 hover:bg-zinc-200/60 hover:ring-1 hover:ring-zinc-300 focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:bg-zinc-200/50" data-card="blog-row">
         <div class="relative z-10 min-w-0 space-y-1 md:space-y-2">
           <p class="text-xs md:text-sm text-zinc-600">
             ${author}
@@ -789,7 +806,7 @@ function homeCaseStudyCardHTML(b) {
     ? `<img src="${b.thumbnail}" alt="${b.title}" data-thumb class="block w-full aspect-[16/10] md:aspect-[4/3] object-cover transition-transform duration-300 group-hover:scale-[1.03]"/>`
     : '';
   return `
-    <a href="/blogs/article/${b.id}" aria-label="Read case study: ${b.title}"
+    <a href="${BLOG_BASE}/blogs/article/${b.id}" aria-label="Read case study: ${b.title}"
        class="group h-full flex flex-col overflow-hidden rounded-2xl ring-1 ring-zinc-200/70 bg-white/60 hover:ring-zinc-300 hover:bg-white transition-shadow shadow-sm hover:shadow-md" data-card="case-card">
       <div class="relative overflow-hidden">${img}</div>
       <div class="p-3 md:p-4 flex-1 flex flex-col gap-2">
@@ -1087,7 +1104,7 @@ async function loadBlogDetail() {
         <div class="grid grid-cols-1 md:grid-cols-[minmax(0,1fr)_280px] gap-8">
           <div>
             <header class="space-y-3 relative">
-              <a href="/blogs" id="back-button"
+              <a href="${(typeof location !== 'undefined' && /carte\./.test(location.hostname)) ? 'https://wirawibisana.com/blogs' : '/blogs'}" id="back-button"
                  class="fixed top-4 left-4 z-50 inline-flex items-center gap-1 rounded-full bg-white px-3 py-1.5 text-sm font-medium text-zinc-600 shadow md:static md:bg-transparent md:shadow-none md:text-zinc-500 transition-colors">
                 <span class="md:hidden">&larr; Back</span>
                 <span class="hidden md:inline">&larr; Back to Blogs</span>
