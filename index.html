@@ -20,6 +20,17 @@
   <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link href="./dist/output.css" rel="stylesheet">
   <link rel="icon" type="image/png" href="assets/favicon.png">
+  <script>
+    // Fallback guard: if this deployment serves the Carte subdomain,
+    // force-route to the Carte page even without server rewrites.
+    (function () {
+      try {
+        if (/^carte\./.test(location.hostname) && location.pathname !== '/carte.html') {
+          location.replace('/carte.html');
+        }
+      } catch (e) {}
+    })();
+  </script>
 </head>
 <body class="min-h-dvh bg-zinc-100 antialiased font-['Roboto']">
 
