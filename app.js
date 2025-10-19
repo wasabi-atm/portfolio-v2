@@ -1,7 +1,7 @@
 // ==================== Global Navigation Renderer ====================
 const NAV_ITEMS = [
   {
-    href: 'index.html',
+    href: '/',
     label: 'Home',
     icon: (isCurrent = false) => `
       <svg xmlns="http://www.w3.org/2000/svg"
@@ -12,7 +12,7 @@ const NAV_ITEMS = [
     `
   },
   {
-    href: 'blogs.html',
+    href: '/blogs',
     label: 'Blogs',
     icon: (isCurrent = false) => `
       <svg xmlns="http://www.w3.org/2000/svg"
@@ -56,7 +56,10 @@ function renderGlobalNav() {
   try {
     const here = currentFilename();
     const links = NAV_ITEMS.map(item => {
-      const isCurrent = (here === item.href) || (here === 'article.html' && item.href === 'blogs.html');
+      const isCurrent = (
+        (item.href === '/' && here === 'index.html') ||
+        (item.href === '/blogs' && (here === 'blogs.html' || here === 'article.html'))
+      );
       const currentAttr = isCurrent ? 'aria-current="page"' : '';
       return (
         `<a role="tab" href="${item.href}" ${currentAttr}
@@ -69,7 +72,7 @@ function renderGlobalNav() {
 
     const connectActive = (here === 'connect.html');
     const connectAvatar = (
-      '<a href="connect.html" class="group inline-flex items-center justify-center p-1.5 rounded-full bg-white/80 backdrop-blur-md border border-zinc-200/80 shadow-[0_6px_16px_rgba(0,0,0,0.12)] ring-2 '
+      '<a href="/connect" class="group inline-flex items-center justify-center p-1.5 rounded-full bg-white/80 backdrop-blur-md border border-zinc-200/80 shadow-[0_6px_16px_rgba(0,0,0,0.12)] ring-2 '
       + (connectActive ? 'ring-green-600' : 'ring-white') + ' overflow-hidden transition-all duration-200 hover:bg-zinc-50 hover:shadow-[0_8px_20px_rgba(0,0,0,0.14)]" aria-label="Connect" id="connect-avatar">'
       + '<img src="assets/profilePinkGreen.png" alt="" class="h-full w-full object-cover rounded-full ring-2 ' + (connectActive ? 'ring-black' : 'ring-transparent') + ' ring-inset transition-transform duration-200 group-hover:scale-[1.03]"/>'
       + '<span class="sr-only">Connect</span>'
@@ -100,12 +103,12 @@ function renderGlobalNav() {
       const samePage = dest && here === dest;
       // Only block when this click would reload the same page,
       // or when clicking the connect avatar while already on connect.html
-      const isConnectAvatar = (here === 'connect.html') && (a.id === 'connect-avatar' || /connect\.html$/.test(dest));
+      const isConnectAvatar = (here === 'connect.html') && (a.id === 'connect-avatar' || /(?:connect\.html|\/connect)$/.test(dest));
       if (!(samePage || isConnectAvatar)) return;
       e.preventDefault();
       // If already on Blogs and the Blogs tab is clicked, reset filters to ALL
       try {
-        if (here === 'blogs.html' && /blogs\.html$/.test(dest)) {
+        if (here === 'blogs.html' && /(?:blogs\.html|\/blogs)$/.test(dest)) {
           if (window.__blogFilters && typeof window.__blogFilters.setActive === 'function') {
             window.__blogFilters.setActive('ALL');
             // Clean the URL params for a canonical ALL state
@@ -281,10 +284,10 @@ function renderGlobalNav() {
         <div class="w-full flex justify-center">
           <div class="flex items-center gap-2 nav-wrap">
             <nav id="primary-nav-fallback" class="w-auto max-w-[94vw] sm:max-w-[88vw] md:w-[180px] flex items-center justify-center gap-2 sm:gap-3 rounded-full bg-white/80 backdrop-blur-md border border-zinc-200/80 shadow-[0_6px_16px_rgba(0,0,0,0.12)] px-3 sm:px-4 py-3 sm:py-3.5 md:px-4 md:py-4">
-              <a href="index.html" class="px-4 sm:px-4 py-0.5 sm:py-1 rounded-full text-sm text-neutral-600 hover:bg-zinc-100 transition-colors nav-underline">Home</a>
-              <a href="blogs.html" class="px-4 sm:px-4 py-0.5 sm:py-1 rounded-full text-sm text-neutral-600 hover:bg-zinc-100 transition-colors nav-underline">Blogs</a>
+              <a href="/" class="px-4 sm:px-4 py-0.5 sm:py-1 rounded-full text-sm text-neutral-600 hover:bg-zinc-100 transition-colors nav-underline">Home</a>
+              <a href="/blogs" class="px-4 sm:px-4 py-0.5 sm:py-1 rounded-full text-sm text-neutral-600 hover:bg-zinc-100 transition-colors nav-underline">Blogs</a>
             </nav>
-            <a href="connect.html" class="group inline-flex items-center justify-center p-1.5 rounded-full bg-white/80 backdrop-blur-md border border-zinc-200/80 shadow-[0_6px_16px_rgba(0,0,0,0.12)] ring-2 ${onConnect ? 'ring-green-600' : 'ring-white'} overflow-hidden transition-all duration-200 hover:bg-zinc-50 hover:shadow-[0_8px_20px_rgba(0,0,0,0.14)]" aria-label="Connect" id="connect-avatar-fallback">
+            <a href="/connect" class="group inline-flex items-center justify-center p-1.5 rounded-full bg-white/80 backdrop-blur-md border border-zinc-200/80 shadow-[0_6px_16px_rgba(0,0,0,0.12)] ring-2 ${onConnect ? 'ring-green-600' : 'ring-white'} overflow-hidden transition-all duration-200 hover:bg-zinc-50 hover:shadow-[0_8px_20px_rgba(0,0,0,0.14)]" aria-label="Connect" id="connect-avatar-fallback">
                 <img src="assets/profilePinkGreen.png" alt="" class="h-full w-full object-cover rounded-full ring-2 ring-inset ring-transparent transition-transform duration-200 group-hover:scale-[1.03]"/>
                 <span class="sr-only">Connect</span>
             </a>
@@ -739,7 +742,7 @@ function blogRowHTML(b) {
     </div>
   ` : '';
 
-  const BLOG_BASE = (typeof location !== 'undefined' && /carte\./.test(location.hostname)) ? 'https://wirawibisana.com' : '';
+  const BLOG_BASE = 'https://wirawibisana.com';
   return `
     <article class="py-3 md:py-6">
       <a href="${BLOG_BASE}/blogs/article/${b.id}" class="group relative grid grid-cols-[1fr_auto] items-start gap-3 md:gap-4 rounded-xl px-3 py-2 md:px-3 md:py-3 transition-colors duration-200 hover:bg-zinc-200/60 hover:ring-1 hover:ring-zinc-300 focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:bg-zinc-200/50" data-card="blog-row">
@@ -804,7 +807,7 @@ function homeCaseStudyCardHTML(b) {
   const img = b.thumbnail
     ? `<img src="${b.thumbnail}" alt="${b.title}" data-thumb class="block w-full aspect-[16/10] md:aspect-[4/3] object-cover transition-transform duration-300 group-hover:scale-[1.03]"/>`
     : '';
-  const BLOG_BASE = (typeof location !== 'undefined' && /carte\./.test(location.hostname)) ? 'https://wirawibisana.com' : '';
+  const BLOG_BASE = 'https://wirawibisana.com';
   return `
     <a href="${BLOG_BASE}/blogs/article/${b.id}" aria-label="Read case study: ${b.title}"
        class="group h-full flex flex-col overflow-hidden rounded-2xl ring-1 ring-zinc-200/70 bg-white/60 hover:ring-zinc-300 hover:bg-white transition-shadow shadow-sm hover:shadow-md" data-card="case-card">
@@ -1113,7 +1116,7 @@ async function loadBlogDetail() {
         <div class="grid grid-cols-1 md:grid-cols-[minmax(0,1fr)_280px] gap-8">
           <div>
             <header class="space-y-3 relative">
-              <a href="${(typeof location !== 'undefined' && /carte\./.test(location.hostname)) ? 'https://wirawibisana.com/blogs' : '/blogs'}" id="back-button"
+              <a href="https://wirawibisana.com/blogs" id="back-button"
                  class="fixed top-4 left-4 z-50 inline-flex items-center gap-1 rounded-full bg-white px-3 py-1.5 text-sm font-medium text-zinc-600 shadow md:static md:bg-transparent md:shadow-none md:text-zinc-500 transition-colors">
                 <span class="md:hidden">&larr; Back</span>
                 <span class="hidden md:inline">&larr; Back to Blogs</span>
@@ -1540,7 +1543,7 @@ function projectCardHTML(p) {
   ].join(' ');
 
   if (p.slug) {
-    return `<a href="showcase.html?slug=${encodeURIComponent(p.slug)}" class="${wrapperClasses}" data-card="case-card">${inner}</a>`;
+    return `<a href="/showcase?slug=${encodeURIComponent(p.slug)}" class="${wrapperClasses}" data-card="case-card">${inner}</a>`;
   }
   return `<div class="${wrapperClasses} cursor-pointer" data-card="case-card">${inner}</div>`;
 }
@@ -1887,7 +1890,7 @@ async function loadProjectDetail() {
       <article class="mx-auto w-full md:max-w-[900px] px-4 md:px-6 lg:px-0 space-y-6 mt-6 pt-6 md:pt-12 pb-24">
         <div id="back-sentinel" class="hidden md:block h-0"></div>
         <header class="space-y-3">
-          <a href="index.html" id="back-button"
+          <a href="/" id="back-button"
              class="fixed top-4 left-4 z-50 inline-flex items-center gap-1 rounded-full bg-white px-3 py-1.5 text-sm font-medium text-zinc-400 shadow md:static md:bg-transparent md:shadow-none md:text-zinc-500 transition-colors">
             <span class="md:hidden">&larr; Back</span>
             <span class="hidden md:inline">&larr; Back to Home</span>
