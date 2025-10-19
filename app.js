@@ -54,7 +54,10 @@ function renderGlobalNav() {
   if (!mount) return; // page can opt-out by omitting the mount node
 
   try {
-    const here = currentFilename();
+    // Normalize current page; treat article detail as part of Blogs
+    const hereRaw = currentFilename();
+    const onArticlePage = !!document.getElementById('blog-detail');
+    const here = onArticlePage ? 'article.html' : hereRaw;
     const links = NAV_ITEMS.map(item => {
       const isCurrent = (
         (item.href === '/' && here === 'index.html') ||
@@ -121,7 +124,7 @@ function renderGlobalNav() {
           return 'index.html';
         } catch { return 'index.html'; }
       };
-      const samePage = dest && (here === toPage(dest));
+      const samePage = dest && ((onArticlePage ? 'article.html' : here) === toPage(dest));
       // Only block when this click would reload the same page,
       // or when clicking the connect avatar while already on connect.html
       const isConnectAvatar = (here === 'connect.html') && (a.id === 'connect-avatar' || /(?:connect\.html|\/connect)$/.test(dest));
@@ -129,7 +132,8 @@ function renderGlobalNav() {
       e.preventDefault();
       // If already on Blogs and the Blogs tab is clicked, reset filters to ALL
       try {
-        if (here === 'blogs.html' && /(?:blogs\.html|\/blogs)$/.test(dest)) {
+        // If on Blogs index and clicking Blogs, reset filters; if on article and clicking Blogs, allow navigation back to /blogs
+        if ((here === 'blogs.html' || onArticlePage) && /(?:blogs\.html|\/blogs)$/.test(dest)) {
           if (window.__blogFilters && typeof window.__blogFilters.setActive === 'function') {
             window.__blogFilters.setActive('ALL');
             // Clean the URL params for a canonical ALL state
