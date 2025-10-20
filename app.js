@@ -1201,7 +1201,7 @@ async function loadBlogDetail() {
 
   root.innerHTML = `
     <div class="min-h-screen pb-48 md:pb-32">
-      <article class="mx-auto w-full max-w-[1100px] px-6 sm:px-8 md:px-12 lg:px-24 xl:px-28 2xl:px-32 mt-6 pt-12 md:pt-12 pb-24">
+      <article class="mx-auto w-full max-w-[1100px] px-6 sm:px-8 md:px-12 lg:px-24 xl:px-28 2xl:px-32 mt-6 pt-24 md:pt-24 pb-24">
         <div id="back-sentinel" class="hidden md:block h-0"></div>
         <div>
           <div>
@@ -1213,9 +1213,7 @@ async function loadBlogDetail() {
               </a>
               <p class="text-sm text-zinc-400">${author}</p>
               <h1 class="text-3xl md:text-4xl font-semibold">${b.title}</h1>
-              ${b.description ? `<p class="text-zinc-400 text-lg leading-relaxed">${b.description}</p>` : ''}
-              ${tagsHtml ? `<div class="flex flex-wrap gap-2">${tagsHtml}</div>` : ''}
-              ${linksPills || ''}
+              ${b.description ? `<div class="mb-1"><p class="text-zinc-400 text-lg leading-relaxed">${b.description}</p><div class="mt-2 w-1/4 border-b border-zinc-200/80"></div></div>` : ''}
               ${(myRole || team || timeline) ? `
                 <div class="mt-1 flex flex-wrap gap-x-6 gap-y-2 text-sm">
                   ${myRole ? `<div class="text-zinc-600 inline-flex items-center gap-1">${svgIcon('role','text-zinc-400')}<span class="text-zinc-400">My Role:</span> <span class="text-zinc-800">${myRole}</span></div>` : ''}
@@ -1231,10 +1229,11 @@ async function loadBlogDetail() {
               ` : ''}
               ${skills && skills.length ? `<div class="mt-2 flex flex-wrap items-center gap-2">${svgIcon('skills','text-zinc-400')} ${skills.map(s => `<span class="inline-flex items-center rounded-full border border-zinc-300/70 bg-white/80 px-2 py-0.5 text-xs text-zinc-700">${s}</span>`).join(' ')}</div>` : ''}
               ${b.date ? `<div class="flex items-center gap-2 text-zinc-400 text-sm">${svgIcon('calendar')}<span class="md:hidden">${dateShort}</span><span class="hidden md:inline">${dateLong}</span></div>` : ''}
+              ${linksPills ? `<div class="mt-1">${linksPills}</div>` : ''}
             </header>
 
             <section class="prose max-w-none mt-2">${bodyHtml}</section>
-            ${linksPills ? `<div class="mt-8">${linksPills}</div>` : ''}
+            
           </div>
           <aside class="hidden md:block">
             <div id="toc-floating">
