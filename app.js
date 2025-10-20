@@ -1207,8 +1207,8 @@ async function loadBlogDetail() {
           <div>
             <header class="space-y-3 relative">
               <a href="/blogs" id="back-button" aria-label="Back to Blogs"
-                 class="back-floating z-50 inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/95 backdrop-blur-lg backdrop-saturate-150 border border-zinc-200/90 shadow-[0_6px_16px_rgba(0,0,0,0.12)] text-black">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5"><path d="M15.75 19.5L8.25 12l7.5-7.5"/></svg>
+                 class="back-floating z-50 inline-flex items-center justify-center rounded-full bg-white/95 backdrop-blur-lg backdrop-saturate-150 border border-zinc-200/90 shadow-[0_6px_16px_rgba(0,0,0,0.12)] text-black">
+                <img src="assets/Chevron%20Icon.png" alt="" class="w-5 h-5" draggable="false"/>
               </a>
               <p class="text-sm text-zinc-400">${author}</p>
               <h1 class="text-3xl md:text-4xl font-semibold">${b.title}</h1>
@@ -1333,9 +1333,27 @@ async function loadBlogDetail() {
     }
   }
 
-  // Back button: always fixed and aligned to article padding at each breakpoint
+  // Back button: always fixed, aligned to article padding; match nav capsule height
   const backBtn = document.getElementById('back-button');
-  if (backBtn) backBtn.classList.add('back-floating');
+  if (backBtn) {
+    backBtn.classList.add('back-floating');
+    const syncBackSize = () => {
+      try {
+        const fs = document.getElementById('primary-nav') || document.getElementById('primary-nav-fallback');
+        if (!fs) return;
+        const h = Math.max(40, Math.round(fs.offsetHeight || fs.getBoundingClientRect().height));
+        backBtn.style.width = h + 'px';
+        backBtn.style.height = h + 'px';
+      } catch {}
+    };
+    syncBackSize();
+    const fs = document.getElementById('primary-nav') || document.getElementById('primary-nav-fallback');
+    if (fs && window.ResizeObserver) {
+      const ro = new ResizeObserver(syncBackSize);
+      ro.observe(fs);
+    }
+    window.addEventListener('resize', syncBackSize);
+  }
 
 
   // Click handlers for gallery thumbnails (if any)
