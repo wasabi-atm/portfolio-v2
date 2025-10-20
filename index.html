@@ -31,6 +31,16 @@
         }
       } catch (e) {}
     })();
+    // If returning via bfcache or after first visit, ensure overlay is not shown
+    window.addEventListener('pageshow', function() {
+      try {
+        if (sessionStorage.getItem('intro_greeted')) {
+          document.documentElement.classList.remove('show-intro');
+          var ov = document.getElementById('intro-greeting');
+          if (ov) { ov.classList.add('hide'); }
+        }
+      } catch (e) {}
+    });
   </script>
 
   <script src="https://cdn.tailwindcss.com"></script>

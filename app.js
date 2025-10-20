@@ -1099,7 +1099,9 @@ async function loadBlogDetail() {
     return `
       <section id="${keyId}" class="scroll-mt-24 pt-10 mt-10">
         <div class="my-8">
-          <h2 class="text-right text-2xl md:text-3xl lg:text-4xl font-semibold tracking-tight text-black border-b-4 border-black pb-2">${label}</h2>
+          <div class="w-2/3 border-b-2 border-black pb-1">
+            <h2 class="text-left text-2xl md:text-3xl lg:text-4xl font-semibold tracking-tight text-black">${label}</h2>
+          </div>
         </div>
         <div class="prose max-w-none">${normalizeArticleHtml(html)}</div>
       </section>`;
@@ -1154,8 +1156,8 @@ async function loadBlogDetail() {
 
       <article class="mx-auto w-full max-w-[1100px] px-6 sm:px-8 md:px-12 lg:px-24 xl:px-28 2xl:px-32 mt-6 pt-6 md:pt-12 pb-24">
         <div id="back-sentinel" class="hidden md:block h-0"></div>
-        <div>
-            <header class="space-y-3 relative">
+        <div class="grid grid-cols-1 md:grid-cols-[minmax(0,1fr)_280px] gap-8">
+          <header class="space-y-3 relative">
               <a href="https://wirawibisana.com/blogs" id="back-button"
                  class="fixed top-4 left-4 z-50 inline-flex items-center gap-1 rounded-full bg-white px-3 py-1.5 text-sm font-medium text-zinc-600 shadow md:static md:bg-transparent md:shadow-none md:text-zinc-500 transition-colors">
                 <span class="md:hidden">&larr; Back</span>
@@ -1173,7 +1175,7 @@ async function loadBlogDetail() {
             ${linksPills ? `<div class="mt-8">${linksPills}</div>` : ''}
           </div>
           <aside class="hidden md:block">
-            <div class="space-y-2" id="toc-panel">
+            <div class="sticky top-24 space-y-2" id="toc">
               <p class="text-xs uppercase tracking-wide text-zinc-500">On this page</p>
               <nav class="flex flex-col text-sm" id="toc-links"></nav>
             </div>
@@ -2070,31 +2072,8 @@ style.textContent = `
   /* Ensure any Tailwind font-serif utility inside article is neutralized */
   #blog-detail .font-serif { font-family: 'Roboto', ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji", sans-serif !important; }
 
-  /* On-this-page floating panel aligned to container paddings */
-  @media (min-width: 768px) { /* md */
-    #toc-panel { position: fixed; top: 6rem; right: 3rem; width: 240px; }
-  }
-  @media (min-width: 1024px) { /* lg:px-24 => 6rem */
-    #toc-panel { right: 6rem; }
-  }
-  @media (min-width: 1280px) { /* xl:px-28 => 7rem */
-    #toc-panel { right: 7rem; }
-  }
-  @media (min-width: 1536px) { /* 2xl:px-32 => 8rem */
-    #toc-panel { right: 8rem; }
-  }
-  #toc-panel {
-    background: rgba(255,255,255,0.95);
-    -webkit-backdrop-filter: saturate(160%) blur(10px);
-    backdrop-filter: saturate(160%) blur(10px);
-    border: 1px solid rgba(0,0,0,0.08);
-    box-shadow: 0 8px 24px rgba(0,0,0,0.12);
-    border-radius: 16px;
-    padding: 12px 14px;
-  }
-  #toc-panel nav a { border-radius: 10px; padding: 6px 8px; }
-  #toc-panel nav a:hover { background: rgba(0,0,0,0.05); }
-  #toc-panel nav a.toc-active { color: #000; background: rgba(0,0,0,0.08); font-weight: 600; }
+  /* TOC: link highlight only */
+  #toc a.toc-active { color: #000; font-weight: 600; }
 `;
 document.head.appendChild(style);
 
@@ -2129,6 +2108,14 @@ document.addEventListener('DOMContentLoaded', () => {
       });
       // Ensure flag is set (may already be set by early script)
       try { sessionStorage.setItem('intro_greeted', '1'); } catch {}
+    }
+    // If on Home but not first time, ensure no overlay is visible (handles bfcache restores)
+    if ((here === 'index.html') && onHomeDom && !firstTime) {
+      try {
+        document.documentElement.classList.remove('show-intro');
+        const ov = document.getElementById('intro-greeting');
+        if (ov) { ov.classList.add('hide'); }
+      } catch {}
     }
     // Hard guard: ensure overlay never appears off-Home
     if (here !== 'index.html' || !onHomeDom) {
