@@ -2186,6 +2186,83 @@ style.textContent = `
 `;
 document.head.appendChild(style);
 
+// Project video modal (Home)
+function initProjectVideoModals() {
+  const cards = document.querySelectorAll('section .grid figure');
+  cards.forEach(card => {
+    const video = card.querySelector('video');
+    if (!video) return;
+    video.style.cursor = 'pointer';
+    video.addEventListener('click', () => {
+      const figcap = card.querySelector('figcaption');
+      const summary = figcap ? figcap.innerHTML : '';
+      const long = card.getAttribute('data-long') || '';
+      const project = (card.getAttribute('data-project') || '').toLowerCase();
+      let link = card.getAttribute('data-link') || '';
+      let linkTitle = '';
+      let linkDesc = '';
+      if (project === 'carte11') {
+        link = '';
+        linkTitle = 'Case study coming soon';
+        linkDesc = 'A deeper write‑up is on the way.';
+      } else if (project === 'carte') {
+        linkTitle = 'Read the Carte case study';
+        linkDesc = 'Designing the bridge between print and digital.';
+      } else if (project === 'swisekai') {
+        linkTitle = 'Read the Swisekai case study';
+        linkDesc = 'Designing a responsive learning companion.';
+      } else if (project === 'stoa') {
+        linkTitle = 'Read the Stoa case study';
+        linkDesc = 'Accessibility and calm interactions.';
+      }
+      openProjectModal(video.currentSrc || video.src, summary, long, link, linkTitle, linkDesc);
+    });
+  });
+}
+
+function openProjectModal(src, summaryHtml, longText, linkUrl, linkTitle, linkDesc) {
+  const overlay = document.createElement('div');
+  overlay.className = 'fixed inset-0 z-[999] bg-black/70 backdrop-blur-sm flex items-center justify-center p-4';
+  overlay.innerHTML = `
+    <div class=\"relative w-full max-w-3xl bg-white rounded-2xl shadow-2xl overflow-hidden\">
+      <button aria-label=\"Close\" class=\"absolute top-2 right-2 w-9 h-9 grid place-items-center rounded-full bg-white/95 border border-zinc-200/80 shadow hover:bg-white\">×</button>
+      <div class=\"w-full bg-black\">
+        <video class=\"block w-full h-auto\" src=\"${src}\" controls playsinline></video>
+      </div>
+      <div class=\"p-4 sm:p-6\">
+        ${summaryHtml ? `<div class=\\\"text-sm sm:text-base text-zinc-600\\\">${summaryHtml}</div>` : ''}
+        ${longText ? `<p class=\\\"mt-3 text-sm sm:text-base text-zinc-700 leading-relaxed\\\">${longText}</p>` : ''}
+        ${renderEmbedLink(linkUrl, linkTitle, linkDesc)}
+      </div>
+    </div>
+  `;
+  function close() { try { document.body.classList.remove('overflow-hidden'); overlay.remove(); } catch {} }
+  overlay.addEventListener('click', (e) => { if (e.target === overlay) close(); });
+  const btn = overlay.querySelector('button[aria-label="Close"]');
+  if (btn) btn.addEventListener('click', close);
+  document.body.appendChild(overlay);
+  document.body.classList.add('overflow-hidden');
+  document.addEventListener('keydown', function onKey(e){ if (e.key === 'Escape') { close(); document.removeEventListener('keydown', onKey); } });
+}
+
+function renderEmbedLink(url, title, desc) {
+  if (!title) return '';
+  const isLink = !!url;
+  const domain = (() => {
+    try { if (!url) return ''; const u = new URL(url, location.origin); return u.hostname.replace(/^www\\\./,''); } catch { return ''; }
+  })();
+  const content = `
+    <div class=\\\"flex-1 p-4\\\">
+      <h2 class=\\\"text-base sm:text-lg font-semibold text-black\\\">${title}</h2>
+      ${desc ? `<h3 class=\\\"text-sm sm:text-base text-zinc-600 mt-1\\\">${desc}</h3>` : ''}
+      ${domain ? `<p class=\\\"text-xs text-zinc-500 mt-1\\\">${domain}</p>` : ''}
+    </div>
+    <div class=\\\"w-24 sm:w-32 bg-zinc-100\\\"></div>`;
+  const inner = `<div class=\\\"flex items-stretch justify-between rounded-lg border border-zinc-200 hover:border-zinc-300 overflow-hidden\\\">${content}</div>`;
+  if (!isLink) return `<div class=\\\"mt-4\\\">${inner}</div>`;
+  return `<div class=\\\"mt-4\\\"><a href=\\\"${url}\\\" class=\\\"block\\\" rel=\\\"noopener\\\" target=\\\"_blank\\\">${inner}</a></div>`;
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   // Intro greeting (first visit in session, render on actual Home only)
   try {
@@ -2261,6 +2338,7 @@ document.addEventListener('DOMContentLoaded', () => {
   loadProjectDetail();
   loadBlogsAndRender();
   loadBlogDetail();
+  if (currentFilename() === 'index.html') initProjectVideoModals();
 
   // Re-clamp on resize (debounced via rAF)
   let __clampRaf = 0;
