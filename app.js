@@ -2108,6 +2108,15 @@ document.addEventListener('DOMContentLoaded', () => {
       });
       // Ensure flag is set (may already be set by early script)
       try { sessionStorage.setItem('intro_greeted', '1'); } catch {}
+      // Hard fallback: in case timers are paused or tab is backgrounded,
+      // forcibly remove any lingering overlay after ~2.5s
+      setTimeout(() => {
+        try {
+          const ov = document.getElementById('intro-greeting');
+          if (ov) ov.remove();
+          document.documentElement.classList.remove('show-intro');
+        } catch {}
+      }, 2500);
     }
     // If on Home but not first time, ensure no overlay is visible (handles bfcache restores)
     if ((here === 'index.html') && onHomeDom && !firstTime) {
