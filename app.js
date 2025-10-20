@@ -1134,8 +1134,47 @@ async function loadBlogDetail() {
   const team = safeText(d.team || d['Team']);
   const teamComp = safeText(d.teamComposition || d['Team Composition'] || d.TeamComposition);
   const timeline = safeText(d.timeline || d['Timeline']);
-  // Skills: explicit skill1, skill2, skill3 per Builder model
-  const skills = [safeText(d.skill1), safeText(d.skill2), safeText(d.skill3)].filter(Boolean);
+  // Skills: prefer list field `skills`. Items may have `skill1/2/3` or `Skill 1/2/3`,
+  // and values may be hyphen/comma/newline-separated (e.g., "User Research - Figma - SwiftUI").
+  const splitSkills = (s) => (s || '')
+    .toString()
+    .split(/\s*[-,]\s+|\n+/)
+    .map(x => x.trim())
+    .filter(Boolean);
+  let skills = [];
+  const skillsList = d.skills;
+  if (Array.isArray(skillsList)) {
+    skillsList.forEach(item => {
+      if (!item) return;
+      if (typeof item === 'string') {
+        skills.push(...splitSkills(item));
+        return;
+      }
+      if (typeof item === 'object') {
+        const candidates = [
+          safeText(item.skill1), safeText(item.skill2), safeText(item.skill3),
+          safeText(item['Skill 1']), safeText(item['Skill 2']), safeText(item['Skill 3']),
+          safeText(item.label || item.name || item.title || item.value || item.text)
+        ].filter(Boolean);
+        candidates.forEach(v => skills.push(...splitSkills(v)));
+      }
+    });
+  } else if (skillsList && typeof skillsList === 'object') {
+    ['skill1','skill2','skill3','Skill 1','Skill 2','Skill 3'].forEach(k => {
+      const v = safeText(skillsList[k]);
+      if (v) skills.push(...splitSkills(v));
+    });
+  }
+  // Fallbacks to top-level fields
+  if (!skills.length) {
+    ['skill1','skill2','skill3','Skill 1','Skill 2','Skill 3'].forEach(k => {
+      const v = safeText(d[k]);
+      if (v) skills.push(...splitSkills(v));
+    });
+  }
+  // Dedup preserve order
+  const seenSkill = new Set();
+  skills = skills.filter(s => { if (seenSkill.has(s.toLowerCase())) return false; seenSkill.add(s.toLowerCase()); return true; });
   function svgBrand(label) {
     const k = (label || '').toLowerCase();
     if (k.includes('github')) {
@@ -1179,18 +1218,18 @@ async function loadBlogDetail() {
               ${linksPills || ''}
               ${(myRole || team || timeline) ? `
                 <div class="mt-1 flex flex-wrap gap-x-6 gap-y-2 text-sm">
-                  ${myRole ? `<div class="text-zinc-500"><span class="text-zinc-400">My Role:</span> <span class="text-zinc-700">${myRole}</span></div>` : ''}
-                  ${team ? `<div class="text-zinc-500 relative inline-block group">
-                    <span class="text-zinc-400">Team:</span>
-                    <span class="underline underline-offset-4 decoration-zinc-400 group-hover:decoration-black cursor-help">${team}</span>
+                  ${myRole ? `<div class="text-zinc-600 inline-flex items-center gap-1">${svgIcon('role','text-zinc-400')}<span class="text-zinc-400">My Role:</span> <span class="text-zinc-800">${myRole}</span></div>` : ''}
+                  ${team ? `<div class="text-zinc-600 relative inline-flex items-center gap-1 group">
+                    ${svgIcon('team','text-zinc-400')}<span class="text-zinc-400">Team:</span>
+                    <span class="underline underline-offset-4 decoration-zinc-400 group-hover:decoration-black cursor-help text-zinc-800">${team}</span>
                     ${teamComp ? `<span role="tooltip" class="pointer-events-none absolute left-1/2 top-full z-50 mt-2 w-[min(90vw,260px)] -translate-x-1/2 translate-y-1 opacity-0 group-hover:opacity-100 group-hover:translate-y-0 transition duration-200">
                       <span class="block rounded-md border border-zinc-200 bg-white px-3 py-2 text-xs text-zinc-700 shadow-md">${teamComp}</span>
                     </span>` : ''}
                   </div>` : ''}
-                  ${timeline ? `<div class="text-zinc-500"><span class="text-zinc-400">Timeline:</span> <span class="text-zinc-700">${timeline}</span></div>` : ''}
+                  ${timeline ? `<div class="text-zinc-600 inline-flex items-center gap-1">${svgIcon('timeline','text-zinc-400')}<span class="text-zinc-400">Timeline:</span> <span class="text-zinc-800">${timeline}</span></div>` : ''}
                 </div>
               ` : ''}
-              ${skills && skills.length ? `<div class="mt-2 flex flex-wrap gap-2">${skills.map(s => `<span class="inline-flex items-center rounded-full border border-zinc-300/70 bg-white/80 px-2 py-0.5 text-xs text-zinc-700">${s}</span>`).join(' ')}</div>` : ''}
+              ${skills && skills.length ? `<div class="mt-2 flex flex-wrap items-center gap-2">${svgIcon('skills','text-zinc-400')} ${skills.map(s => `<span class="inline-flex items-center rounded-full border border-zinc-300/70 bg-white/80 px-2 py-0.5 text-xs text-zinc-700">${s}</span>`).join(' ')}</div>` : ''}
               ${b.date ? `<div class="flex items-center gap-2 text-zinc-400 text-sm">${svgIcon('calendar')}<span class="md:hidden">${dateShort}</span><span class="hidden md:inline">${dateLong}</span></div>` : ''}
             </header>
 
@@ -1681,6 +1720,18 @@ function formatDateHuman(input) {
 function svgIcon(name, cls = '') {
   if (name === 'calendar') {
     return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="inline-block w-4 h-4 ${cls}"><path d="M7 2a1 1 0 00-1 1v1H5a3 3 0 00-3 3v11a3 3 0 003 3h14a3 3 0 003-3V7a3 3 0 00-3-3h-1V3a1 1 0 10-2 0v1H8V3a1 1 0 00-1-1zm12 7H5v9a1 1 0 001 1h12a1 1 0 001-1V9z"/></svg>`;
+  }
+  if (name === 'role' || name === 'briefcase') {
+    return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="inline-block w-4 h-4 ${cls}"><path d="M9 4a2 2 0 00-2 2v1H5a3 3 0 00-3 3v7a3 3 0 003 3h14a3 3 0 003-3v-7a3 3 0 00-3-3h-2V6a2 2 0 00-2-2H9zm6 3V6a1 1 0 00-1-1H10a1 1 0 00-1 1v1h6z"/></svg>`;
+  }
+  if (name === 'team' || name === 'users') {
+    return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="inline-block w-4 h-4 ${cls}"><path d="M7 11a3 3 0 110-6 3 3 0 010 6zm10-2a2.5 2.5 0 10-5 0 2.5 2.5 0 005 0zM2 19a5 5 0 019-3H7a5 5 0 00-5 5v-2zm9 0a5 5 0 019 0v2h-9v-2z"/></svg>`;
+  }
+  if (name === 'timeline' || name === 'clock') {
+    return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="inline-block w-4 h-4 ${cls}"><path d="M12 2a10 10 0 100 20 10 10 0 000-20zm1 5a1 1 0 10-2 0v5a1 1 0 00.293.707l3 3a1 1 0 001.414-1.414L13 11.586V7z"/></svg>`;
+  }
+  if (name === 'skills' || name === 'tag') {
+    return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="inline-block w-4 h-4 ${cls}"><path d="M3 12l7.293-7.293A1 1 0 0111 4h6a2 2 0 012 2v6a1 1 0 01-.293.707L11 20 3 12zm13-5a1.5 1.5 0 100 3 1.5 1.5 0 000-3z"/></svg>`;
   }
   return '';
 }
