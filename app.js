@@ -1157,7 +1157,8 @@ async function loadBlogDetail() {
       <article class="mx-auto w-full max-w-[1100px] px-6 sm:px-8 md:px-12 lg:px-24 xl:px-28 2xl:px-32 mt-6 pt-6 md:pt-12 pb-24">
         <div id="back-sentinel" class="hidden md:block h-0"></div>
         <div class="grid grid-cols-1 md:grid-cols-[minmax(0,1fr)_280px] gap-8">
-          <header class="space-y-3 relative">
+          <div>
+            <header class="space-y-3 relative">
               <a href="https://wirawibisana.com/blogs" id="back-button"
                  class="fixed top-4 left-4 z-50 inline-flex items-center gap-1 rounded-full bg-white px-3 py-1.5 text-sm font-medium text-zinc-600 shadow md:static md:bg-transparent md:shadow-none md:text-zinc-500 transition-colors">
                 <span class="md:hidden">&larr; Back</span>
