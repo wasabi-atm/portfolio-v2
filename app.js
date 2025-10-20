@@ -2287,7 +2287,7 @@ document.addEventListener('DOMContentLoaded', () => {
 // Inject footer
 document.addEventListener("DOMContentLoaded", function () {
   const footer = `
-    <footer class="w-full border-t border-zinc-200 mt-12">
+    <footer class="w-full border-t border-zinc-200 mt-12 bg-zinc-200/40">
       <div class="mx-auto w-full max-w-[1100px] px-6 sm:px-8 md:px-12 lg:px-24 xl:px-28 2xl:px-32 pt-6 pb-20 md:pt-8 md:pb-24">
         <p class="text-lg md:text-xl text-black mb-4">
           I'm available to chat and collaborate

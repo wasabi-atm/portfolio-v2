@@ -62,8 +62,9 @@
     // force-route to the Carte page even without server rewrites.
     (function () {
       try {
-        if (/^carte\./.test(location.hostname) && location.pathname !== '/carte.html') {
-          location.replace('/carte.html');
+        if (/^carte\./.test(location.hostname) && location.pathname !== '/') {
+          // Keep URL clean on Carte subdomain; root is rewritten to carte.html by Vercel
+          location.replace('/');
         }
       } catch (e) {}
     })();
@@ -201,7 +202,7 @@
 
       <!-- 3: Stoa -->
       <figure class="rounded-2xl relative">
-        <video class="block w-full aspect-[4/3] object-cover rounded-2xl" src="assets/Stoa.mp4" autoplay muted loop playsinline preload="metadata" aria-label="Stoa demo"></video>
+        <video class="block w-full aspect-[4/3] object-cover rounded-2xl" src="assets/StoaShowcaseNue.mp4" autoplay muted loop playsinline preload="metadata" aria-label="Stoa demo"></video>
         <figcaption class="mt-2 text-sm sm:text-base text-muted leading-snug pl-3 md:pl-4">
           Stoa is an 
           <span class="relative inline-block group">
@@ -218,7 +219,7 @@
 
       <!-- 4: Swisekai -->
       <figure class="rounded-2xl relative">
-        <video class="block w-full aspect-[4/3] object-cover rounded-2xl" src="assets/Swisekai.mp4" autoplay muted loop playsinline preload="metadata" poster="assets/Swisekai.webp" aria-label="Swisekai demo"></video>
+        <video class="block w-full aspect-[4/3] object-cover rounded-2xl" src="assets/SwisekaiShowcaseNeu.mp4" autoplay muted loop playsinline preload="metadata" poster="assets/Swisekai.webp" aria-label="Swisekai demo"></video>
         <figcaption class="mt-2 text-sm sm:text-base text-muted leading-snug pl-3 md:pl-4">
           SwiSekai is an 
           <span class="relative inline-block group">
