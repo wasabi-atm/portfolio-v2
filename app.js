@@ -97,6 +97,16 @@ function renderGlobalNav() {
       + '</div>'
     );
 
+    // Ensure full-width fading gradient backdrop behind nav for separation
+    try {
+      let nb = document.getElementById('nav-backdrop');
+      if (!nb) {
+        nb = document.createElement('div');
+        nb.id = 'nav-backdrop';
+        document.body.appendChild(nb);
+      }
+    } catch {}
+
     // Intercept clicks on current page to avoid reload and give feedback
     const intercept = (e) => {
       const a = e.target.closest('a');
@@ -318,6 +328,16 @@ function renderGlobalNav() {
           </div>
         </div>
       </div>`;
+
+    // Ensure gradient backdrop exists in fallback too
+    try {
+      let nb = document.getElementById('nav-backdrop');
+      if (!nb) {
+        nb = document.createElement('div');
+        nb.id = 'nav-backdrop';
+        document.body.appendChild(nb);
+      }
+    } catch {}
 
     // Fallback: responsive sizing
     try {
@@ -2089,6 +2109,16 @@ style.textContent = `
     color: #000 !important;
     box-shadow: 0 4px 16px rgba(0,0,0,0.15);
     border-radius: 9999px;
+  }
+  /* Full-width fading gradient behind nav for clearer separation */
+  #nav-backdrop { position: fixed; left: 0; right: 0; z-index: 40; pointer-events: none; }
+  /* md and up: gradient from top */
+  @media (min-width: 768px) {
+    #nav-backdrop { top: 0; height: 110px; background: linear-gradient(to bottom, rgba(244,244,245,1), rgba(244,244,245,0)); }
+  }
+  /* below md: gradient from bottom for bottom nav */
+  @media (max-width: 767.98px) {
+    #nav-backdrop { bottom: 0; height: 120px; background: linear-gradient(to top, rgba(244,244,245,1), rgba(244,244,245,0)); }
   }
   /* Intro greeting overlay */
   #intro-greeting {
