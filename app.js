@@ -1122,6 +1122,20 @@ async function loadBlogDetail() {
     <img src="${typeBadgeForTag(firstTag)}" alt="${firstTag} type" class="inline-block align-middle h-[1em] w-[1em] object-cover" loading="lazy" decoding="async"/>`;
   const dateLong = formatBlogDate(b.date);
   const dateShort = formatBlogDateShort(b.date);
+
+  // Pull auxiliary fields from Builder (camelCase first)
+  const safeText = (v) => {
+    if (!v) return '';
+    if (typeof v === 'string') return v.trim();
+    if (typeof v === 'object') return (v.text || v.html || v.value || '').toString().trim();
+    return '';
+  };
+  const myRole = safeText(d.myRole || d.role || d['My Role']);
+  const team = safeText(d.team || d['Team']);
+  const teamComp = safeText(d.teamComposition || d['Team Composition'] || d.TeamComposition);
+  const timeline = safeText(d.timeline || d['Timeline']);
+  // Skills: explicit skill1, skill2, skill3 per Builder model
+  const skills = [safeText(d.skill1), safeText(d.skill2), safeText(d.skill3)].filter(Boolean);
   function svgBrand(label) {
     const k = (label || '').toLowerCase();
     if (k.includes('github')) {
@@ -1148,13 +1162,7 @@ async function loadBlogDetail() {
 
   root.innerHTML = `
     <div class="min-h-screen pb-48 md:pb-32">
-      ${b.thumbnail ? `
-        <div class="w-full overflow-hidden">
-          <img data-hero src="${b.thumbnail}" alt="${b.title}" class="block w-full object-cover object-center cursor-pointer blur-md grayscale" style="max-height:200px; transform: scale(1.2); transform-origin: center;" />
-        </div>
-      ` : ''}
-
-      <article class="mx-auto w-full max-w-[1100px] px-6 sm:px-8 md:px-12 lg:px-24 xl:px-28 2xl:px-32 mt-6 pt-6 md:pt-12 pb-24">
+      <article class="mx-auto w-full max-w-[1100px] px-6 sm:px-8 md:px-12 lg:px-24 xl:px-28 2xl:px-32 mt-6 pt-12 md:pt-12 pb-24">
         <div id="back-sentinel" class="hidden md:block h-0"></div>
         <div>
           <div>
@@ -1169,6 +1177,20 @@ async function loadBlogDetail() {
               ${b.description ? `<p class="text-zinc-400 text-lg leading-relaxed">${b.description}</p>` : ''}
               ${tagsHtml ? `<div class="flex flex-wrap gap-2">${tagsHtml}</div>` : ''}
               ${linksPills || ''}
+              ${(myRole || team || timeline) ? `
+                <div class="mt-1 flex flex-wrap gap-x-6 gap-y-2 text-sm">
+                  ${myRole ? `<div class="text-zinc-500"><span class="text-zinc-400">My Role:</span> <span class="text-zinc-700">${myRole}</span></div>` : ''}
+                  ${team ? `<div class="text-zinc-500 relative inline-block group">
+                    <span class="text-zinc-400">Team:</span>
+                    <span class="underline underline-offset-4 decoration-zinc-400 group-hover:decoration-black cursor-help">${team}</span>
+                    ${teamComp ? `<span role="tooltip" class="pointer-events-none absolute left-1/2 top-full z-50 mt-2 w-[min(90vw,260px)] -translate-x-1/2 translate-y-1 opacity-0 group-hover:opacity-100 group-hover:translate-y-0 transition duration-200">
+                      <span class="block rounded-md border border-zinc-200 bg-white px-3 py-2 text-xs text-zinc-700 shadow-md">${teamComp}</span>
+                    </span>` : ''}
+                  </div>` : ''}
+                  ${timeline ? `<div class="text-zinc-500"><span class="text-zinc-400">Timeline:</span> <span class="text-zinc-700">${timeline}</span></div>` : ''}
+                </div>
+              ` : ''}
+              ${skills && skills.length ? `<div class="mt-2 flex flex-wrap gap-2">${skills.map(s => `<span class="inline-flex items-center rounded-full border border-zinc-300/70 bg-white/80 px-2 py-0.5 text-xs text-zinc-700">${s}</span>`).join(' ')}</div>` : ''}
               ${b.date ? `<div class="flex items-center gap-2 text-zinc-400 text-sm">${svgIcon('calendar')}<span class="md:hidden">${dateShort}</span><span class="hidden md:inline">${dateLong}</span></div>` : ''}
             </header>
 
@@ -2102,13 +2124,13 @@ document.addEventListener('DOMContentLoaded', () => {
         `;
         document.body.appendChild(overlay);
       }
-      // Show for a brief moment, then fade
+      // Show for a bit longer, then fade (allow time to read)
       requestAnimationFrame(() => {
         setTimeout(() => {
           try { document.documentElement.classList.remove('show-intro'); } catch {}
           overlay.classList.add('hide');
           setTimeout(() => overlay.remove(), 700);
-        }, 1000);
+        }, 2000);
       });
       // Ensure flag is set (may already be set by early script)
       try { sessionStorage.setItem('intro_greeted', '1'); } catch {}
@@ -2120,7 +2142,7 @@ document.addEventListener('DOMContentLoaded', () => {
           if (ov) ov.remove();
           document.documentElement.classList.remove('show-intro');
         } catch {}
-      }, 2500);
+      }, 4500);
     }
     // If on Home but not first time, ensure no overlay is visible (handles bfcache restores)
     if ((here === 'index.html') && onHomeDom && !firstTime) {
