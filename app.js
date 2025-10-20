@@ -1156,7 +1156,7 @@ async function loadBlogDetail() {
 
       <article class="mx-auto w-full max-w-[1100px] px-6 sm:px-8 md:px-12 lg:px-24 xl:px-28 2xl:px-32 mt-6 pt-6 md:pt-12 pb-24">
         <div id="back-sentinel" class="hidden md:block h-0"></div>
-        <div class="grid grid-cols-1 md:grid-cols-[minmax(0,1fr)_280px] gap-8">
+        <div>
           <div>
             <header class="space-y-3 relative">
               <a href="https://wirawibisana.com/blogs" id="back-button"
@@ -1176,9 +1176,9 @@ async function loadBlogDetail() {
             ${linksPills ? `<div class="mt-8">${linksPills}</div>` : ''}
           </div>
           <aside class="hidden md:block">
-            <div class="sticky top-24 space-y-2" id="toc">
-              <p class="text-xs uppercase tracking-wide text-zinc-500">On this page</p>
-              <nav class="flex flex-col text-sm" id="toc-links"></nav>
+            <div id="toc-floating">
+              <p class="text-xs uppercase tracking-wide text-zinc-500 text-right pr-4">On this page</p>
+              <nav class="flex flex-col text-sm items-end pr-4" id="toc-links"></nav>
             </div>
           </aside>
         </div>
@@ -2073,8 +2073,11 @@ style.textContent = `
   /* Ensure any Tailwind font-serif utility inside article is neutralized */
   #blog-detail .font-serif { font-family: 'Roboto', ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji", sans-serif !important; }
 
-  /* TOC: link highlight only */
-  #toc a.toc-active { color: #000; font-weight: 600; }
+  /* TOC: floating at right edge on md+; right-aligned links */
+  @media (min-width: 768px) {
+    #toc-floating { position: fixed; top: 6rem; right: 12px; width: 240px; text-align: right; }
+  }
+  #toc-floating a.toc-active, #toc a.toc-active { color: #000; font-weight: 600; }
 `;
 document.head.appendChild(style);
 
