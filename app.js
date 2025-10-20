@@ -1206,10 +1206,9 @@ async function loadBlogDetail() {
         <div>
           <div>
             <header class="space-y-3 relative">
-              <a href="https://wirawibisana.com/blogs" id="back-button"
-                 class="fixed top-4 left-4 z-50 inline-flex items-center gap-1 rounded-full bg-white px-3 py-1.5 text-sm font-medium text-zinc-600 shadow md:static md:bg-transparent md:shadow-none md:text-zinc-500 transition-colors">
-                <span class="md:hidden">&larr; Back</span>
-                <span class="hidden md:inline">&larr; Back to Blogs</span>
+              <a href="/blogs" id="back-button" aria-label="Back to Blogs"
+                 class="back-floating z-50 inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/95 backdrop-blur-lg backdrop-saturate-150 border border-zinc-200/90 shadow-[0_6px_16px_rgba(0,0,0,0.12)] text-black">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5"><path d="M15.75 19.5L8.25 12l7.5-7.5"/></svg>
               </a>
               <p class="text-sm text-zinc-400">${author}</p>
               <h1 class="text-3xl md:text-4xl font-semibold">${b.title}</h1>
@@ -1334,29 +1333,9 @@ async function loadBlogDetail() {
     }
   }
 
-  // Back button floating logic: avoid stutter by using scroll threshold + rAF throttle
+  // Back button: always fixed and aligned to article padding at each breakpoint
   const backBtn = document.getElementById('back-button');
-  if (backBtn) {
-    const apply = () => {
-      if (window.innerWidth < 768) {
-        backBtn.classList.add('back-floating');
-        return;
-      }
-      const y = window.scrollY || document.documentElement.scrollTop || 0;
-      if (y > 120) backBtn.classList.add('back-floating');
-      else backBtn.classList.remove('back-floating');
-    };
-    let ticking = false;
-    const onScroll = () => {
-      if (!ticking) {
-        ticking = true;
-        requestAnimationFrame(() => { ticking = false; apply(); });
-      }
-    };
-    apply();
-    window.addEventListener('scroll', onScroll, { passive: true });
-    window.addEventListener('resize', apply);
-  }
+  if (backBtn) backBtn.classList.add('back-floating');
 
 
   // Click handlers for gallery thumbnails (if any)
@@ -2074,7 +2053,6 @@ style.textContent = `
     color: #000 !important;
     box-shadow: 0 4px 16px rgba(0,0,0,0.15);
     border-radius: 9999px;
-    padding: 0.375rem 0.75rem;
   }
   /* Intro greeting overlay */
   #intro-greeting {
