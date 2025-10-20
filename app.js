@@ -1177,8 +1177,8 @@ async function loadBlogDetail() {
           </div>
           <aside class="hidden md:block">
             <div id="toc-floating">
-              <p class="text-xs uppercase tracking-wide text-zinc-500 text-right pr-4">On this page</p>
-              <nav class="flex flex-col text-sm items-end pr-4" id="toc-links"></nav>
+              <p class="text-xs uppercase tracking-wide text-zinc-500 text-right pr-6">On this page</p>
+              <nav class="flex flex-col text-sm items-end pr-6" id="toc-links"></nav>
             </div>
           </aside>
         </div>
@@ -2075,7 +2075,7 @@ style.textContent = `
 
   /* TOC: floating at right edge on md+; right-aligned links */
   @media (min-width: 768px) {
-    #toc-floating { position: fixed; top: 6rem; right: 12px; width: 240px; text-align: right; }
+    #toc-floating { position: fixed; top: 50%; transform: translateY(-50%); right: 24px; width: 260px; text-align: right; }
   }
   #toc-floating a.toc-active, #toc a.toc-active { color: #000; font-weight: 600; }
 `;
