@@ -2159,18 +2159,7 @@ style.textContent = `
     #back-button.back-floating { left: 8rem; }
   }
   html { scroll-behavior: smooth; }
-  /* Extra bottom margin for footer on mobile, so it clears the fixed bottom nav */
-  @media (max-width: 768px) {
-    footer {
-      margin-bottom: calc(10rem + env(safe-area-inset-bottom));
-    }
-  }
-  /* Additional bottom margin for footer on desktop */
-  @media (min-width: 769px) {
-    footer {
-      margin-bottom: 4rem;
-    }
-  }
+  /* Remove extra bottom margin below footer to avoid visible white gap */
   /* Article typography: use sans (Roboto-first) for headings and body */
   /* Also force serif utility to resolve to sans within the article scope */
   #blog-detail { --font-serif: var(--font-sans); }
@@ -2288,7 +2277,7 @@ document.addEventListener('DOMContentLoaded', () => {
 document.addEventListener("DOMContentLoaded", function () {
   const footer = `
     <footer class="w-full border-t border-zinc-200 mt-12 bg-zinc-200/40">
-      <div class="mx-auto w-full max-w-[1100px] px-6 sm:px-8 md:px-12 lg:px-24 xl:px-28 2xl:px-32 pt-6 pb-20 md:pt-8 md:pb-24">
+      <div class="mx-auto w-full max-w-[1100px] px-6 sm:px-8 md:px-12 lg:px-24 xl:px-28 2xl:px-32 pt-6 pb-28 md:pt-8 md:pb-32">
         <p class="text-lg md:text-xl text-black mb-4">
           I'm available to chat and collaborate
         </p>

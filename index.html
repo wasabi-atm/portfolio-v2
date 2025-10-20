@@ -62,9 +62,8 @@
     // force-route to the Carte page even without server rewrites.
     (function () {
       try {
-        if (/^carte\./.test(location.hostname) && location.pathname !== '/') {
-          // Keep URL clean on Carte subdomain; root is rewritten to carte.html by Vercel
-          location.replace('/');
+        if (/^carte\./.test(location.hostname) && location.pathname !== '/carte.html') {
+          location.replace('/carte.html');
         }
       } catch (e) {}
     })();

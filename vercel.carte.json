@@ -7,8 +7,6 @@
     { "source": "/(.*)", "destination": "/carte.html" }
   ],
   "redirects": [
-    { "source": "/carte.html", "destination": "/", "permanent": true },
-    { "source": "/carte", "destination": "/", "permanent": true },
-    { "source": "/carte/", "destination": "/", "permanent": true }
+    { "source": "/carte.html", "destination": "/", "permanent": true }
   ]
 }
