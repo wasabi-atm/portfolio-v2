@@ -23,10 +23,7 @@
 
 .counter-glow { text-shadow: 0 0 40px rgba(102,126,234,0.3); }
 
-/* Ensure all Tailwind `font-serif` elements use Lora consistently */
-.font-serif {
-  font-family: 'Lora', ui-serif, Georgia, Cambria, "Times New Roman", Times, serif !important;
-}
+/* Scope serif utility to Carte only via CSS variable */
 
 /* Tailwind v4 theme tokens for CLI build */
 @theme {
@@ -38,8 +35,12 @@
   --color-carte-red: #FF5454;
   /* Typography tokens to use with font-sans / font-serif */
   --font-sans: 'Roboto', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Apple Color Emoji', 'Segoe UI Emoji';
-  --font-serif: 'Lora', ui-serif, Georgia, Cambria, 'Times New Roman', Times, serif;
+  /* Default serif maps to sans across the site; Carte page will override */
+  --font-serif: var(--font-sans);
 }
+
+/* Carte-only override: enable Lora for serif utility on Carte page */
+.carte { --font-serif: 'Lora', ui-serif, Georgia, Cambria, 'Times New Roman', Times, serif; }
 
 /* Minimal prose styles for article readability */
 .prose { color: var(--color-content); line-height: 1.7; }

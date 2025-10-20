@@ -8,7 +8,7 @@
   <!-- Using local compiled Tailwind from dist/output.css; no CDN runtime needed -->
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Lora:wght@400;600;700&display=swap" rel="stylesheet">
   <link href="./dist/output.css" rel="stylesheet">
-  <link id="site-favicon" rel="icon" type="image/png" href="assets/favicon.png">
+  <link id="site-favicon" rel="icon" type="image/png" href="assets/faviconneu.png">
   <link rel="apple-touch-icon" href="assets/carteIcon.png">
   <script>
     (function () {
@@ -22,7 +22,7 @@
           document.head.appendChild(link);
         }
         var onCarte = /^carte\./i.test(location.hostname) || /(^|\.)carte\.wirawibisana\.com$/i.test(location.hostname);
-        link.href = onCarte ? 'assets/carteFavicon.png' : 'assets/favicon.png';
+        link.href = onCarte ? 'assets/carteFavicon.png' : 'assets/faviconneu.png';
       } catch (e) {}
     })();
   </script>
@@ -42,7 +42,7 @@
     }
   </style>
 </head>
-<body class="text-gray-900 antialiased font-sans">
+<body class="carte text-gray-900 antialiased font-sans">
 
   <!-- Hero Section -->
   <section class="relative px-6 py-20 md:py-32 bg-white overflow-hidden">

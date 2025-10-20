@@ -5,6 +5,34 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Wira Wibisana Portfolio</title>
 
+  <!-- Early intro overlay styles and flag; ensures overlay paints before content -->
+  <style>
+    #intro-greeting { display: none; }
+    .show-intro #intro-greeting {
+      display: grid;
+      position: fixed; inset: 0; z-index: 9999;
+      place-items: center; background: #000; color: #fff;
+      opacity: 1; transition: opacity .6s ease;
+    }
+    .show-intro #intro-greeting .bubble {
+      transform: translateY(8px) scale(.98);
+      opacity: 0; animation: intro-pop .6s ease forwards .15s; text-align: center;
+    }
+    @keyframes intro-pop { to { transform: translateY(0) scale(1); opacity: 1; } }
+  </style>
+  <script>
+    // Mark document to show intro overlay ASAP on first session visit to Home
+    (function(){
+      try {
+        if (!sessionStorage.getItem('intro_greeted')) {
+          document.documentElement.classList.add('show-intro');
+          // Set flag early so navigation during overlay timeframe doesn't retrigger
+          sessionStorage.setItem('intro_greeted', '1');
+        }
+      } catch (e) {}
+    })();
+  </script>
+
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -17,9 +45,8 @@
   </script>
 
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&amp;display=swap" rel="stylesheet" />
-  <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link href="./dist/output.css" rel="stylesheet">
-  <link id="site-favicon" rel="icon" type="image/png" href="assets/favicon.png">
+  <link id="site-favicon" rel="icon" type="image/png" href="assets/faviconneu.png">
   <script>
     // Fallback guard: if this deployment serves the Carte subdomain,
     // force-route to the Carte page even without server rewrites.
@@ -41,12 +68,19 @@
           document.head.appendChild(link);
         }
         var onCarte = /^carte\./i.test(location.hostname) || /(^|\.)carte\.wirawibisana\.com$/i.test(location.hostname);
-        link.href = onCarte ? 'assets/carteFavicon.png' : 'assets/favicon.png';
+        link.href = onCarte ? 'assets/carteFavicon.png' : 'assets/faviconneu.png';
       } catch (e) {}
     })();
   </script>
 </head>
 <body class="min-h-dvh bg-zinc-100 antialiased font-['Roboto']">
+
+  <!-- Pre-rendered intro overlay (shown via .show-intro on <html>) -->
+  <div id="intro-greeting" aria-hidden="true">
+    <div class="bubble">
+      <div style="font-size: clamp(22px,4vw,36px); font-weight: 600; letter-spacing: .2px;">Om Swastyastu 🙏🏻</div>
+    </div>
+  </div>
 
   <!-- Global nav will be injected by app.js -->
   <div id="site-nav"></div>

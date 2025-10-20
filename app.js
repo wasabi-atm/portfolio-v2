@@ -75,7 +75,7 @@ function renderGlobalNav() {
 
     const connectActive = (here === 'connect.html');
     const connectAvatar = (
-      '<a href="/connect" class="group inline-flex items-center justify-center p-1.5 rounded-full bg-white/80 backdrop-blur-md border border-zinc-200/80 shadow-[0_6px_16px_rgba(0,0,0,0.12)] ring-2 '
+      '<a href="/connect" class="group inline-flex items-center justify-center p-1.5 rounded-full bg-white/95 backdrop-blur-lg backdrop-saturate-150 border border-zinc-200/90 shadow-[0_6px_16px_rgba(0,0,0,0.12)] ring-2 '
       + (connectActive ? 'ring-green-600' : 'ring-white') + ' overflow-hidden transition-all duration-200 hover:bg-zinc-50 hover:shadow-[0_8px_20px_rgba(0,0,0,0.14)]" aria-label="Connect" id="connect-avatar">'
       + '<img src="assets/profilePinkGreen.png" alt="" class="h-full w-full object-cover rounded-full ring-2 ' + (connectActive ? 'ring-black' : 'ring-transparent') + ' ring-inset transition-transform duration-200 group-hover:scale-[1.03]"/>'
       + '<span class="sr-only">Connect</span>'
@@ -87,7 +87,7 @@ function renderGlobalNav() {
       + '<div class="w-full flex justify-center">'
       + '<div class="flex items-center gap-2 sm:gap-3 nav-wrap">'
       + '<fieldset role="tablist" aria-label="Primary navigation" id="primary-nav"'
-      + '  class="w-auto max-w-[94vw] sm:max-w-[88vw] md:w-[180px] flex items-center justify-center rounded-full bg-white/80 backdrop-blur-md border border-zinc-200/80 shadow-[0_6px_16px_rgba(0,0,0,0.12)] px-3 sm:px-4 py-3 sm:py-3.5 md:px-4 md:py-4 gap-2 sm:gap-3 md:gap-2">'
+      + '  class="w-auto max-w-[94vw] sm:max-w-[88vw] md:w-[180px] flex items-center justify-center rounded-full bg-white/95 backdrop-blur-lg backdrop-saturate-150 border border-zinc-200/90 shadow-[0_6px_16px_rgba(0,0,0,0.12)] px-3 sm:px-4 py-3 sm:py-3.5 md:px-4 md:py-4 gap-2 sm:gap-3 md:gap-2">'
       + '<legend class="sr-only">Navigation</legend>'
       + links
       + '</fieldset>'
@@ -307,11 +307,11 @@ function renderGlobalNav() {
       <div class="fixed inset-x-0 z-50 bottom-[calc(env(safe-area-inset-bottom)+36px)] md:bottom-auto md:top-6">
         <div class="w-full flex justify-center">
           <div class="flex items-center gap-2 nav-wrap">
-            <nav id="primary-nav-fallback" class="w-auto max-w-[94vw] sm:max-w-[88vw] md:w-[180px] flex items-center justify-center gap-2 sm:gap-3 rounded-full bg-white/80 backdrop-blur-md border border-zinc-200/80 shadow-[0_6px_16px_rgba(0,0,0,0.12)] px-3 sm:px-4 py-3 sm:py-3.5 md:px-4 md:py-4">
+            <nav id="primary-nav-fallback" class="w-auto max-w-[94vw] sm:max-w-[88vw] md:w-[180px] flex items-center justify-center gap-2 sm:gap-3 rounded-full bg-white/95 backdrop-blur-lg backdrop-saturate-150 border border-zinc-200/90 shadow-[0_6px_16px_rgba(0,0,0,0.12)] px-3 sm:px-4 py-3 sm:py-3.5 md:px-4 md:py-4">
               <a href="/" class="px-4 sm:px-4 py-0.5 sm:py-1 rounded-full text-sm text-neutral-600 hover:bg-zinc-100 transition-colors nav-underline">Home</a>
               <a href="/blogs" class="px-4 sm:px-4 py-0.5 sm:py-1 rounded-full text-sm text-neutral-600 hover:bg-zinc-100 transition-colors nav-underline">Blogs</a>
             </nav>
-            <a href="/connect" class="group inline-flex items-center justify-center p-1.5 rounded-full bg-white/80 backdrop-blur-md border border-zinc-200/80 shadow-[0_6px_16px_rgba(0,0,0,0.12)] ring-2 ${onConnect ? 'ring-green-600' : 'ring-white'} overflow-hidden transition-all duration-200 hover:bg-zinc-50 hover:shadow-[0_8px_20px_rgba(0,0,0,0.14)]" aria-label="Connect" id="connect-avatar-fallback">
+            <a href="/connect" class="group inline-flex items-center justify-center p-1.5 rounded-full bg-white/95 backdrop-blur-lg backdrop-saturate-150 border border-zinc-200/90 shadow-[0_6px_16px_rgba(0,0,0,0.12)] ring-2 ${onConnect ? 'ring-green-600' : 'ring-white'} overflow-hidden transition-all duration-200 hover:bg-zinc-50 hover:shadow-[0_8px_20px_rgba(0,0,0,0.14)]" aria-label="Connect" id="connect-avatar-fallback">
                 <img src="assets/profilePinkGreen.png" alt="" class="h-full w-full object-cover rounded-full ring-2 ring-inset ring-transparent transition-transform duration-200 group-hover:scale-[1.03]"/>
                 <span class="sr-only">Connect</span>
             </a>
@@ -2056,10 +2056,12 @@ style.textContent = `
       margin-bottom: 4rem;
     }
   }
-  /* Article typography: headings serif, body sans */
+  /* Article typography: use sans (Roboto-first) for headings and body */
+  /* Also force serif utility to resolve to sans within the article scope */
+  #blog-detail { --font-serif: var(--font-sans); }
   #blog-detail h1, #blog-detail h2, #blog-detail h3,
   #blog-detail h4, #blog-detail h5, #blog-detail h6 {
-    font-family: 'Lora', ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+    font-family: 'Roboto', ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji", sans-serif;
     letter-spacing: .1px;
   }
   #blog-detail .prose,
@@ -2067,33 +2069,52 @@ style.textContent = `
   #blog-detail .prose li,
   #blog-detail .prose span,
   #blog-detail .prose div {
-    font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji", sans-serif;
+    font-family: 'Roboto', ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji", sans-serif;
   }
+  /* Ensure any Tailwind font-serif utility inside article is neutralized */
+  #blog-detail .font-serif { font-family: 'Roboto', ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji", sans-serif !important; }
 `;
 document.head.appendChild(style);
 
 document.addEventListener('DOMContentLoaded', () => {
-  // Intro greeting (first visit in session, home only)
+  // Intro greeting (first visit in session, render on actual Home only)
   try {
     const here = currentFilename();
+    const onHomeDom = !!document.getElementById('home-pinned-grid');
     const firstTime = !sessionStorage.getItem('intro_greeted');
-    if (here === 'index.html' && firstTime) {
-      const overlay = document.createElement('div');
-      overlay.id = 'intro-greeting';
-      overlay.innerHTML = `
-        <div class="bubble">
-          <div style="font-size: clamp(22px,4vw,36px); font-weight: 600; letter-spacing: .2px;">Om Swastyastu 🙏🏻</div>
-        </div>
-      `;
-      document.body.appendChild(overlay);
+    const preShown = document.documentElement.classList.contains('show-intro') && document.getElementById('intro-greeting');
+    // Render only on Home, but also handle case where overlay was pre-shown via index.html
+    if ((here === 'index.html') && onHomeDom && (firstTime || preShown)) {
+      // Use pre-rendered overlay if present; otherwise create it.
+      let overlay = document.getElementById('intro-greeting');
+      if (!overlay) {
+        overlay = document.createElement('div');
+        overlay.id = 'intro-greeting';
+        overlay.innerHTML = `
+          <div class="bubble">
+            <div style="font-size: clamp(22px,4vw,36px); font-weight: 600; letter-spacing: .2px;">Om Swastyastu 🙏🏻</div>
+          </div>
+        `;
+        document.body.appendChild(overlay);
+      }
       // Show for a brief moment, then fade
       requestAnimationFrame(() => {
         setTimeout(() => {
+          try { document.documentElement.classList.remove('show-intro'); } catch {}
           overlay.classList.add('hide');
           setTimeout(() => overlay.remove(), 700);
         }, 1000);
       });
-      sessionStorage.setItem('intro_greeted', '1');
+      // Ensure flag is set (may already be set by early script)
+      try { sessionStorage.setItem('intro_greeted', '1'); } catch {}
+    }
+    // Hard guard: ensure overlay never appears off-Home
+    if (here !== 'index.html' || !onHomeDom) {
+      try {
+        document.documentElement.classList.remove('show-intro');
+        const stray = document.getElementById('intro-greeting');
+        if (stray) stray.remove();
+      } catch {}
     }
   } catch {}
 

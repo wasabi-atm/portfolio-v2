@@ -5,13 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Article – Portfolio</title>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet" />
-  <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = { theme: { extend: {} } }
   </script>
   <link href="./dist/output.css" rel="stylesheet">
-  <link id="site-favicon" rel="icon" type="image/png" href="assets/favicon.png">
+  <link id="site-favicon" rel="icon" type="image/png" href="assets/faviconneu.png">
   <script>
     (function () {
       try {
@@ -24,7 +23,7 @@
           document.head.appendChild(link);
         }
         var onCarte = /^carte\./i.test(location.hostname) || /(^|\.)carte\.wirawibisana\.com$/i.test(location.hostname);
-        link.href = onCarte ? 'assets/carteFavicon.png' : 'assets/favicon.png';
+        link.href = onCarte ? 'assets/carteFavicon.png' : 'assets/faviconneu.png';
       } catch (e) {}
     })();
   </script>
