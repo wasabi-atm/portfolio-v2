@@ -1346,13 +1346,31 @@ async function loadBlogDetail() {
         backBtn.style.height = h + 'px';
       } catch {}
     };
+    const syncBackLeft = () => {
+      try {
+        // Align left edge to the article text column (use first header text as anchor)
+        const anchor = document.querySelector('#blog-detail header h1')
+          || document.querySelector('#blog-detail header p')
+          || document.querySelector('#blog-detail article')
+          || document.querySelector('#blog-detail');
+        if (!anchor) return;
+        const rect = anchor.getBoundingClientRect();
+        // Fixed positioning uses viewport; rect.left is viewport-relative
+        backBtn.style.left = Math.max(8, Math.floor(rect.left)) + 'px';
+      } catch {}
+    };
     syncBackSize();
+    syncBackLeft();
     const fs = document.getElementById('primary-nav') || document.getElementById('primary-nav-fallback');
     if (fs && window.ResizeObserver) {
       const ro = new ResizeObserver(syncBackSize);
       ro.observe(fs);
     }
-    window.addEventListener('resize', syncBackSize);
+    const onResize = () => { syncBackSize(); syncBackLeft(); };
+    window.addEventListener('resize', onResize);
+    // Re-align after fonts/layout settle
+    setTimeout(syncBackLeft, 50);
+    setTimeout(syncBackLeft, 250);
   }
 
 
