@@ -2382,8 +2382,8 @@ function renderEmbedLink(url, title, desc) {
         ${url ? `href="${url}" target="_blank" rel="noopener"` : ''} 
         class="block group"
       >
-        <div class="flex items-stretch rounded-xl border border-zinc-200 hover:border-zinc-300 hover:shadow-md bg-white overflow-hidden transition-all duration-200">
-          <div class="flex-1 p-5">
+        <div class="flex items-start rounded-xl border border-zinc-200 hover:border-zinc-300 hover:shadow-md bg-white overflow-hidden transition-all duration-200">
+          <div class="flex-1 p-5 min-w-0">
             <h2 class="text-base sm:text-lg font-semibold text-zinc-900 group-hover:text-black transition-colors line-clamp-2">
               ${title || (idParam ? 'Loading…' : 'Related Article')}
             </h2>
@@ -2401,7 +2401,7 @@ function renderEmbedLink(url, title, desc) {
               </p>
             ` : ''}
           </div>
-          <div class="w-28 sm:w-36 bg-zinc-100 flex-shrink-0"></div>
+          <div class="relative w-28 sm:w-36 aspect-square self-start bg-zinc-100 flex-shrink-0 overflow-hidden"></div>
         </div>
       </a>
     </div>
@@ -2413,19 +2413,27 @@ function renderEmbedLink(url, title, desc) {
   // Enrich with live metadata asynchronously
   setTimeout(async () => {
     try {
-      const rows = await fetchBuilder('blogs', { limit: 1, ids: idParam });
+      // Try robust ID resolution, mirroring blog detail loader
+      let rows = await fetchBuilder('blogs', { limit: 1, ids: idParam });
+      if (!rows || !rows.length || rows[0]?.id !== idParam) {
+        rows = await fetchBuilder('blogs', { limit: 1, 'query.id': idParam });
+      }
+      if (!rows || !rows.length || rows[0]?.id !== idParam) {
+        const many = await fetchBuilder('blogs', { limit: 200, includeUnpublished: true });
+        rows = many.filter(r => r?.id === idParam);
+      }
       if (!rows || !rows.length) return;
-      
+
       const b = normalizeBlog(rows[0]);
       const minutes = b.minutes ? `${b.minutes} min read` : '';
       const thumb = b.thumbnail
-        ? `<img src="${b.thumbnail}" alt="" class="w-28 sm:w-36 h-full object-cover" loading="lazy" />`
-        : `<div class="w-28 sm:w-36 bg-zinc-100"></div>`;
+        ? `<div class=\"relative w-28 sm:w-36 aspect-square self-start flex-shrink-0 overflow-hidden bg-zinc-100\"><img src=\"${b.thumbnail}\" alt=\"\" class=\"absolute inset-0 w-full h-full object-cover\" loading=\"lazy\" /></div>`
+        : `<div class=\"relative w-28 sm:w-36 aspect-square self-start flex-shrink-0 overflow-hidden bg-zinc-100\"></div>`;
 
       const html = `
         <a href="${url}" target="_blank" rel="noopener" class="block group">
-          <div class="flex items-stretch rounded-xl border border-zinc-200 hover:border-zinc-300 hover:shadow-md bg-white overflow-hidden transition-all duration-200">
-            <div class="flex-1 p-5">
+          <div class="flex items-start rounded-xl border border-zinc-200 hover:border-zinc-300 hover:shadow-md bg-white overflow-hidden transition-all duration-200">
+            <div class="flex-1 p-5 min-w-0">
               <h2 class="text-base sm:text-lg font-semibold text-zinc-900 group-hover:text-black transition-colors line-clamp-2">
                 ${b.title || title || ''}
               </h2>
