@@ -2190,6 +2190,27 @@ style.textContent = `
 `;
 document.head.appendChild(style);
 
+// Lightweight animations and utilities for project modal
+const modalStyle = document.createElement('style');
+modalStyle.textContent = `
+  @keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes fade-out { from { opacity: 1; } to { opacity: 0; } }
+  @keyframes scale-in {
+    from { opacity: 0; transform: scale(0.95) translateY(10px); }
+    to { opacity: 1; transform: scale(1) translateY(0); }
+  }
+  @keyframes scale-out {
+    from { opacity: 1; transform: scale(1) translateY(0); }
+    to { opacity: 0; transform: scale(0.95) translateY(10px); }
+  }
+  .animate-fade-in { animation: fade-in 0.2s ease-out; }
+  .animate-fade-out { animation: fade-out 0.2s ease-out; }
+  .animate-scale-in { animation: scale-in 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
+  .animate-scale-out { animation: scale-out 0.2s cubic-bezier(0.4, 0, 1, 1); }
+  .line-clamp-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+`;
+document.head.appendChild(modalStyle);
+
 // Project video modal (Home)
 function initProjectVideoModals() {
   const cards = document.querySelectorAll('section .grid figure');
@@ -2226,70 +2247,213 @@ function initProjectVideoModals() {
 
 function openProjectModal(src, summaryHtml, longText, linkUrl, linkTitle, linkDesc) {
   const overlay = document.createElement('div');
-  overlay.className = 'fixed inset-0 z-[999] bg-black/70 backdrop-blur-sm flex items-center justify-center p-4';
+  overlay.className = 'fixed inset-0 z-[999] bg-black/60 backdrop-blur-md flex items-center justify-center p-4 animate-fade-in';
+  
   overlay.innerHTML = `
-    <div class=\"relative w-full max-w-3xl bg-white rounded-2xl shadow-2xl overflow-hidden\">
-      <button aria-label=\"Close\" class=\"absolute top-2 right-2 w-9 h-9 grid place-items-center rounded-full bg-white/95 border border-zinc-200/80 shadow hover:bg-white\">×</button>
-      <div class=\"w-full bg-black\">
-        <video class=\"block w-full h-auto\" src=\"${src}\" controls playsinline></video>
+    <div class="relative w-full max-w-4xl bg-white rounded-3xl shadow-2xl overflow-hidden transform transition-all animate-scale-in">
+      <!-- Close button with better positioning and styling -->
+      <button 
+        aria-label="Close modal" 
+        class="absolute top-4 right-4 z-20 w-10 h-10 flex items-center justify-center rounded-full bg-white/95 backdrop-blur-sm border border-zinc-200/80 shadow-lg hover:bg-zinc-50 hover:border-zinc-300 active:scale-95 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2 group"
+      >
+        <svg class="w-5 h-5 text-zinc-600 group-hover:text-zinc-900 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+
+      <!-- Video container with improved aspect ratio handling -->
+      <div class="relative w-full bg-black">
+        <video 
+          class="block w-full h-auto max-h-[70vh] object-contain" 
+          src="${src}" 
+          controls 
+          playsinline
+          controlsList="nodownload"
+          onloadstart="this.volume=0.7"
+        ></video>
       </div>
-      <div class=\"p-4 sm:p-6\">
-        ${summaryHtml ? `<div class=\\\"text-sm sm:text-base text-zinc-600\\\">${summaryHtml}</div>` : ''}
-        ${longText ? `<p class=\\\"mt-3 text-sm sm:text-base text-zinc-700 leading-relaxed\\\">${longText}</p>` : ''}
+
+      <!-- Content section with refined spacing and typography -->
+      <div class="p-6 sm:p-8 space-y-4">
+        ${summaryHtml ? `
+          <div class="text-sm sm:text-base text-zinc-600 leading-relaxed">
+            ${summaryHtml}
+          </div>
+        ` : ''}
+        
+        ${longText ? `
+          <p class="text-sm sm:text-base text-zinc-700 leading-relaxed">
+            ${longText}
+          </p>
+        ` : ''}
+        
         ${renderEmbedLink(linkUrl, linkTitle, linkDesc)}
       </div>
     </div>
   `;
-  function close() { try { document.body.classList.remove('overflow-hidden'); overlay.remove(); } catch {} }
-  overlay.addEventListener('click', (e) => { if (e.target === overlay) close(); });
-  const btn = overlay.querySelector('button[aria-label="Close"]');
-  if (btn) btn.addEventListener('click', close);
+
+  // Close handler with smooth cleanup
+  function close() {
+    try {
+      overlay.classList.add('animate-fade-out');
+      const modal = overlay.querySelector('div');
+      if (modal) modal.classList.add('animate-scale-out');
+      
+      setTimeout(() => {
+        document.body.classList.remove('overflow-hidden');
+        overlay.remove();
+      }, 200);
+    } catch (e) {}
+  }
+
+  // Click outside to close
+  overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) close();
+  });
+
+  // Close button handler
+  const closeBtn = overlay.querySelector('button[aria-label="Close modal"]');
+  if (closeBtn) {
+    closeBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      close();
+    });
+  }
+
+  // Append to body
   document.body.appendChild(overlay);
   document.body.classList.add('overflow-hidden');
-  document.addEventListener('keydown', function onKey(e){ if (e.key === 'Escape') { close(); document.removeEventListener('keydown', onKey); } });
+
+  // Keyboard navigation
+  const handleKeydown = (e) => {
+    if (e.key === 'Escape') {
+      close();
+      document.removeEventListener('keydown', handleKeydown);
+    }
+  };
+  document.addEventListener('keydown', handleKeydown);
+
+  // Focus trap for accessibility
+  const focusableElements = overlay.querySelectorAll(
+    'button, a[href], video, [tabindex]:not([tabindex="-1"])'
+  );
+  const firstFocusable = focusableElements[0];
+  const lastFocusable = focusableElements[focusableElements.length - 1];
+
+  overlay.addEventListener('keydown', (e) => {
+    if (e.key === 'Tab') {
+      if (e.shiftKey && document.activeElement === firstFocusable) {
+        e.preventDefault();
+        lastFocusable.focus();
+      } else if (!e.shiftKey && document.activeElement === lastFocusable) {
+        e.preventDefault();
+        firstFocusable.focus();
+      }
+    }
+  });
+
+  // Auto-focus close button for keyboard users
+  setTimeout(() => closeBtn?.focus(), 100);
 }
 
 function renderEmbedLink(url, title, desc) {
+  if (!url && !title) return '';
+  
   const embedId = 'embed_' + Math.random().toString(36).slice(2, 9);
-  const domain = (() => { try { if (!url) return ''; const u = new URL(url, location.origin); return u.hostname.replace(/^www\./,''); } catch { return ''; } })();
-  const idParam = (() => { try { const u = new URL(url, location.origin); return u.searchParams.get('id'); } catch { return null; } })();
+  const domain = (() => {
+    try {
+      if (!url) return '';
+      const u = new URL(url, location.origin);
+      return u.hostname.replace(/^www\./, '');
+    } catch { return ''; }
+  })();
+  
+  const idParam = (() => {
+    try {
+      const u = new URL(url, location.origin);
+      return u.searchParams.get('id');
+    } catch { return null; }
+  })();
+
+  // Enhanced base card with better hover states
   const base = `
-    <div id=\"${embedId}\" class=\"mt-4\">
-      <a ${url ? `href=\"${url}\" target=\"_blank\" rel=\"noopener\"` : ''} class=\"block\">
-        <div class=\"flex items-stretch justify-between rounded-lg border border-zinc-300 hover:border-zinc-400 overflow-hidden\">
-          <div class=\"flex-1 p-4\">
-            <h2 class=\"text-base sm:text-lg font-semibold text-black\">${title || (idParam ? 'Loading…' : '')}</h2>
-            ${desc ? `<h3 class=\\\"text-sm sm:text-base text-zinc-600 mt-1\\\">${desc}</h3>` : ''}
-            ${domain ? `<p class=\\\"text-xs text-zinc-500 mt-1\\\">${domain}</p>` : ''}
+    <div id="${embedId}" class="mt-6">
+      <a 
+        ${url ? `href="${url}" target="_blank" rel="noopener"` : ''} 
+        class="block group"
+      >
+        <div class="flex items-stretch rounded-xl border border-zinc-200 hover:border-zinc-300 hover:shadow-md bg-white overflow-hidden transition-all duration-200">
+          <div class="flex-1 p-5">
+            <h2 class="text-base sm:text-lg font-semibold text-zinc-900 group-hover:text-black transition-colors line-clamp-2">
+              ${title || (idParam ? 'Loading…' : 'Related Article')}
+            </h2>
+            ${desc ? `
+              <p class="text-sm sm:text-base text-zinc-600 mt-2 line-clamp-2">
+                ${desc}
+              </p>
+            ` : ''}
+            ${domain ? `
+              <p class="text-xs text-zinc-500 mt-3 flex items-center gap-1.5">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                </svg>
+                ${domain}
+              </p>
+            ` : ''}
           </div>
-          <div class=\"w-24 sm:w-32 bg-zinc-100\"></div>
+          <div class="w-28 sm:w-36 bg-zinc-100 flex-shrink-0"></div>
         </div>
       </a>
-    </div>`;
+    </div>
+  `;
+
+  // If no article ID, return static card
   if (!idParam) return base;
-  // Enrich with article metadata (thumbnail, title, desc, minutes)
+
+  // Enrich with live metadata asynchronously
   setTimeout(async () => {
     try {
       const rows = await fetchBuilder('blogs', { limit: 1, ids: idParam });
       if (!rows || !rows.length) return;
+      
       const b = normalizeBlog(rows[0]);
       const minutes = b.minutes ? `${b.minutes} min read` : '';
-      const thumb = b.thumbnail ? `<div class=\\\"w-24 sm:w-32 bg-cover bg-center\\\" style=\\\"background-image:url('${b.thumbnail}')\\\"></div>` : `<div class=\\\"w-24 sm:w-32 bg-zinc-100\\\"></div>`;
+      const thumb = b.thumbnail
+        ? `<img src="${b.thumbnail}" alt="" class="w-28 sm:w-36 h-full object-cover" loading="lazy" />`
+        : `<div class="w-28 sm:w-36 bg-zinc-100"></div>`;
+
       const html = `
-        <a href=\"${url}\" target=\"_blank\" rel=\"noopener\" class=\"block\">
-          <div class=\"flex items-stretch justify-between rounded-lg border border-zinc-300 hover:border-zinc-400 overflow-hidden\">
-            <div class=\"flex-1 p-4\">
-              <h2 class=\"text-base sm:text-lg font-semibold text-black\">${b.title || title || ''}</h2>
-              ${b.description ? `<h3 class=\\\\\\\"text-sm sm:text-base text-zinc-600 mt-1\\\\\\\">${b.description}</h3>` : ''}
-              <p class=\"text-xs text-zinc-500 mt-1\">${domain}${minutes ? ` • ${minutes}` : ''}</p>
+        <a href="${url}" target="_blank" rel="noopener" class="block group">
+          <div class="flex items-stretch rounded-xl border border-zinc-200 hover:border-zinc-300 hover:shadow-md bg-white overflow-hidden transition-all duration-200">
+            <div class="flex-1 p-5">
+              <h2 class="text-base sm:text-lg font-semibold text-zinc-900 group-hover:text-black transition-colors line-clamp-2">
+                ${b.title || title || ''}
+              </h2>
+              ${b.description ? `
+                <p class="text-sm sm:text-base text-zinc-600 mt-2 line-clamp-2">
+                  ${b.description}
+                </p>
+              ` : ''}
+              <p class="text-xs text-zinc-500 mt-3 flex items-center gap-1.5">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                </svg>
+                ${domain}${minutes ? ` • ${minutes}` : ''}
+              </p>
             </div>
             ${thumb}
           </div>
-        </a>`;
+        </a>
+      `;
+
       const host = document.getElementById(embedId);
-      if (host) host.innerHTML = html;
-    } catch {}
+      if (host) {
+        host.classList.add('animate-fade-in');
+        host.innerHTML = html;
+      }
+    } catch (e) {}
   }, 0);
+
   return base;
 }
 
