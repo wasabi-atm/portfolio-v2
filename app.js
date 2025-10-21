@@ -2182,6 +2182,10 @@ style.textContent = `
   @media (min-width: 768px) {
     #toc-floating { position: fixed; top: 50%; transform: translateY(-50%); right: 24px; width: 260px; text-align: right; }
   }
+  /* Hide TOC when viewport is square or taller than wide (<= 1:1) */
+  @media (max-aspect-ratio: 1/1) {
+    #toc-floating { display: none !important; }
+  }
   #toc-floating a.toc-active, #toc a.toc-active { color: #000; font-weight: 600; }
 `;
 document.head.appendChild(style);
@@ -2246,21 +2250,47 @@ function openProjectModal(src, summaryHtml, longText, linkUrl, linkTitle, linkDe
 }
 
 function renderEmbedLink(url, title, desc) {
-  if (!title) return '';
-  const isLink = !!url;
-  const domain = (() => {
-    try { if (!url) return ''; const u = new URL(url, location.origin); return u.hostname.replace(/^www\\\./,''); } catch { return ''; }
-  })();
-  const content = `
-    <div class=\\\"flex-1 p-4\\\">
-      <h2 class=\\\"text-base sm:text-lg font-semibold text-black\\\">${title}</h2>
-      ${desc ? `<h3 class=\\\"text-sm sm:text-base text-zinc-600 mt-1\\\">${desc}</h3>` : ''}
-      ${domain ? `<p class=\\\"text-xs text-zinc-500 mt-1\\\">${domain}</p>` : ''}
-    </div>
-    <div class=\\\"w-24 sm:w-32 bg-zinc-100\\\"></div>`;
-  const inner = `<div class=\\\"flex items-stretch justify-between rounded-lg border border-zinc-200 hover:border-zinc-300 overflow-hidden\\\">${content}</div>`;
-  if (!isLink) return `<div class=\\\"mt-4\\\">${inner}</div>`;
-  return `<div class=\\\"mt-4\\\"><a href=\\\"${url}\\\" class=\\\"block\\\" rel=\\\"noopener\\\" target=\\\"_blank\\\">${inner}</a></div>`;
+  const embedId = 'embed_' + Math.random().toString(36).slice(2, 9);
+  const domain = (() => { try { if (!url) return ''; const u = new URL(url, location.origin); return u.hostname.replace(/^www\./,''); } catch { return ''; } })();
+  const idParam = (() => { try { const u = new URL(url, location.origin); return u.searchParams.get('id'); } catch { return null; } })();
+  const base = `
+    <div id=\"${embedId}\" class=\"mt-4\">
+      <a ${url ? `href=\"${url}\" target=\"_blank\" rel=\"noopener\"` : ''} class=\"block\">
+        <div class=\"flex items-stretch justify-between rounded-lg border border-zinc-300 hover:border-zinc-400 overflow-hidden\">
+          <div class=\"flex-1 p-4\">
+            <h2 class=\"text-base sm:text-lg font-semibold text-black\">${title || (idParam ? 'Loading…' : '')}</h2>
+            ${desc ? `<h3 class=\\\"text-sm sm:text-base text-zinc-600 mt-1\\\">${desc}</h3>` : ''}
+            ${domain ? `<p class=\\\"text-xs text-zinc-500 mt-1\\\">${domain}</p>` : ''}
+          </div>
+          <div class=\"w-24 sm:w-32 bg-zinc-100\"></div>
+        </div>
+      </a>
+    </div>`;
+  if (!idParam) return base;
+  // Enrich with article metadata (thumbnail, title, desc, minutes)
+  setTimeout(async () => {
+    try {
+      const rows = await fetchBuilder('blogs', { limit: 1, ids: idParam });
+      if (!rows || !rows.length) return;
+      const b = normalizeBlog(rows[0]);
+      const minutes = b.minutes ? `${b.minutes} min read` : '';
+      const thumb = b.thumbnail ? `<div class=\\\"w-24 sm:w-32 bg-cover bg-center\\\" style=\\\"background-image:url('${b.thumbnail}')\\\"></div>` : `<div class=\\\"w-24 sm:w-32 bg-zinc-100\\\"></div>`;
+      const html = `
+        <a href=\"${url}\" target=\"_blank\" rel=\"noopener\" class=\"block\">
+          <div class=\"flex items-stretch justify-between rounded-lg border border-zinc-300 hover:border-zinc-400 overflow-hidden\">
+            <div class=\"flex-1 p-4\">
+              <h2 class=\"text-base sm:text-lg font-semibold text-black\">${b.title || title || ''}</h2>
+              ${b.description ? `<h3 class=\\\\\\\"text-sm sm:text-base text-zinc-600 mt-1\\\\\\\">${b.description}</h3>` : ''}
+              <p class=\"text-xs text-zinc-500 mt-1\">${domain}${minutes ? ` • ${minutes}` : ''}</p>
+            </div>
+            ${thumb}
+          </div>
+        </a>`;
+      const host = document.getElementById(embedId);
+      if (host) host.innerHTML = html;
+    } catch {}
+  }, 0);
+  return base;
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -2290,7 +2320,7 @@ document.addEventListener('DOMContentLoaded', () => {
           try { document.documentElement.classList.remove('show-intro'); } catch {}
           overlay.classList.add('hide');
           setTimeout(() => overlay.remove(), 700);
-        }, 2000);
+        }, 3500);
       });
       // Ensure flag is set (may already be set by early script)
       try { sessionStorage.setItem('intro_greeted', '1'); } catch {}
@@ -2302,7 +2332,7 @@ document.addEventListener('DOMContentLoaded', () => {
           if (ov) ov.remove();
           document.documentElement.classList.remove('show-intro');
         } catch {}
-      }, 4500);
+      }, 6000);
     }
     // If on Home but not first time, ensure no overlay is visible (handles bfcache restores)
     if ((here === 'index.html') && onHomeDom && !firstTime) {

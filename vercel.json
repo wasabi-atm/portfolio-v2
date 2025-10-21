@@ -7,6 +7,7 @@
     { "source": "/blogs", "destination": "/blogs.html" },
     { "source": "/connect", "destination": "/connect.html" },
     { "source": "/showcase", "destination": "/showcase.html" },
+    { "source": "/article", "destination": "/article.html" },
     { "source": "/blogs/article/:slug", "destination": "/article.html?slug=:slug" }
   ],
   "redirects": [
