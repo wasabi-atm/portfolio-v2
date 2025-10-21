@@ -1129,8 +1129,12 @@ async function loadBlogDetail() {
 
   const chaptersHtml = CHAPTERS.map(([id, label]) => chapterHtml(id, label)).filter(Boolean).join('');
 
-  // Assemble final body: optional raw Html article first, then gallery, then chapters
-  const bodyHtml = `${normalizeArticleHtml(htmlContent) || ''}${galleryHtml}${chaptersHtml}` || (b.description ? `<p>${b.description}</p>` : '<p></p>');
+  // Assemble final body:
+  // - Add generous top spacing before raw Blog article content to separate from meta/date
+  // - Then gallery (if any), then chapters
+  const articleHtmlRaw = normalizeArticleHtml(htmlContent) || '';
+  const articleHtml = articleHtmlRaw ? `<div class="pt-10 mt-8 md:pt-12 md:mt-10">${articleHtmlRaw}</div>` : '';
+  const bodyHtml = `${articleHtml}${galleryHtml}${chaptersHtml}` || (b.description ? `<p>${b.description}</p>` : '<p></p>');
 
   const firstTag = (b.tags && b.tags[0]) ? b.tags[0] : 'General';
   function typeBadgeForTag(tag) {
@@ -2110,10 +2114,12 @@ style.textContent = `
     box-shadow: 0 4px 16px rgba(0,0,0,0.15);
     border-radius: 9999px;
   }
-  /* Blog article: make mobile back button 50% smaller */
+  /* Blog article: make mobile back button 50% smaller (circle and chevron) */
   @media (max-width: 767.98px) {
-    #blog-detail #back-button.back-floating { width: 28px; height: 28px; padding: 0; }
-    #blog-detail #back-button.back-floating img { width: 12px; height: 12px; }
+    #blog-detail #back-button.back-floating {
+      transform: scale(0.5);
+      transform-origin: top left;
+    }
   }
   /* Full-width fading gradient behind nav for clearer separation */
   #nav-backdrop { position: fixed; left: 0; right: 0; z-index: 40; pointer-events: none; }
@@ -2185,7 +2191,8 @@ style.textContent = `
 
   /* TOC: floating at right edge on md+; right-aligned links */
   @media (min-width: 768px) {
-    #toc-floating { position: fixed; top: 50%; transform: translateY(-50%); right: 24px; width: 260px; text-align: right; }
+    /* Reduce TOC width ~20% to avoid clipping into content */
+    #toc-floating { position: fixed; top: 50%; transform: translateY(-50%); right: 24px; width: 208px; text-align: right; }
   }
   /* Hide TOC when viewport is square or taller than wide (<= 1:1) */
   @media (max-aspect-ratio: 1/1) {
