@@ -2110,6 +2110,11 @@ style.textContent = `
     box-shadow: 0 4px 16px rgba(0,0,0,0.15);
     border-radius: 9999px;
   }
+  /* Blog article: make mobile back button 50% smaller */
+  @media (max-width: 767.98px) {
+    #blog-detail #back-button.back-floating { width: 28px; height: 28px; padding: 0; }
+    #blog-detail #back-button.back-floating img { width: 12px; height: 12px; }
+  }
   /* Full-width fading gradient behind nav for clearer separation */
   #nav-backdrop { position: fixed; left: 0; right: 0; z-index: 40; pointer-events: none; }
   /* md and up: gradient from top */
