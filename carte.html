@@ -27,6 +27,10 @@
     })();
   </script>
   <style>
+    html {
+      scroll-behavior: smooth;
+      scroll-padding-top: 6rem;
+    }
     @keyframes fadeInUp {
       from {
         opacity: 0;
@@ -40,12 +44,58 @@
     .animate-fadeInUp {
       animation: fadeInUp 0.6s ease-out;
     }
+    .cta-button {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      border-radius: 9999px;
+      padding: 0.85rem 2rem;
+      font-size: 1rem;
+      font-weight: 600;
+      line-height: 1.2;
+      color: #fff;
+      background: linear-gradient(135deg, #0f172a, #030712);
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      transition: transform 0.2s ease, background 0.2s ease;
+    }
+    .cta-button:hover {
+      transform: translateY(-2px);
+      background: linear-gradient(135deg, #111827, #04060c);
+    }
+    .cta-button:focus-visible {
+      outline: 2px solid rgba(15,23,42,0.6);
+      outline-offset: 3px;
+    }
+    @media (max-width: 640px) {
+      .primary-nav {
+        display: none;
+      }
+    }
   </style>
 </head>
 <body class="carte text-gray-900 antialiased font-sans">
 
-  <!-- Hero Section -->
-  <section class="relative px-6 py-20 md:py-32 bg-white overflow-hidden">
+  <header class="fixed top-0 inset-x-0 z-50 border-b border-gray-200 bg-white shadow-sm hidden sm:block">
+    <div class="max-w-6xl mx-auto w-full px-6 py-4 flex flex-wrap items-center gap-4">
+      <a href="#hero" class="flex items-center gap-3 text-gray-900 font-semibold">
+        <img src="assets/CarteLogo.png" alt="Carte logo" class="h-10 w-auto">
+        <span class="text-lg hidden sm:inline">Carte</span>
+      </a>
+      <nav class="primary-nav flex flex-1 items-center justify-center gap-4 text-sm font-medium text-gray-700 flex-wrap">
+        <a href="#features" class="hover:text-gray-900 transition-colors">Features</a>
+        <a href="#demo" class="hover:text-gray-900 transition-colors">Demo</a>
+        <a href="#privacy" class="hover:text-gray-900 transition-colors">Privacy</a>
+      </nav>
+      <a href="https://apps.apple.com/id/app/carte-cards-to-contacts/id6752802409" class="cta-button inline-flex items-center gap-2 text-white font-semibold">
+        <span>Download Free</span>
+      </a>
+    </div>
+  </header>
+
+  <main class="pt-24">
+
+    <!-- Hero Section -->
+    <section id="hero" class="relative px-6 py-20 md:py-32 bg-white overflow-hidden scroll-mt-32 md:scroll-mt-40">
     <div class="absolute inset-0 bg-grid-pattern opacity-5"></div>
     <div class="max-w-4xl mx-auto text-center relative z-10">
       <div class="mb-4 flex justify-center">
@@ -82,12 +132,12 @@
         <span class="px-4 py-2 bg-white rounded-full font-medium shadow-sm border border-gray-200">🔒 Private & offline</span>
       </div>
     </div>
-  </section>
+    </section>
 
   
 
   <!-- Features Section -->
-  <section class="px-6 py-20 bg-gray-50">
+    <section id="features" class="px-6 py-20 bg-gray-50 scroll-mt-32 md:scroll-mt-40">
     <div class="max-w-6xl mx-auto">
       <div class="text-center mb-16">
         <h2 class="text-4xl font-bold mb-4 font-serif tracking-tight">Keep the Value of Print, Add the Speed of Digital</h2>
@@ -150,10 +200,10 @@
         </div>
       </div>
     </div>
-  </section>
+    </section>
 
   <!-- Quick Demo -->
-  <section class="px-6 py-24 bg-white">
+    <section id="demo" class="px-6 py-24 bg-white scroll-mt-32 md:scroll-mt-40">
     <div class="max-w-6xl mx-auto text-center mb-8">
       <h2 class="text-4xl font-bold mb-6 font-serif tracking-tight">Quick Demo</h2>
     </div>
@@ -186,10 +236,10 @@
         Get Started Free
       </a>
     </div>
-  </section>
+    </section>
 
   <!-- Use Cases Section -->
-  <section class="px-6 py-20 bg-white">
+  <section id="use-cases" class="px-6 py-20 bg-white">
     <div class="max-w-5xl mx-auto">
       <div class="text-center mb-10">
         <h2 class="text-3xl font-bold font-serif tracking-tight mb-2">Why Carte</h2>
@@ -225,7 +275,7 @@
   </section>
 
   <!-- Trust Section -->
-  <section class="px-6 py-20 bg-white">
+    <section id="privacy" class="px-6 py-20 bg-white scroll-mt-32 md:scroll-mt-40">
     <div class="max-w-4xl mx-auto text-center">
       <h2 class="text-3xl font-bold mb-4 font-serif tracking-tight">Private. Offline. Yours.</h2>
       <p class="text-lg text-gray-600 max-w-2xl mx-auto">On‑device. No sign‑up, no servers, no analytics. Apple Intelligence on supported iPhones; works offline.</p>
@@ -244,26 +294,46 @@
         </div>
       </div>
     </div>
-  </section>
+    </section>
 
-  
-
-  <!-- CTA Section (light, accent) -->
-  <section class="px-6 py-24 bg-white">
-    <div class="max-w-3xl mx-auto text-center">
-      <div class="border border-gray-200 rounded-3xl p-10 md:p-12">
-        <h2 class="text-4xl md:text-5xl font-bold mb-6 font-serif tracking-tight">Turn Every Handshake Into a Relationship</h2>
-        <p class="text-xl text-gray-700 mb-10">
-          Stop losing business cards. Start building lasting connections with Carte.
-        </p>
-        <a href="https://apps.apple.com/id/app/carte-cards-to-contacts/id6752802409" class="inline-flex items-center gap-3 bg-gray-900 text-white px-10 py-5 rounded-full text-xl font-bold hover:bg-gray-800 transition shadow-2xl hover:shadow-3xl transform hover:-translate-y-1">
-          <img src="assets/carteIcon.png" alt="" class="h-6 w-6 rounded" />
-          <span>Download Free on the App Store</span>
-        </a>
-        <p class="text-sm text-gray-500 mt-6">✓ Free to download  ✓ Works offline immediately  ✓ No account required</p>
+  <!-- Data Not Collected Badge -->
+    <section id="badge" class="px-6 py-20 bg-gray-50">
+    <div class="max-w-5xl mx-auto grid md:grid-cols-2 gap-12 items-center">
+      <div class="order-2 md:order-1 text-center md:text-left">
+        <p class="text-sm uppercase tracking-[0.2em] text-gray-500 mb-3">Carte pledge</p>
+        <h2 class="text-3xl font-bold font-serif tracking-tight text-gray-900 mb-4">Data Not Collected. Forever.</h2>
+        <p class="text-lg text-gray-700 mb-4">This exact “Data Not Collected” badge comes straight from Carte’s App Store page—a public, Apple-verified promise that contact data never leaves your device.</p>
+        <p class="text-base text-gray-600">Carte is built to deserve this badge permanently: no trackers, no analytics, just a private business card scanner designed for professionals who guard their network.</p>
+      </div>
+      <div class="order-1 md:order-2">
+        <div class="bg-white rounded-3xl border border-gray-200 shadow-xl p-4">
+          <img src="assets/DataNotCollectedBadge.jpg" alt="Apple App Store Data Not Collected privacy badge for Carte" class="w-full rounded-2xl">
+          <p class="text-xs text-gray-500 mt-3 text-center">Actual badge as shown on the Carte App Store listing.</p>
+        </div>
       </div>
     </div>
-  </section>
+    </section>
+
+    
+
+    <!-- CTA Section (light, accent) -->
+    <section id="download" class="px-6 py-24 bg-white">
+      <div class="max-w-3xl mx-auto text-center">
+        <div class="border border-gray-200 rounded-3xl p-10 md:p-12">
+          <h2 class="text-4xl md:text-5xl font-bold mb-6 font-serif tracking-tight">Turn Every Handshake Into a Relationship</h2>
+          <p class="text-xl text-gray-700 mb-10">
+            Stop losing business cards. Start building lasting connections with Carte.
+          </p>
+          <a href="https://apps.apple.com/id/app/carte-cards-to-contacts/id6752802409" class="inline-flex items-center gap-3 bg-gray-900 text-white px-10 py-5 rounded-full text-xl font-bold hover:bg-gray-800 transition shadow-2xl hover:shadow-3xl transform hover:-translate-y-1">
+            <img src="assets/carteIcon.png" alt="" class="h-6 w-6 rounded" />
+            <span>Download Free on the App Store</span>
+          </a>
+          <p class="text-sm text-gray-500 mt-6">✓ Free to download  ✓ Works offline immediately  ✓ No account required</p>
+        </div>
+      </div>
+    </section>
+
+  </main>
 
   <!-- Footer -->
   <footer class="px-6 py-12 bg-gray-900 text-gray-400">

@@ -96,7 +96,7 @@
   <div id="site-nav"></div>
 
   <!-- Greeting (hero) -->
-  <main class="mx-auto w-full max-w-[1100px] px-6 sm:px-8 md:px-12 lg:px-24 xl:px-28 2xl:px-32 mt-12 sm:mt-16 md:mt-24 lg:mt-28 py-10 sm:py-10 md:py-20 lg:py-28 space-y-2 sm:space-y-4 md:space-y-6 lg:space-y-8">
+  <main class="mx-auto w-full max-w-[1100px] px-6 sm:px-8 md:px-12 lg:px-24 xl:px-28 2xl:px-32 mt-12 sm:mt-16 md:mt-24 lg:mt-28 pt-10 pb-8 sm:pt-10 sm:pb-8 md:pt-20 md:pb-16 lg:pt-28 lg:pb-24 space-y-2 sm:space-y-4 md:space-y-6 lg:space-y-8">
     <div class="justify-start leading-tight tracking-tight">
       <span class="text-zinc-400 text-2xl">Hi, I’m </span><span class="text-black text-2xl">Wira Wibisana</span>
     </div>
@@ -131,28 +131,33 @@
              class="flex items-center justify-center h-16 w-16 rounded-2xl border border-zinc-300/70 bg-white/80 hover:bg-zinc-100 active:bg-zinc-200 transition">
             <img src="assets/carteIcon.png" alt="Carte app icon" class="h-10 w-10 object-contain" />
           </a>
+          <a href="https://clamby.id" target="_blank" rel="noopener" aria-label="Visit Clamby (case study in progress)"
+             class="flex items-center justify-center h-16 w-16 rounded-2xl border border-zinc-300/70 bg-white/80 hover:bg-zinc-100 active:bg-zinc-200 transition">
+            <img src="assets/ClambyIcon.png" alt="Clamby app icon" class="h-10 w-10 object-contain" />
+          </a>
         </div>
       </div>
 
-      <!-- Desktop (lg+): stacked icons that expand on hover -->
-      <div class="hidden lg:inline-block relative -m-3 pl-3 pr-20 sm:pr-24 md:pr-28 pt-1 group">
-        <div class="relative w-14 sm:w-16 md:w-20 aspect-square">
-          <!-- Left (Swisekai) -->
-          <a href="https://swiftsekai.framer.website/" title="Swisekai" aria-label="Open Swisekai website" target="_blank" rel="noopener" class="absolute inset-0 m-auto flex items-center justify-center h-[64%] w-[64%] z-10 opacity-80 rotate-[14deg] -translate-x-1 -translate-y-1 scale-95 transition-all duration-300 ease-out group-hover:opacity-100 group-hover:rotate-0 group-hover:translate-x-[90%] group-hover:translate-y-0 group-hover:scale-100">
-            <img src="assets/Swisekai.png" alt="Swisekai app icon" class="peer h-full w-full object-contain" />
-            <span role="tooltip" class="pointer-events-none absolute right-0 top-full z-50 mt-2 translate-y-1 opacity-0 transition duration-200 peer-hover:opacity-100 peer-hover:translate-y-0 peer-focus-visible:opacity-100">
-              <span class="block rounded-md border border-zinc-200 bg-white px-3 py-2 text-xs text-zinc-700 shadow-md whitespace-nowrap">Swisekai - an engaging way to learn Swift</span>
-            </span>
-          </a>
-          <!-- Center (Carte) -->
-          <a href="https://carte.wirawibisana.com" aria-label="Open Carte case study" class="absolute inset-0 m-auto flex items-center justify-center h-[64%] w-[64%] z-20 rotate-[-2deg] transition-all duration-300 ease-out group-hover:rotate-0 group-hover:translate-x-0">
-            <img src="assets/carteIcon.png" alt="Carte app icon" class="peer h-full w-full object-contain" />
-            <span role="tooltip" class="pointer-events-none absolute right-0 top-full z-50 mt-2 translate-y-1 opacity-0 transition duration-200 peer-hover:opacity-100 peer-hover:translate-y-0 peer-focus-visible:opacity-100">
-              <span class="block rounded-md border border-zinc-200 bg-white px-3 py-2 text-xs text-zinc-700 shadow-md whitespace-nowrap">Scan Business Cards - Carte</span>
-            </span>
-          </a>
-          <!-- Right placeholder removed as requested -->
-        </div>
+      <!-- Desktop (lg+): left-to-right icon ribbon -->
+      <div class="hidden lg:flex items-center gap-6 pt-2">
+        <a href="https://carte.wirawibisana.com" aria-label="Open Carte case study" class="group relative flex h-20 w-20 items-center justify-center rounded-3xl border border-zinc-300/70 bg-white/80 transition hover:-translate-y-1 hover:border-zinc-400 hover:bg-white shadow-sm">
+          <img src="assets/carteIcon.png" alt="Carte app icon" class="peer h-12 w-12 object-contain" />
+          <span role="tooltip" class="pointer-events-none absolute left-1/2 top-full z-50 mt-2 -translate-x-1/2 translate-y-1 opacity-0 transition duration-200 peer-hover:opacity-100 peer-hover:translate-y-0 peer-focus-visible:opacity-100">
+            <span class="block rounded-md border border-zinc-200 bg-white px-3 py-2 text-xs text-zinc-700 shadow-md whitespace-nowrap">Carte - Save business cards to contacts privately</span>
+          </span>
+        </a>
+        <a href="https://swiftsekai.framer.website/" title="Swisekai" aria-label="Open Swisekai website" target="_blank" rel="noopener" class="group relative flex h-20 w-20 items-center justify-center rounded-3xl border border-zinc-300/70 bg-white/80 transition hover:-translate-y-1 hover:border-zinc-400 hover:bg-white shadow-sm">
+          <img src="assets/Swisekai.png" alt="Swisekai app icon" class="peer h-12 w-12 object-contain" />
+          <span role="tooltip" class="pointer-events-none absolute left-1/2 top-full z-50 mt-2 -translate-x-1/2 translate-y-1 opacity-0 transition duration-200 peer-hover:opacity-100 peer-hover:translate-y-0 peer-focus-visible:opacity-100">
+            <span class="block rounded-md border border-zinc-200 bg-white px-3 py-2 text-xs text-zinc-700 shadow-md whitespace-nowrap">SwiSekai - Learn Swift in an Engaging Way</span>
+          </span>
+        </a>
+        <a href="https://clamby.id" title="Clamby" target="_blank" rel="noopener" aria-label="Visit Clamby (case study in progress)" class="group relative flex h-20 w-20 items-center justify-center rounded-3xl border border-zinc-300/70 bg-white/80 transition hover:-translate-y-1 hover:border-zinc-400 hover:bg-white shadow-sm">
+          <img src="assets/ClambyIcon.png" alt="Clamby app icon" class="peer h-12 w-12 object-contain" />
+          <span role="tooltip" class="pointer-events-none absolute left-1/2 top-full z-50 mt-2 -translate-x-1/2 translate-y-1 opacity-0 transition duration-200 peer-hover:opacity-100 peer-hover:translate-y-0 peer-focus-visible:opacity-100">
+            <span class="block rounded-md border border-zinc-200 bg-white px-3 py-2 text-xs text-zinc-700 shadow-md whitespace-nowrap">Clamby - Your AI Fashion Assistant</span>
+          </span>
+        </a>
       </div>
     </div>
   </main>
@@ -162,7 +167,7 @@
 
 
   <!-- Design works grid: 2x2 -->
-  <section class="mx-auto w-full max-w-[1100px] px-6 sm:px-8 md:px-12 lg:px-24 xl:px-28 2xl:px-32 pt-12 pb-8 md:pt-20 md:pb-12">
+  <section class="mx-auto w-full max-w-[1100px] px-6 sm:px-8 md:px-12 lg:px-24 xl:px-28 2xl:px-32 pt-12 pb-6 md:pt-20 md:pb-10">
     <h2 class="text-xl sm:text-2xl leading-snug text-content mb-6 md:mb-8">Projects</h2>
     <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-10 md:gap-x-8 md:gap-y-8">
       <!-- 1: Carte 1.1 -->
@@ -241,7 +246,7 @@
   
 
   <!-- Case studies (pinned from Builder) -->
-  <section class="mx-auto w-full max-w-[1100px] px-6 sm:px-8 md:px-12 lg:px-24 xl:px-28 2xl:px-32 pt-6 md:pt-10 pb-4 md:pb-8">
+  <section class="mx-auto w-full max-w-[1100px] px-6 sm:px-8 md:px-12 lg:px-24 xl:px-28 2xl:px-32 pt-6 md:pt-10 pb-2 md:pb-6">
     <div class="flex items-baseline justify-between mb-4 md:mb-6">
       <h2 class="text-xl sm:text-2xl leading-snug text-content">My Blogs</h2>
       <a href="/blogs" class="text-sm md:text-base text-zinc-500 hover:text-black underline-offset-4 hover:underline">See All →</a>
