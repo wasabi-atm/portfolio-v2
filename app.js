@@ -13,7 +13,7 @@ const NAV_ITEMS = [
   },
   {
     href: '/blogs',
-    label: 'Blogs',
+    label: 'Articles',
     icon: (isCurrent = false) => `
       <svg xmlns="http://www.w3.org/2000/svg"
            class="w-5 h-5 md:hidden ${isCurrent ? 'text-black' : 'text-neutral-500 group-hover:text-black aria-[current=page]:text-black'}"
@@ -319,7 +319,7 @@ function renderGlobalNav() {
           <div class="flex items-center gap-2 nav-wrap">
             <nav id="primary-nav-fallback" class="w-auto max-w-[94vw] sm:max-w-[88vw] md:w-[180px] flex items-center justify-center gap-2 sm:gap-3 rounded-full bg-white/95 backdrop-blur-lg backdrop-saturate-150 border border-zinc-200/90 shadow-[0_6px_16px_rgba(0,0,0,0.12)] px-3 sm:px-4 py-3 sm:py-3.5 md:px-4 md:py-4">
               <a href="/" class="px-4 sm:px-4 py-0.5 sm:py-1 rounded-full text-sm text-neutral-600 hover:bg-zinc-100 transition-colors nav-underline">Home</a>
-              <a href="/blogs" class="px-4 sm:px-4 py-0.5 sm:py-1 rounded-full text-sm text-neutral-600 hover:bg-zinc-100 transition-colors nav-underline">Blogs</a>
+              <a href="/blogs" class="px-4 sm:px-4 py-0.5 sm:py-1 rounded-full text-sm text-neutral-600 hover:bg-zinc-100 transition-colors nav-underline">Articles</a>
             </nav>
             <a href="/connect" class="group inline-flex items-center justify-center p-1.5 rounded-full bg-white/95 backdrop-blur-lg backdrop-saturate-150 border border-zinc-200/90 shadow-[0_6px_16px_rgba(0,0,0,0.12)] ring-2 ${onConnect ? 'ring-green-600' : 'ring-white'} overflow-hidden transition-all duration-200 hover:bg-zinc-50 hover:shadow-[0_8px_20px_rgba(0,0,0,0.14)]" aria-label="Connect" id="connect-avatar-fallback">
                 <img src="assets/profilePinkGreen.png" alt="" class="h-full w-full object-cover rounded-full ring-2 ring-inset ring-transparent transition-transform duration-200 group-hover:scale-[1.03]"/>
@@ -495,6 +495,46 @@ function renderGlobalNav() {
     } catch {}
     } catch {}
   }
+}
+
+// Navigate to /blogs with a specific filter applied
+function navigateToBlogsWithFilter(tag = 'ALL') {
+  const safe = (tag || '').toString().trim();
+  const normalized = safe || 'ALL';
+  const dest = normalized === 'ALL' ? '/blogs' : `/blogs?tag=${encodeURIComponent(normalized)}`;
+  let handled = false;
+
+  try {
+    const here = currentFilename();
+    const onBlogs = (here === 'blogs.html');
+    if (onBlogs && window.__blogFilters && typeof window.__blogFilters.setActive === 'function') {
+      window.__blogFilters.setActive(normalized);
+      try { history.pushState(null, '', dest); } catch {}
+      handled = true;
+    }
+  } catch {}
+
+  if (!handled) {
+    try {
+      window.location.href = dest;
+    } catch {
+      try { window.location.assign(dest); } catch {}
+    }
+  }
+}
+
+try { window.navigateToBlogsWithFilter = navigateToBlogsWithFilter; } catch {}
+
+function initCaseStudiesShortcut() {
+  const triggers = document.querySelectorAll('[data-case-studies-trigger]');
+  if (!triggers.length) return;
+  const onClick = (e) => {
+    e.preventDefault();
+    navigateToBlogsWithFilter('Case Studies');
+  };
+  triggers.forEach(el => {
+    el.addEventListener('click', onClick);
+  });
 }
 
 // ==================== Builder.io wiring ====================
@@ -2537,6 +2577,7 @@ document.addEventListener('DOMContentLoaded', () => {
   } catch {}
 
   renderGlobalNav();
+  initCaseStudiesShortcut();
   initConnectPageAccordion();
   // Home: render pinned case studies (blogs with a truthy "is pinned" field)
   if (document.getElementById('home-pinned-grid')) {
