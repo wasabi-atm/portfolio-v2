@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -12,38 +13,43 @@
   <link href="./dist/output.css" rel="stylesheet">
   <link id="site-favicon" rel="icon" type="image/png" href="assets/faviconneu.png">
   <script>
-    (function () {
-      try {
-        var link = document.querySelector('link#site-favicon');
-        if (!link) {
-          link = document.createElement('link');
-          link.id = 'site-favicon';
-          link.rel = 'icon';
-          link.type = 'image/png';
-          document.head.appendChild(link);
-        }
-        var onCarte = /^carte\./i.test(location.hostname) || /(^|\.)carte\.wirawibisana\.com$/i.test(location.hostname);
-        link.href = onCarte ? 'assets/carteFavicon.png' : 'assets/faviconneu.png';
-      } catch (e) {}
-    })();
+      (function () {
+        try {
+          var link = document.querySelector('link#site-favicon');
+          if (!link) {
+            link = document.createElement('link');
+            link.id = 'site-favicon';
+            link.rel = 'icon';
+            link.type = 'image/png';
+            document.head.appendChild(link);
+          }
+          var onCarte = /^carte\./i.test(location.hostname) || /(^|\.)carte\.wirawibisana\.com$/i.test(location.hostname);
+          link.href = onCarte ? 'assets/carteFavicon.png' : 'assets/faviconneu.png';
+        } catch (e) { }
+      })();
   </script>
 </head>
+
 <body class="min-h-dvh bg-zinc-100 antialiased font-['Roboto']">
   <div id="site-nav"></div>
 
   <!-- Main content container (match index.html margins) -->
-  <main class="mx-auto w-full max-w-[1100px] px-6 sm:px-8 md:px-12 lg:px-24 xl:px-28 2xl:px-32 mt-12 sm:mt-16 md:mt-24 lg:mt-28 py-12 sm:py-12 md:py-24 space-y-6">
+  <main
+    class="mx-auto w-full max-w-[1100px] px-6 sm:px-8 md:px-12 lg:px-24 xl:px-28 2xl:px-32 mt-12 sm:mt-16 md:mt-24 lg:mt-28 py-12 sm:py-12 md:py-24 space-y-6">
 
     <!-- Title -->
     <header>
-      <h1 class="text-3xl md:text-4xl font-light leading-tight"><span class="text-zinc-400">About </span><span class="text-black">Wira</span></h1>
+      <h1 class="text-3xl md:text-4xl font-light leading-tight"><span class="text-zinc-400">About </span><span
+          class="text-black">Wira</span></h1>
     </header>
 
     <!-- Content -->
     <section class="grid grid-cols-1 md:grid-cols-[1fr_1.25fr] gap-6 md:gap-12 items-start">
       <!-- Left: portrait -->
       <div>
-        <img id="connect-portrait" src="assets/profile.jpg" data-default-src="assets/profile.jpg" alt="Portrait / coffee desk" class="w-full max-w-sm sm:max-w-md md:max-w-full aspect-[4/5] object-cover rounded-[30px] mx-auto" />
+        <img id="connect-portrait" src="assets/ProfilePic.png" data-default-src="assets/ProfilePic.png"
+          alt="Portrait / coffee desk"
+          class="w-full max-w-sm sm:max-w-md md:max-w-full aspect-[4/5] object-cover rounded-[30px] mx-auto" />
       </div>
       <!-- Right: text + accordion -->
       <div>
@@ -52,49 +58,73 @@
         <div id="about-accordion" class="mt-4 border-t border-zinc-200">
           <!-- Row 1 -->
           <div class="acc-item border-b border-zinc-200">
-            <button class="acc-btn w-full grid grid-cols-[1fr_auto] items-center gap-4 py-4 text-left" aria-expanded="false" data-acc="toggle" data-portrait-swap="assets/internationalRelations.JPG">
+            <button class="acc-btn w-full grid grid-cols-[1fr_auto] items-center gap-4 py-4 text-left"
+              aria-expanded="false" data-acc="toggle" data-portrait-swap="assets/internationalRelations.JPG">
               <span class="text-base md:text-lg">Educational background in <b>International Relations</b></span>
-              <svg class="chev w-5 h-5 text-zinc-500 transition-transform" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M7 5l6 5-6 5V5z"/></svg>
+              <svg class="chev w-5 h-5 text-zinc-500 transition-transform" viewBox="0 0 20 20" fill="currentColor"
+                aria-hidden="true">
+                <path d="M7 5l6 5-6 5V5z" />
+              </svg>
             </button>
             <div class="acc-panel overflow-hidden max-h-0">
               <div class="px-0 pb-4 acc-strong text-sm md:text-base">
-                I studied International Relations because it is a field that combines many things I can learn: politics, economics, culture, history, and many more. It has given me a strong foundation in understanding how people and societies interact, which I apply to my design work.
+                I studied International Relations because it is a field that combines many things I can learn: politics,
+                economics, culture, history, and many more. It has given me a strong foundation in understanding how
+                people and societies interact, which I apply to my design work.
               </div>
             </div>
           </div>
           <!-- Row 2 -->
           <div class="acc-item border-b border-zinc-200">
-            <button class="acc-btn w-full grid grid-cols-[1fr_auto] items-center gap-4 py-4 text-left" aria-expanded="false" data-acc="toggle" data-portrait-swap="assets/volunteering.jpg">
+            <button class="acc-btn w-full grid grid-cols-[1fr_auto] items-center gap-4 py-4 text-left"
+              aria-expanded="false" data-acc="toggle" data-portrait-swap="assets/volunteering.jpg">
               <span class="text-base md:text-lg">I love <b>volunteering</b> and <b>supporting social causes</b></span>
-              <svg class="chev w-5 h-5 text-zinc-500 transition-transform" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M7 5l6 5-6 5V5z"/></svg>
+              <svg class="chev w-5 h-5 text-zinc-500 transition-transform" viewBox="0 0 20 20" fill="currentColor"
+                aria-hidden="true">
+                <path d="M7 5l6 5-6 5V5z" />
+              </svg>
             </button>
             <div class="acc-panel overflow-hidden max-h-0">
               <div class="px-0 pb-4 acc-strong text-sm md:text-base">
-                I regularly involve myself in community programs around education and international relations. I believe that giving back to society is important, and it also helps me gain insights from many people I met that I can apply to my design work.
+                I regularly involve myself in community programs around education and international relations. I believe
+                that giving back to society is important, and it also helps me gain insights from many people I met that
+                I can apply to my design work.
               </div>
             </div>
           </div>
           <!-- Row 3 -->
           <div class="acc-item border-b border-zinc-200">
-            <button class="acc-btn w-full grid grid-cols-[1fr_auto] items-center gap-4 py-4 text-left" aria-expanded="false" data-acc="toggle" data-portrait-swap="assets/design.jpg">
+            <button class="acc-btn w-full grid grid-cols-[1fr_auto] items-center gap-4 py-4 text-left"
+              aria-expanded="false" data-acc="toggle" data-portrait-swap="assets/design.jpg">
               <span class="text-base md:text-lg">I design to <b>solve real problems</b></span>
-              <svg class="chev w-5 h-5 text-zinc-500 transition-transform" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M7 5l6 5-6 5V5z"/></svg>
+              <svg class="chev w-5 h-5 text-zinc-500 transition-transform" viewBox="0 0 20 20" fill="currentColor"
+                aria-hidden="true">
+                <path d="M7 5l6 5-6 5V5z" />
+              </svg>
             </button>
             <div class="acc-panel overflow-hidden max-h-0">
               <div class="px-0 pb-4 acc-strong text-sm md:text-base">
-                I love observing how people interact with products and services, and I design to make those interactions better. My goal is to create experiences that are not only functional but also delightful and meaningful for every layer of society.
+                I love observing how people interact with products and services, and I design to make those interactions
+                better. My goal is to create experiences that are not only functional but also delightful and meaningful
+                for every layer of society.
               </div>
             </div>
           </div>
           <!-- Row 4 -->
           <div class="acc-item">
-            <button class="acc-btn w-full grid grid-cols-[1fr_auto] items-center gap-4 py-4 text-left" aria-expanded="false" data-acc="toggle">
+            <button class="acc-btn w-full grid grid-cols-[1fr_auto] items-center gap-4 py-4 text-left"
+              aria-expanded="false" data-acc="toggle">
               <span class="text-base md:text-lg">I like <b>learning new things</b></span>
-              <svg class="chev w-5 h-5 text-zinc-500 transition-transform" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M7 5l6 5-6 5V5z"/></svg>
+              <svg class="chev w-5 h-5 text-zinc-500 transition-transform" viewBox="0 0 20 20" fill="currentColor"
+                aria-hidden="true">
+                <path d="M7 5l6 5-6 5V5z" />
+              </svg>
             </button>
             <div class="acc-panel overflow-hidden max-h-0">
               <div class="px-0 pb-4 acc-strong text-sm md:text-base">
-                Currently learning to code, I believe the ability to understand how code works will help me design better products. I also enjoy learning about new design tools and methodologies to keep my skills sharp and relevant.
+                Currently learning to code, I believe the ability to understand how code works will help me design
+                better products. I also enjoy learning about new design tools and methodologies to keep my skills sharp
+                and relevant.
               </div>
             </div>
           </div>
@@ -103,6 +133,7 @@
     </section>
   </main>
 
-    <script src="app.js"></script>
+  <script src="app.js"></script>
 </body>
+
 </html>

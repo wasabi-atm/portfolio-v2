@@ -77,7 +77,7 @@ function renderGlobalNav() {
     const connectAvatar = (
       '<a href="/connect" class="group inline-flex items-center justify-center p-1.5 rounded-full bg-white/95 backdrop-blur-lg backdrop-saturate-150 border border-zinc-200/90 shadow-[0_6px_16px_rgba(0,0,0,0.12)] ring-2 '
       + (connectActive ? 'ring-green-600' : 'ring-white') + ' overflow-hidden transition-all duration-200 hover:bg-zinc-50 hover:shadow-[0_8px_20px_rgba(0,0,0,0.14)]" aria-label="Connect" id="connect-avatar">'
-      + '<img src="assets/profilePinkGreen.png" alt="" class="h-full w-full object-cover rounded-full ring-2 ' + (connectActive ? 'ring-black' : 'ring-transparent') + ' ring-inset transition-transform duration-200 group-hover:scale-[1.03]"/>'
+      + '<img src="assets/ProfilePic.png" alt="" class="h-full w-full object-cover rounded-full ring-2 ' + (connectActive ? 'ring-black' : 'ring-transparent') + ' ring-inset transition-transform duration-200 group-hover:scale-[1.03]"/>'
       + '<span class="sr-only">Connect</span>'
       + '</a>'
     );
@@ -105,7 +105,7 @@ function renderGlobalNav() {
         nb.id = 'nav-backdrop';
         document.body.appendChild(nb);
       }
-    } catch {}
+    } catch { }
 
     // Intercept clicks on current page to avoid reload and give feedback
     const intercept = (e) => {
@@ -151,7 +151,7 @@ function renderGlobalNav() {
             history.replaceState(null, '', url);
           }
         }
-      } catch {}
+      } catch { }
       const fs = mount.querySelector('#primary-nav');
       if (fs) {
         fs.classList.remove('shake-x');
@@ -219,7 +219,7 @@ function renderGlobalNav() {
         ro.observe(fs);
       }
       window.addEventListener('resize', syncNavSizes);
-    } catch {}
+    } catch { }
 
     // Subtle 3D hover tilt for nav capsule (desktop only, reduced motion aware)
     try {
@@ -264,7 +264,7 @@ function renderGlobalNav() {
         fs.addEventListener('mouseenter', onEnter);
         fs.addEventListener('mouseleave', onLeave);
       }
-    } catch {}
+    } catch { }
 
     // Subtle magnetic translation for the whole nav capsule (desktop)
     try {
@@ -308,7 +308,7 @@ function renderGlobalNav() {
         };
         window.addEventListener('mousemove', onMag, { passive: true });
       }
-    } catch {}
+    } catch { }
 
   } catch (e) {
     console.error('[nav] render failed, using fallback', e);
@@ -322,7 +322,7 @@ function renderGlobalNav() {
               <a href="/blogs" class="px-4 sm:px-4 py-0.5 sm:py-1 rounded-full text-sm text-neutral-600 hover:bg-zinc-100 transition-colors nav-underline">Articles</a>
             </nav>
             <a href="/connect" class="group inline-flex items-center justify-center p-1.5 rounded-full bg-white/95 backdrop-blur-lg backdrop-saturate-150 border border-zinc-200/90 shadow-[0_6px_16px_rgba(0,0,0,0.12)] ring-2 ${onConnect ? 'ring-green-600' : 'ring-white'} overflow-hidden transition-all duration-200 hover:bg-zinc-50 hover:shadow-[0_8px_20px_rgba(0,0,0,0.14)]" aria-label="Connect" id="connect-avatar-fallback">
-                <img src="assets/profilePinkGreen.png" alt="" class="h-full w-full object-cover rounded-full ring-2 ring-inset ring-transparent transition-transform duration-200 group-hover:scale-[1.03]"/>
+                <img src="assets/ProfilePic.png" alt="" class="h-full w-full object-cover rounded-full ring-2 ring-inset ring-transparent transition-transform duration-200 group-hover:scale-[1.03]"/>
                 <span class="sr-only">Connect</span>
             </a>
           </div>
@@ -337,7 +337,7 @@ function renderGlobalNav() {
         nb.id = 'nav-backdrop';
         document.body.appendChild(nb);
       }
-    } catch {}
+    } catch { }
 
     // Fallback: responsive sizing
     try {
@@ -397,103 +397,103 @@ function renderGlobalNav() {
           fsFb.addEventListener('mousemove', onMove);
           fsFb.addEventListener('mouseenter', onEnter);
           fsFb.addEventListener('mouseleave', onLeave);
-      }
-    } catch {}
+        }
+      } catch { }
 
-    // Fallback: subtle magnetic translation for nav capsule
-    try {
-      const fsFb = mount.querySelector('#primary-nav-fallback');
-      const prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      const pointerFine = window.matchMedia && window.matchMedia('(hover:hover)').matches;
-      if (fsFb && !prefersReduced && pointerFine) {
-        let raf2 = 0;
-        let hovering = false;
-        const maxT = 1; // subtler
-        fsFb.addEventListener('mouseenter', () => { if (window.innerWidth < 768) return; hovering = true; });
-        fsFb.addEventListener('mouseleave', () => { hovering = false; });
-        const onMag = (e) => {
-          if (hovering) return;
-          if (raf2) return;
-          raf2 = requestAnimationFrame(() => {
-            raf2 = 0;
-            const r = fsFb.getBoundingClientRect();
-            const cx = r.left + r.width / 2;
-            const cy = r.top + r.height / 2;
-            const dx = e.clientX - cx;
-            const dy = e.clientY - cy;
-            const dist = Math.hypot(dx, dy);
-            const radius = 120;
-            if (dist < radius && window.innerWidth >= 768) {
-              const t = 1 - dist / radius;
-              const mag = maxT * t;
-              const inv = dist === 0 ? 0 : (mag / dist);
-              const tx = dx * inv;
-              const ty = dy * inv;
-              fsFb.style.transform = `translate(${tx.toFixed(2)}px, ${ty.toFixed(2)}px)`;
-            } else {
-              fsFb.style.transform = '';
-            }
+      // Fallback: subtle magnetic translation for nav capsule
+      try {
+        const fsFb = mount.querySelector('#primary-nav-fallback');
+        const prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        const pointerFine = window.matchMedia && window.matchMedia('(hover:hover)').matches;
+        if (fsFb && !prefersReduced && pointerFine) {
+          let raf2 = 0;
+          let hovering = false;
+          const maxT = 1; // subtler
+          fsFb.addEventListener('mouseenter', () => { if (window.innerWidth < 768) return; hovering = true; });
+          fsFb.addEventListener('mouseleave', () => { hovering = false; });
+          const onMag = (e) => {
+            if (hovering) return;
+            if (raf2) return;
+            raf2 = requestAnimationFrame(() => {
+              raf2 = 0;
+              const r = fsFb.getBoundingClientRect();
+              const cx = r.left + r.width / 2;
+              const cy = r.top + r.height / 2;
+              const dx = e.clientX - cx;
+              const dy = e.clientY - cy;
+              const dist = Math.hypot(dx, dy);
+              const radius = 120;
+              if (dist < radius && window.innerWidth >= 768) {
+                const t = 1 - dist / radius;
+                const mag = maxT * t;
+                const inv = dist === 0 ? 0 : (mag / dist);
+                const tx = dx * inv;
+                const ty = dy * inv;
+                fsFb.style.transform = `translate(${tx.toFixed(2)}px, ${ty.toFixed(2)}px)`;
+              } else {
+                fsFb.style.transform = '';
+              }
+            });
+          };
+          window.addEventListener('mousemove', onMag, { passive: true });
+        }
+      } catch { }
+
+      // Fallback: intercept clicks on current link
+      try {
+        const here = currentFilename();
+        const intercept = (e) => {
+          const a = e.target.closest('a');
+          if (!a) return;
+          const href = a.getAttribute('href') || '';
+          const dest = href.split('#')[0];
+          const samePage = dest && here === dest;
+          const isConnectAvatar = (here === 'connect.html') && (a.id === 'connect-avatar-fallback' || /connect\.html$/.test(dest));
+          if (!(samePage || isConnectAvatar)) return;
+          e.preventDefault();
+          const fs = mount.querySelector('#primary-nav-fallback');
+          if (fs) {
+            fs.classList.remove('shake-x');
+            void fs.offsetWidth;
+            fs.classList.add('shake-x');
+            setTimeout(() => fs.classList.remove('shake-x'), 520);
+          }
+          const avatar = mount.querySelector('#connect-avatar-fallback');
+          if (avatar) {
+            avatar.classList.remove('shake-x');
+            void avatar.offsetWidth;
+            avatar.classList.add('shake-x');
+            setTimeout(() => avatar.classList.remove('shake-x'), 520);
+          }
+          let toast = document.getElementById('already-here-toast');
+          if (!toast) {
+            toast = document.createElement('div');
+            toast.id = 'already-here-toast';
+            toast.className = 'ios-toast';
+            toast.textContent = "You're already here";
+            document.body.appendChild(toast);
+          }
+          // Position relative to bottom nav (fallback is identical layout)
+          const navWrap = mount.querySelector('.nav-wrap');
+          const rect = (navWrap || fs).getBoundingClientRect();
+          toast.style.bottom = 'auto';
+          toast.style.top = '0px';
+          toast.style.left = (rect.left + rect.width / 2) + 'px';
+          toast.style.transform = 'translateX(-50%)';
+          toast.classList.remove('hide');
+          requestAnimationFrame(() => {
+            const tRect = toast.getBoundingClientRect();
+            // Fallback nav is also bottom on mobile and top on desktop; mirror logic
+            const isTopNav = window.innerWidth >= 768;
+            const top = isTopNav ? (rect.bottom + 10) : (rect.top - tRect.height - 10);
+            toast.style.top = Math.max(10, top) + 'px';
+            toast.classList.add('show');
+            setTimeout(() => { toast.classList.add('hide'); toast.classList.remove('show'); }, 1400);
           });
         };
-        window.addEventListener('mousemove', onMag, { passive: true });
-      }
-    } catch {}
-
-    // Fallback: intercept clicks on current link
-    try {
-      const here = currentFilename();
-      const intercept = (e) => {
-        const a = e.target.closest('a');
-        if (!a) return;
-        const href = a.getAttribute('href') || '';
-        const dest = href.split('#')[0];
-        const samePage = dest && here === dest;
-        const isConnectAvatar = (here === 'connect.html') && (a.id === 'connect-avatar-fallback' || /connect\.html$/.test(dest));
-        if (!(samePage || isConnectAvatar)) return;
-        e.preventDefault();
-        const fs = mount.querySelector('#primary-nav-fallback');
-        if (fs) {
-          fs.classList.remove('shake-x');
-          void fs.offsetWidth;
-          fs.classList.add('shake-x');
-          setTimeout(() => fs.classList.remove('shake-x'), 520);
-        }
-        const avatar = mount.querySelector('#connect-avatar-fallback');
-        if (avatar) {
-          avatar.classList.remove('shake-x');
-          void avatar.offsetWidth;
-          avatar.classList.add('shake-x');
-          setTimeout(() => avatar.classList.remove('shake-x'), 520);
-        }
-        let toast = document.getElementById('already-here-toast');
-        if (!toast) {
-          toast = document.createElement('div');
-          toast.id = 'already-here-toast';
-          toast.className = 'ios-toast';
-          toast.textContent = "You're already here";
-          document.body.appendChild(toast);
-        }
-        // Position relative to bottom nav (fallback is identical layout)
-        const navWrap = mount.querySelector('.nav-wrap');
-        const rect = (navWrap || fs).getBoundingClientRect();
-        toast.style.bottom = 'auto';
-        toast.style.top = '0px';
-        toast.style.left = (rect.left + rect.width / 2) + 'px';
-        toast.style.transform = 'translateX(-50%)';
-        toast.classList.remove('hide');
-        requestAnimationFrame(() => {
-          const tRect = toast.getBoundingClientRect();
-          // Fallback nav is also bottom on mobile and top on desktop; mirror logic
-          const isTopNav = window.innerWidth >= 768;
-          const top = isTopNav ? (rect.bottom + 10) : (rect.top - tRect.height - 10);
-          toast.style.top = Math.max(10, top) + 'px';
-          toast.classList.add('show');
-          setTimeout(() => { toast.classList.add('hide'); toast.classList.remove('show'); }, 1400);
-        });
-      };
-      mount.addEventListener('click', intercept);
-    } catch {}
-    } catch {}
+        mount.addEventListener('click', intercept);
+      } catch { }
+    } catch { }
   }
 }
 
@@ -509,21 +509,21 @@ function navigateToBlogsWithFilter(tag = 'ALL') {
     const onBlogs = (here === 'blogs.html');
     if (onBlogs && window.__blogFilters && typeof window.__blogFilters.setActive === 'function') {
       window.__blogFilters.setActive(normalized);
-      try { history.pushState(null, '', dest); } catch {}
+      try { history.pushState(null, '', dest); } catch { }
       handled = true;
     }
-  } catch {}
+  } catch { }
 
   if (!handled) {
     try {
       window.location.href = dest;
     } catch {
-      try { window.location.assign(dest); } catch {}
+      try { window.location.assign(dest); } catch { }
     }
   }
 }
 
-try { window.navigateToBlogsWithFilter = navigateToBlogsWithFilter; } catch {}
+try { window.navigateToBlogsWithFilter = navigateToBlogsWithFilter; } catch { }
 
 function initCaseStudiesShortcut() {
   const triggers = document.querySelectorAll('[data-case-studies-trigger]');
@@ -981,7 +981,7 @@ async function loadBlogDetail() {
       if (idx !== -1 && segs[idx + 1] === 'article' && segs[idx + 2]) {
         slug = segs[idx + 2];
       }
-    } catch {}
+    } catch { }
   }
   if (!slug && !id) {
     root.innerHTML = `<p class="px-6 py-8 text-zinc-600">Missing <code>slug</code> in URL.</p>`;
@@ -1012,7 +1012,7 @@ async function loadBlogDetail() {
         const s = (r?.data?.slug || r?.data?.Slug || '').toString().trim().toLowerCase();
         return s && s === want;
       });
-    } catch {}
+    } catch { }
   }
 
   if (!rows.length) {
@@ -1093,15 +1093,15 @@ async function loadBlogDetail() {
 
   // Build chapters from known fields; each becomes a section with anchor
   const CHAPTERS = [
-    ['overview','Overview'],
-    ['background','Background'],
-    ['empathize','Empathize'],
-    ['desk-research','Desk research'],
-    ['user-interview','User interview'],
-    ['ideate','Ideate'],
-    ['prototype','Prototype'],
-    ['final-result','Final result'],
-    ['reflections','Reflections']
+    ['overview', 'Overview'],
+    ['background', 'Background'],
+    ['empathize', 'Empathize'],
+    ['desk-research', 'Desk research'],
+    ['user-interview', 'User interview'],
+    ['ideate', 'Ideate'],
+    ['prototype', 'Prototype'],
+    ['final-result', 'Final result'],
+    ['reflections', 'Reflections']
   ];
 
   function chapterHtml(keyId, label, source) {
@@ -1224,14 +1224,14 @@ async function loadBlogDetail() {
       }
     });
   } else if (skillsList && typeof skillsList === 'object') {
-    ['skill1','skill2','skill3','Skill 1','Skill 2','Skill 3'].forEach(k => {
+    ['skill1', 'skill2', 'skill3', 'Skill 1', 'Skill 2', 'Skill 3'].forEach(k => {
       const v = safeText(skillsList[k]);
       if (v) skills.push(...splitSkills(v));
     });
   }
   // Fallbacks to top-level fields
   if (!skills.length) {
-    ['skill1','skill2','skill3','Skill 1','Skill 2','Skill 3'].forEach(k => {
+    ['skill1', 'skill2', 'skill3', 'Skill 1', 'Skill 2', 'Skill 3'].forEach(k => {
       const v = safeText(d[k]);
       if (v) skills.push(...splitSkills(v));
     });
@@ -1279,18 +1279,18 @@ async function loadBlogDetail() {
               ${b.description ? `<div class="mb-1"><p class="text-zinc-400 text-lg leading-relaxed">${b.description}</p><div class="mt-2 w-1/4 border-b border-zinc-200/80"></div></div>` : ''}
               ${(myRole || team || timeline) ? `
                 <div class="mt-1 flex flex-wrap gap-x-6 gap-y-2 text-sm">
-                  ${myRole ? `<div class="text-zinc-600 inline-flex items-center gap-1">${svgIcon('role','text-zinc-400')}<span class="text-zinc-400">My Role:</span> <span class="text-zinc-800">${myRole}</span></div>` : ''}
+                  ${myRole ? `<div class="text-zinc-600 inline-flex items-center gap-1">${svgIcon('role', 'text-zinc-400')}<span class="text-zinc-400">My Role:</span> <span class="text-zinc-800">${myRole}</span></div>` : ''}
                   ${team ? `<div class="text-zinc-600 relative inline-flex items-center gap-1 group">
-                    ${svgIcon('team','text-zinc-400')}<span class="text-zinc-400">Team:</span>
+                    ${svgIcon('team', 'text-zinc-400')}<span class="text-zinc-400">Team:</span>
                     <span class="underline underline-offset-4 decoration-zinc-400 group-hover:decoration-black cursor-help text-zinc-800">${team}</span>
                     ${teamComp ? `<span role="tooltip" class="pointer-events-none absolute left-1/2 top-full z-50 mt-2 w-[min(90vw,260px)] -translate-x-1/2 translate-y-1 opacity-0 group-hover:opacity-100 group-hover:translate-y-0 transition duration-200">
                       <span class="block rounded-md border border-zinc-200 bg-white px-3 py-2 text-xs text-zinc-700 shadow-md">${teamComp}</span>
                     </span>` : ''}
                   </div>` : ''}
-                  ${timeline ? `<div class="text-zinc-600 inline-flex items-center gap-1">${svgIcon('timeline','text-zinc-400')}<span class="text-zinc-400">Timeline:</span> <span class="text-zinc-800">${timeline}</span></div>` : ''}
+                  ${timeline ? `<div class="text-zinc-600 inline-flex items-center gap-1">${svgIcon('timeline', 'text-zinc-400')}<span class="text-zinc-400">Timeline:</span> <span class="text-zinc-800">${timeline}</span></div>` : ''}
                 </div>
               ` : ''}
-              ${skills && skills.length ? `<div class="mt-2 flex flex-wrap items-center gap-2">${svgIcon('skills','text-zinc-400')} ${skills.map(s => `<span class="inline-flex items-center rounded-full border border-zinc-300/70 bg-white/80 px-2 py-0.5 text-xs text-zinc-700">${s}</span>`).join(' ')}</div>` : ''}
+              ${skills && skills.length ? `<div class="mt-2 flex flex-wrap items-center gap-2">${svgIcon('skills', 'text-zinc-400')} ${skills.map(s => `<span class="inline-flex items-center rounded-full border border-zinc-300/70 bg-white/80 px-2 py-0.5 text-xs text-zinc-700">${s}</span>`).join(' ')}</div>` : ''}
               ${b.date ? `<div class="flex items-center gap-2 text-zinc-400 text-sm">${svgIcon('calendar')}<span class="md:hidden">${dateShort}</span><span class="hidden md:inline">${dateLong}</span></div>` : ''}
               ${linksPills ? `<div class="mt-1">${linksPills}</div>` : ''}
             </header>
@@ -1328,7 +1328,7 @@ async function loadBlogDetail() {
       .replace(/^-+|-+$/g, '') || 'section';
 
     // Known chapter sections
-    const chapterIds = ['overview','background','empathize','desk-research','user-interview','ideate','prototype','final-result','reflections'];
+    const chapterIds = ['overview', 'background', 'empathize', 'desk-research', 'user-interview', 'ideate', 'prototype', 'final-result', 'reflections'];
     const chapterSections = Array.from(document.querySelectorAll('section[id]')).filter(sec => chapterIds.includes(sec.id));
 
     // Headings from Blog article content (if any)
@@ -1408,7 +1408,7 @@ async function loadBlogDetail() {
         const h = Math.max(40, Math.round(fs.offsetHeight || fs.getBoundingClientRect().height));
         backBtn.style.width = h + 'px';
         backBtn.style.height = h + 'px';
-      } catch {}
+      } catch { }
     };
     const syncBackLeft = () => {
       try {
@@ -1421,7 +1421,7 @@ async function loadBlogDetail() {
         const rect = anchor.getBoundingClientRect();
         // Fixed positioning uses viewport; rect.left is viewport-relative
         backBtn.style.left = Math.max(8, Math.floor(rect.left)) + 'px';
-      } catch {}
+      } catch { }
     };
     syncBackSize();
     syncBackLeft();
@@ -1449,7 +1449,7 @@ async function loadBlogDetail() {
   // Add skeletons for embedded images inside article content
   try {
     root.querySelectorAll('.prose').forEach(enhanceArticleImages);
-  } catch {}
+  } catch { }
 }
 
 // Wrap images with a skeleton placeholder until they load
@@ -1706,9 +1706,9 @@ function projectCardHTML(p) {
   const inner = `
     <div class="relative overflow-hidden">
       ${img
-        ? `<img src="${img}" alt="${title}" loading="lazy"
+      ? `<img src="${img}" alt="${title}" loading="lazy"
                class="block w-full aspect-square object-cover transition-transform duration-300 group-hover:scale-[1.03]" />`
-        : `<div class=\"aspect-square w-full bg-zinc-300\"></div>`}
+      : `<div class=\"aspect-square w-full bg-zinc-300\"></div>`}
       <div class="pointer-events-none absolute inset-0 bg-black/0 transition-colors duration-300 group-hover:bg-black/10"></div>
       <div class="absolute inset-x-0 bottom-0 p-4 text-white transition-all duration-300 translate-y-2 opacity-0 group-hover:translate-y-0 group-hover:opacity-100">
         <h3 class="text-base md:text-lg font-semibold">${title}</h3>
@@ -2022,7 +2022,7 @@ async function loadProjectDetail() {
 
   // Create gallery layout based on number of other images
   let galleryHtml = '';
-  
+
   if (rest.length === 1) {
     // Single image layout - just show one image full width
     galleryHtml = `
@@ -2300,7 +2300,7 @@ function initProjectVideoModals() {
 function openProjectModal(src, summaryHtml, longText, linkUrl, linkTitle, linkDesc) {
   const overlay = document.createElement('div');
   overlay.className = 'fixed inset-0 z-[999] bg-black/60 backdrop-blur-md flex items-center justify-center p-4 animate-fade-in';
-  
+
   overlay.innerHTML = `
     <div class="relative w-full max-w-4xl bg-white rounded-3xl shadow-2xl overflow-hidden transform transition-all animate-scale-in">
       <!-- Close button with better positioning and styling -->
@@ -2318,10 +2318,11 @@ function openProjectModal(src, summaryHtml, longText, linkUrl, linkTitle, linkDe
         <video 
           class="block w-full h-auto max-h-[70vh] object-contain" 
           src="${src}" 
-          controls 
+          autoplay
+          muted
+          loop
           playsinline
           controlsList="nodownload"
-          onloadstart="this.volume=0.7"
         ></video>
       </div>
 
@@ -2350,12 +2351,12 @@ function openProjectModal(src, summaryHtml, longText, linkUrl, linkTitle, linkDe
       overlay.classList.add('animate-fade-out');
       const modal = overlay.querySelector('div');
       if (modal) modal.classList.add('animate-scale-out');
-      
+
       setTimeout(() => {
         document.body.classList.remove('overflow-hidden');
         overlay.remove();
       }, 200);
-    } catch (e) {}
+    } catch (e) { }
   }
 
   // Click outside to close
@@ -2410,7 +2411,7 @@ function openProjectModal(src, summaryHtml, longText, linkUrl, linkTitle, linkDe
 
 function renderEmbedLink(url, title, desc) {
   if (!url && !title) return '';
-  
+
   const embedId = 'embed_' + Math.random().toString(36).slice(2, 9);
   const domain = (() => {
     try {
@@ -2419,7 +2420,7 @@ function renderEmbedLink(url, title, desc) {
       return u.hostname.replace(/^www\./, '');
     } catch { return ''; }
   })();
-  
+
   const idParam = (() => {
     try {
       const u = new URL(url, location.origin);
@@ -2511,7 +2512,7 @@ function renderEmbedLink(url, title, desc) {
         host.classList.add('animate-fade-in');
         host.innerHTML = html;
       }
-    } catch (e) {}
+    } catch (e) { }
   }, 0);
 
   return base;
@@ -2541,13 +2542,13 @@ document.addEventListener('DOMContentLoaded', () => {
       // Show for a bit longer, then fade (allow time to read)
       requestAnimationFrame(() => {
         setTimeout(() => {
-          try { document.documentElement.classList.remove('show-intro'); } catch {}
+          try { document.documentElement.classList.remove('show-intro'); } catch { }
           overlay.classList.add('hide');
           setTimeout(() => overlay.remove(), 700);
         }, 3500);
       });
       // Ensure flag is set (may already be set by early script)
-      try { sessionStorage.setItem('intro_greeted', '1'); } catch {}
+      try { sessionStorage.setItem('intro_greeted', '1'); } catch { }
       // Hard fallback: in case timers are paused or tab is backgrounded,
       // forcibly remove any lingering overlay after ~2.5s
       setTimeout(() => {
@@ -2555,7 +2556,7 @@ document.addEventListener('DOMContentLoaded', () => {
           const ov = document.getElementById('intro-greeting');
           if (ov) ov.remove();
           document.documentElement.classList.remove('show-intro');
-        } catch {}
+        } catch { }
       }, 6000);
     }
     // If on Home but not first time, ensure no overlay is visible (handles bfcache restores)
@@ -2564,7 +2565,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.documentElement.classList.remove('show-intro');
         const ov = document.getElementById('intro-greeting');
         if (ov) { ov.classList.add('hide'); }
-      } catch {}
+      } catch { }
     }
     // Hard guard: ensure overlay never appears off-Home
     if (here !== 'index.html' || !onHomeDom) {
@@ -2572,9 +2573,9 @@ document.addEventListener('DOMContentLoaded', () => {
         document.documentElement.classList.remove('show-intro');
         const stray = document.getElementById('intro-greeting');
         if (stray) stray.remove();
-      } catch {}
+      } catch { }
     }
-  } catch {}
+  } catch { }
 
   renderGlobalNav();
   initCaseStudiesShortcut();
@@ -2615,10 +2616,11 @@ document.addEventListener("DOMContentLoaded", function () {
           I'm available to chat and collaborate
         </p>
         <nav aria-label="Connect links" class="flex flex-wrap gap-4 text-base md:text-lg text-zinc-500">
-          <a href="mailto:hello@wirawibisana.com" class="underline-offset-4 hover:underline hover:text-black">Contact</a>
+          <a href="https://drive.google.com/file/d/1mwBK0OjYgY03427YE0VkbEZ3agS-2YBs/view?usp=sharing" target="_blank" rel="noopener" class="underline-offset-4 hover:underline hover:text-black">Resume</a>
           <a href="https://www.linkedin.com/in/wira29/" target="_blank" rel="noopener" class="underline-offset-4 hover:underline hover:text-black">LinkedIn</a>
-          <a href="https://www.threads.com/@wira.wibisana" target="_blank" rel="noopener" class="underline-offset-4 hover:underline hover:text-black">Threads</a>
+          <a href="mailto:hello@wirawibisana.com" class="underline-offset-4 hover:underline hover:text-black">Contact</a>
           <a href="https://github.com/wasabi-atm" target="_blank" rel="noopener" class="underline-offset-4 hover:underline hover:text-black">GitHub</a>
+          <a href="https://www.threads.com/@wira.wibisana" target="_blank" rel="noopener" class="underline-offset-4 hover:underline hover:text-black">Threads</a>
         </nav>
       </div>
     </footer>
