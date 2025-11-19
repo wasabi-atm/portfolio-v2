@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -7,39 +8,56 @@
 
   <!-- Early intro overlay styles and flag; ensures overlay paints before content -->
   <style>
-    #intro-greeting { display: none; }
+    #intro-greeting {
+      display: none;
+    }
+
     .show-intro #intro-greeting {
       display: grid;
-      position: fixed; inset: 0; z-index: 9999;
-      place-items: center; background: #000; color: #fff;
-      opacity: 1; transition: opacity .6s ease;
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      place-items: center;
+      background: #000;
+      color: #fff;
+      opacity: 1;
+      transition: opacity .6s ease;
     }
+
     .show-intro #intro-greeting .bubble {
       transform: translateY(8px) scale(.98);
-      opacity: 0; animation: intro-pop .6s ease forwards .15s; text-align: center;
+      opacity: 0;
+      animation: intro-pop .6s ease forwards .15s;
+      text-align: center;
     }
-    @keyframes intro-pop { to { transform: translateY(0) scale(1); opacity: 1; } }
+
+    @keyframes intro-pop {
+      to {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+      }
+    }
   </style>
   <script>
     // Mark document to show intro overlay ASAP on first session visit to Home
-    (function(){
+    (function () {
       try {
         if (!sessionStorage.getItem('intro_greeted')) {
           document.documentElement.classList.add('show-intro');
           // Set flag early so navigation during overlay timeframe doesn't retrigger
           sessionStorage.setItem('intro_greeted', '1');
         }
-      } catch (e) {}
+      } catch (e) { }
     })();
     // If returning via bfcache or after first visit, ensure overlay is not shown
-    window.addEventListener('pageshow', function() {
+    window.addEventListener('pageshow', function () {
       try {
         if (sessionStorage.getItem('intro_greeted')) {
           document.documentElement.classList.remove('show-intro');
           var ov = document.getElementById('intro-greeting');
           if (ov) { ov.classList.add('hide'); }
         }
-      } catch (e) {}
+      } catch (e) { }
     });
   </script>
 
@@ -58,15 +76,15 @@
   <link href="./dist/output.css" rel="stylesheet">
   <link id="site-favicon" rel="icon" type="image/png" href="assets/faviconneu.png">
   <script>
-    // Fallback guard: if this deployment serves the Carte subdomain,
-    // force-route to the Carte page even without server rewrites.
-    (function () {
-      try {
-        if (/^carte\./.test(location.hostname) && location.pathname !== '/carte.html') {
-          location.replace('/carte.html');
-        }
-      } catch (e) {}
-    })();
+      // Fallback guard: if this deployment serves the Carte subdomain,
+      // force-route to the Carte page even without server rewrites.
+      (function () {
+        try {
+          if (/^carte\./.test(location.hostname) && location.pathname !== '/carte.html') {
+            location.replace('/carte.html');
+          }
+        } catch (e) { }
+      })();
     (function () {
       try {
         var link = document.querySelector('link#site-favicon');
@@ -79,10 +97,11 @@
         }
         var onCarte = /^carte\./i.test(location.hostname) || /(^|\.)carte\.wirawibisana\.com$/i.test(location.hostname);
         link.href = onCarte ? 'assets/carteFavicon.png' : 'assets/faviconneu.png';
-      } catch (e) {}
+      } catch (e) { }
     })();
   </script>
 </head>
+
 <body class="min-h-dvh bg-zinc-100 antialiased font-['Roboto']">
 
   <!-- Pre-rendered intro overlay (shown via .show-intro on <html>) -->
@@ -96,7 +115,8 @@
   <div id="site-nav"></div>
 
   <!-- Greeting (hero) -->
-  <main class="mx-auto w-full max-w-[1100px] px-6 sm:px-8 md:px-12 lg:px-24 xl:px-28 2xl:px-32 mt-12 sm:mt-16 md:mt-24 lg:mt-28 pt-10 pb-8 sm:pt-10 sm:pb-8 md:pt-20 md:pb-16 lg:pt-28 lg:pb-24 space-y-2 sm:space-y-4 md:space-y-6 lg:space-y-8">
+  <main
+    class="mx-auto w-full max-w-[1100px] px-6 sm:px-8 md:px-12 lg:px-24 xl:px-28 2xl:px-32 mt-12 sm:mt-16 md:mt-24 lg:mt-28 pt-10 pb-8 sm:pt-10 sm:pb-8 md:pt-20 md:pb-16 lg:pt-28 lg:pb-24 space-y-2 sm:space-y-4 md:space-y-6 lg:space-y-8">
     <div class="justify-start leading-tight tracking-tight">
       <span class="text-zinc-400 text-2xl">Hi, I’m </span><span class="text-black text-2xl">Wira Wibisana</span>
     </div>
@@ -104,16 +124,18 @@
       <span class="text-zinc-400 text-2xl">A </span><span class="text-black text-2xl">Product Designer</span>
     </div>
     <div class="justify-start leading-tight tracking-tight">
-      <span class="text-zinc-400 text-2xl">Focused on building delightful </span><span class="text-black text-2xl">Apple-first experiences</span>
+      <span class="text-zinc-400 text-2xl">Focused on building delightful </span><span
+        class="text-black text-2xl">Apple-first experiences</span>
     </div>
     <div class="justify-start leading-tight tracking-tight">
-      <span class="text-zinc-400 text-2xl">Ready to craft products people </span><span class="text-black text-2xl">truly love</span>
+      <span class="text-zinc-400 text-2xl">Ready to craft products people </span><span class="text-black text-2xl">truly
+        love</span>
     </div>
 
     <!-- CTA: Case Studies -->
     <div class="pt-2 sm:pt-3 md:pt-4">
       <a href="/blogs?tag=Case%20Studies" aria-label="View Case Studies" data-case-studies-trigger
-         class="inline-flex items-center rounded-full border border-zinc-300/70 bg-white/70 text-zinc-800 px-5 py-2 text-sm sm:text-base font-medium hover:bg-zinc-100 hover:text-black hover:border-zinc-400 focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2 focus:ring-offset-zinc-100 transition-colors">
+        class="inline-flex items-center rounded-full border border-zinc-300/70 bg-white/70 text-zinc-800 px-5 py-2 text-sm sm:text-base font-medium hover:bg-zinc-100 hover:text-black hover:border-zinc-400 focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2 focus:ring-offset-zinc-100 transition-colors">
         Case Studies &gt;
       </a>
     </div>
@@ -124,15 +146,15 @@
       <div class="lg:hidden">
         <div class="flex items-center gap-4">
           <a href="https://swiftsekai.framer.website/" target="_blank" rel="noopener" aria-label="Open Swisekai website"
-             class="flex items-center justify-center h-16 w-16 rounded-2xl border border-zinc-300/70 bg-white/80 hover:bg-zinc-100 active:bg-zinc-200 transition">
+            class="flex items-center justify-center h-16 w-16 rounded-2xl border border-zinc-300/70 bg-white/80 hover:bg-zinc-100 active:bg-zinc-200 transition">
             <img src="assets/Swisekai.png" alt="Swisekai app icon" class="h-10 w-10 object-contain" />
           </a>
           <a href="https://carte.wirawibisana.com" aria-label="Open Carte case study"
-             class="flex items-center justify-center h-16 w-16 rounded-2xl border border-zinc-300/70 bg-white/80 hover:bg-zinc-100 active:bg-zinc-200 transition">
+            class="flex items-center justify-center h-16 w-16 rounded-2xl border border-zinc-300/70 bg-white/80 hover:bg-zinc-100 active:bg-zinc-200 transition">
             <img src="assets/carteIcon.png" alt="Carte app icon" class="h-10 w-10 object-contain" />
           </a>
           <a href="https://clamby.id" target="_blank" rel="noopener" aria-label="Visit Clamby (case study in progress)"
-             class="flex items-center justify-center h-16 w-16 rounded-2xl border border-zinc-300/70 bg-white/80 hover:bg-zinc-100 active:bg-zinc-200 transition">
+            class="flex items-center justify-center h-16 w-16 rounded-2xl border border-zinc-300/70 bg-white/80 hover:bg-zinc-100 active:bg-zinc-200 transition">
             <img src="assets/ClambyIcon.png" alt="Clamby app icon" class="h-10 w-10 object-contain" />
           </a>
         </div>
@@ -140,22 +162,36 @@
 
       <!-- Desktop (lg+): left-to-right icon ribbon -->
       <div class="hidden lg:flex items-center gap-6 pt-2">
-        <a href="https://carte.wirawibisana.com" aria-label="Open Carte case study" class="group relative flex h-20 w-20 items-center justify-center rounded-3xl border border-zinc-300/70 bg-white/80 transition hover:-translate-y-1 hover:border-zinc-400 hover:bg-white shadow-sm">
+        <a href="https://carte.wirawibisana.com" aria-label="Open Carte case study"
+          class="group relative flex h-20 w-20 items-center justify-center rounded-3xl border border-zinc-300/70 bg-white/80 transition hover:-translate-y-1 hover:border-zinc-400 hover:bg-white shadow-sm">
           <img src="assets/carteIcon.png" alt="Carte app icon" class="peer h-12 w-12 object-contain" />
-          <span role="tooltip" class="pointer-events-none absolute left-1/2 top-full z-50 mt-2 -translate-x-1/2 translate-y-1 opacity-0 transition duration-200 peer-hover:opacity-100 peer-hover:translate-y-0 peer-focus-visible:opacity-100">
-            <span class="block rounded-md border border-zinc-200 bg-white px-3 py-2 text-xs text-zinc-700 shadow-md whitespace-nowrap">Carte - Save business cards to contacts privately</span>
+          <span role="tooltip"
+            class="pointer-events-none absolute left-1/2 top-full z-50 mt-2 -translate-x-1/2 translate-y-1 opacity-0 transition duration-200 peer-hover:opacity-100 peer-hover:translate-y-0 peer-focus-visible:opacity-100">
+            <span
+              class="block rounded-md border border-zinc-200 bg-white px-3 py-2 text-xs text-zinc-700 shadow-md whitespace-nowrap">Carte
+              - Save business cards to contacts privately</span>
           </span>
         </a>
-        <a href="https://swiftsekai.framer.website/" title="Swisekai" aria-label="Open Swisekai website" target="_blank" rel="noopener" class="group relative flex h-20 w-20 items-center justify-center rounded-3xl border border-zinc-300/70 bg-white/80 transition hover:-translate-y-1 hover:border-zinc-400 hover:bg-white shadow-sm">
+        <a href="https://swiftsekai.framer.website/" title="Swisekai" aria-label="Open Swisekai website" target="_blank"
+          rel="noopener"
+          class="group relative flex h-20 w-20 items-center justify-center rounded-3xl border border-zinc-300/70 bg-white/80 transition hover:-translate-y-1 hover:border-zinc-400 hover:bg-white shadow-sm">
           <img src="assets/Swisekai.png" alt="Swisekai app icon" class="peer h-12 w-12 object-contain" />
-          <span role="tooltip" class="pointer-events-none absolute left-1/2 top-full z-50 mt-2 -translate-x-1/2 translate-y-1 opacity-0 transition duration-200 peer-hover:opacity-100 peer-hover:translate-y-0 peer-focus-visible:opacity-100">
-            <span class="block rounded-md border border-zinc-200 bg-white px-3 py-2 text-xs text-zinc-700 shadow-md whitespace-nowrap">SwiSekai - Learn Swift in an Engaging Way</span>
+          <span role="tooltip"
+            class="pointer-events-none absolute left-1/2 top-full z-50 mt-2 -translate-x-1/2 translate-y-1 opacity-0 transition duration-200 peer-hover:opacity-100 peer-hover:translate-y-0 peer-focus-visible:opacity-100">
+            <span
+              class="block rounded-md border border-zinc-200 bg-white px-3 py-2 text-xs text-zinc-700 shadow-md whitespace-nowrap">SwiSekai
+              - Learn Swift in an Engaging Way</span>
           </span>
         </a>
-        <a href="https://clamby.id" title="Clamby" target="_blank" rel="noopener" aria-label="Visit Clamby (case study in progress)" class="group relative flex h-20 w-20 items-center justify-center rounded-3xl border border-zinc-300/70 bg-white/80 transition hover:-translate-y-1 hover:border-zinc-400 hover:bg-white shadow-sm">
+        <a href="https://clamby.id" title="Clamby" target="_blank" rel="noopener"
+          aria-label="Visit Clamby (case study in progress)"
+          class="group relative flex h-20 w-20 items-center justify-center rounded-3xl border border-zinc-300/70 bg-white/80 transition hover:-translate-y-1 hover:border-zinc-400 hover:bg-white shadow-sm">
           <img src="assets/ClambyIcon.png" alt="Clamby app icon" class="peer h-12 w-12 object-contain" />
-          <span role="tooltip" class="pointer-events-none absolute left-1/2 top-full z-50 mt-2 -translate-x-1/2 translate-y-1 opacity-0 transition duration-200 peer-hover:opacity-100 peer-hover:translate-y-0 peer-focus-visible:opacity-100">
-            <span class="block rounded-md border border-zinc-200 bg-white px-3 py-2 text-xs text-zinc-700 shadow-md whitespace-nowrap">Clamby - Your AI Fashion Assistant</span>
+          <span role="tooltip"
+            class="pointer-events-none absolute left-1/2 top-full z-50 mt-2 -translate-x-1/2 translate-y-1 opacity-0 transition duration-200 peer-hover:opacity-100 peer-hover:translate-y-0 peer-focus-visible:opacity-100">
+            <span
+              class="block rounded-md border border-zinc-200 bg-white px-3 py-2 text-xs text-zinc-700 shadow-md whitespace-nowrap">Clamby
+              - Your AI Fashion Assistant</span>
           </span>
         </a>
       </div>
@@ -167,19 +203,26 @@
 
 
   <!-- Design works grid: 2x2 -->
-  <section class="mx-auto w-full max-w-[1100px] px-6 sm:px-8 md:px-12 lg:px-24 xl:px-28 2xl:px-32 pt-12 pb-6 md:pt-20 md:pb-10">
+  <section
+    class="mx-auto w-full max-w-[1100px] px-6 sm:px-8 md:px-12 lg:px-24 xl:px-28 2xl:px-32 pt-12 pb-6 md:pt-20 md:pb-10">
     <h2 class="text-xl sm:text-2xl leading-snug text-content mb-6 md:mb-8">Projects</h2>
     <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-10 md:gap-x-8 md:gap-y-8">
       <!-- 1: Carte 1.1 -->
-      <figure class="rounded-2xl relative" data-project="carte11" data-long="This update focused on networking, turning Carte from a simple business card scanner to a full-fledged connection management app.">
-        <video class="block w-full aspect-[4/3] object-cover rounded-2xl" src="assets/Carte1.1Showcase.mp4" autoplay muted loop playsinline preload="metadata" aria-label="Carte 1.1 demo"></video>
+      <figure class="rounded-2xl relative" data-project="carte11"
+        data-long="This update focused on networking, turning Carte from a simple business card scanner to a full-fledged connection management app.">
+        <video class="block w-full aspect-[4/3] object-cover rounded-2xl" src="assets/Carte1point1.webm" autoplay muted
+          loop playsinline preload="metadata" aria-label="Carte 1.1 demo"></video>
         <figcaption class="mt-2 text-sm sm:text-base text-muted leading-snug pl-3 md:pl-4">
           Carte 1.1: Notification UX,
           <span class="relative inline-block group">
-            <span class="underline underline-offset-4 decoration-zinc-400 group-hover:decoration-black cursor-help">Camera Control</span>
-            <span role="tooltip" class="pointer-events-none absolute right-0 top-full z-50 mt-2 w-[min(90vw,260px)] translate-y-1 opacity-0 group-hover:opacity-100 group-hover:translate-y-0 transition duration-200">
+            <span
+              class="underline underline-offset-4 decoration-zinc-400 group-hover:decoration-black cursor-help">Camera
+              Control</span>
+            <span role="tooltip"
+              class="pointer-events-none absolute right-0 top-full z-50 mt-2 w-[min(90vw,260px)] translate-y-1 opacity-0 group-hover:opacity-100 group-hover:translate-y-0 transition duration-200">
               <span class="block rounded-md border border-zinc-200 bg-white px-3 py-2 text-xs text-zinc-700 shadow-md">
-                The iPhone 16 family and up has a dedicated Camera Control button on the right side of the device that functions as a physical shutter button
+                The iPhone 16 family and up has a dedicated Camera Control button on the right side of the device that
+                functions as a physical shutter button
               </span>
             </span>
           </span>
@@ -188,15 +231,21 @@
       </figure>
 
       <!-- 2: Carte -->
-      <figure class="rounded-2xl relative" data-project="carte" data-link="/article?id=20aa74f2ed1443a4afe252b5d0c0afa7" data-long="Carte is my first concept-to-product developed app that I designed and 'coded' myself. It started from a personal problem that I wanted to solve.">
-        <video class="block w-full aspect-[4/3] object-cover rounded-2xl" src="assets/Carte.mp4" autoplay muted loop playsinline preload="metadata" aria-label="Carte demo"></video>
+      <figure class="rounded-2xl relative" data-project="carte" data-link="/article?id=20aa74f2ed1443a4afe252b5d0c0afa7"
+        data-long="Carte is my first concept-to-product developed app that I designed and 'coded' myself. It started from a personal problem that I wanted to solve.">
+        <video class="block w-full aspect-[4/3] object-cover rounded-2xl" src="assets/Carte.webm" autoplay muted loop
+          playsinline preload="metadata" aria-label="Carte demo"></video>
         <figcaption class="mt-2 text-sm sm:text-base text-muted leading-snug pl-3 md:pl-4">
-          Carte is an <b>iOS app</b> that uses Apple's newest 
+          Carte is an <b>iOS app</b> that uses Apple's newest
           <span class="relative inline-block group">
-            <span class="underline underline-offset-4 decoration-zinc-400 group-hover:decoration-black cursor-help">Liquid Glass</span>
-            <span role="tooltip" class="pointer-events-none absolute right-0 top-full z-50 mt-2 w-[min(90vw,260px)] translate-y-1 opacity-0 group-hover:opacity-100 group-hover:translate-y-0 transition duration-200">
+            <span
+              class="underline underline-offset-4 decoration-zinc-400 group-hover:decoration-black cursor-help">Liquid
+              Glass</span>
+            <span role="tooltip"
+              class="pointer-events-none absolute right-0 top-full z-50 mt-2 w-[min(90vw,260px)] translate-y-1 opacity-0 group-hover:opacity-100 group-hover:translate-y-0 transition duration-200">
               <span class="block rounded-md border border-zinc-200 bg-white px-3 py-2 text-xs text-zinc-700 shadow-md">
-                Liquid Glass is a dynamic, translucent material with depth, subtle blur, and specular highlights that responds to motion and context.
+                Liquid Glass is a dynamic, translucent material with depth, subtle blur, and specular highlights that
+                responds to motion and context.
               </span>
             </span>
           </span>
@@ -205,15 +254,21 @@
       </figure>
 
       <!-- 3: Stoa -->
-      <figure class="rounded-2xl relative" data-project="stoa" data-link="/article?id=c287c8562e804bcb88dfe9f54eac4a7e" data-long="Learning deeper about product design made me realize how important equal access for everyone is. When creating Stoa, the principles of accessibility was my team's focus.">
-        <video class="block w-full aspect-[4/3] object-cover rounded-2xl" src="assets/StoaShowcaseNue.mp4" autoplay muted loop playsinline preload="metadata" aria-label="Stoa demo"></video>
+      <figure class="rounded-2xl relative" data-project="stoa" data-link="/article?id=c287c8562e804bcb88dfe9f54eac4a7e"
+        data-long="Learning deeper about product design made me realize how important equal access for everyone is. When creating Stoa, the principles of accessibility was my team's focus.">
+        <video class="block w-full aspect-[4/3] object-cover rounded-2xl" src="assets/Stoa Showcase Nue.webm" autoplay
+          muted loop playsinline preload="metadata" aria-label="Stoa demo"></video>
         <figcaption class="mt-2 text-sm sm:text-base text-muted leading-snug pl-3 md:pl-4">
-          Stoa is an 
+          Stoa is an
           <span class="relative inline-block group">
-            <span class="underline underline-offset-4 decoration-zinc-400 group-hover:decoration-black cursor-help">accessibility friendly</span>
-            <span role="tooltip" class="pointer-events-none absolute right-0 top-full z-50 mt-2 w-[min(90vw,260px)] translate-y-1 opacity-0 group-hover:opacity-100 group-hover:translate-y-0 transition duration-200">
+            <span
+              class="underline underline-offset-4 decoration-zinc-400 group-hover:decoration-black cursor-help">accessibility
+              friendly</span>
+            <span role="tooltip"
+              class="pointer-events-none absolute right-0 top-full z-50 mt-2 w-[min(90vw,260px)] translate-y-1 opacity-0 group-hover:opacity-100 group-hover:translate-y-0 transition duration-200">
               <span class="block rounded-md border border-zinc-200 bg-white px-3 py-2 text-xs text-zinc-700 shadow-md">
-                Designed with inclusive color contrast, large tap targets, Dynamic Type, VoiceOver labels, and reduced motion support.
+                Designed with inclusive color contrast, large tap targets, Dynamic Type, VoiceOver labels, and reduced
+                motion support.
               </span>
             </span>
           </span>
@@ -222,15 +277,22 @@
       </figure>
 
       <!-- 4: Swisekai -->
-      <figure class="rounded-2xl relative" data-project="swisekai" data-link="/article?id=7fa04fbb7fe446f1a05f8307ca972c86" data-long="My team's first MacOS app that helps new programmers learn with a responsive, delightful desktop experience that adapts to the context of learning in split screen.">
-        <video class="block w-full aspect-[4/3] object-cover rounded-2xl" src="assets/SwisekaiShowcaseNeu.mp4" autoplay muted loop playsinline preload="metadata" poster="assets/Swisekai.webp" aria-label="Swisekai demo"></video>
+      <figure class="rounded-2xl relative" data-project="swisekai"
+        data-link="/article?id=7fa04fbb7fe446f1a05f8307ca972c86"
+        data-long="My team's first MacOS app that helps new programmers learn with a responsive, delightful desktop experience that adapts to the context of learning in split screen.">
+        <video class="block w-full aspect-[4/3] object-cover rounded-2xl" src="assets/Swisekai Showcase Neu.webm"
+          autoplay muted loop playsinline preload="metadata" poster="assets/Swisekai.webp"
+          aria-label="Swisekai demo"></video>
         <figcaption class="mt-2 text-sm sm:text-base text-muted leading-snug pl-3 md:pl-4">
-          SwiSekai is an 
+          SwiSekai is an
           <span class="relative inline-block group">
-            <span class="underline underline-offset-4 decoration-zinc-400 group-hover:decoration-black cursor-help">Ultra-responsive</span>
-            <span role="tooltip" class="pointer-events-none absolute right-0 top-full z-50 mt-2 w-[min(90vw,260px)] translate-y-1 opacity-0 group-hover:opacity-100 group-hover:translate-y-0 transition duration-200">
+            <span
+              class="underline underline-offset-4 decoration-zinc-400 group-hover:decoration-black cursor-help">Ultra-responsive</span>
+            <span role="tooltip"
+              class="pointer-events-none absolute right-0 top-full z-50 mt-2 w-[min(90vw,260px)] translate-y-1 opacity-0 group-hover:opacity-100 group-hover:translate-y-0 transition duration-200">
               <span class="block rounded-md border border-zinc-200 bg-white px-3 py-2 text-xs text-zinc-700 shadow-md">
-                Ultra-responsive means buttery-smooth interactions, minimal input latency, and layouts that adapt instantly across window sizes and system settings.
+                Ultra-responsive means buttery-smooth interactions, minimal input latency, and layouts that adapt
+                instantly across window sizes and system settings.
               </span>
             </span>
           </span>
@@ -243,17 +305,20 @@
   <!-- Section separator -->
   <hr class="mx-auto w-full max-w-[1100px] border-t border-zinc-200/80 my-8 sm:my-10 md:my-14" />
 
-  
+
 
   <!-- Case studies (pinned from Builder) -->
-  <section class="mx-auto w-full max-w-[1100px] px-6 sm:px-8 md:px-12 lg:px-24 xl:px-28 2xl:px-32 pt-6 md:pt-10 pb-2 md:pb-6">
+  <section
+    class="mx-auto w-full max-w-[1100px] px-6 sm:px-8 md:px-12 lg:px-24 xl:px-28 2xl:px-32 pt-6 md:pt-10 pb-2 md:pb-6">
     <div class="flex items-baseline justify-between mb-4 md:mb-6">
       <h2 class="text-xl sm:text-2xl leading-snug text-content">Project Articles</h2>
-      <a href="/blogs" class="text-sm md:text-base text-zinc-500 hover:text-black underline-offset-4 hover:underline">See All →</a>
+      <a href="/blogs"
+        class="text-sm md:text-base text-zinc-500 hover:text-black underline-offset-4 hover:underline">See All →</a>
     </div>
     <div id="home-pinned-grid" class="px-0 divide-y divide-zinc-200 bg-white/0"></div>
   </section>
 
   <script src="app.js"></script>
 </body>
+
 </html>
