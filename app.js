@@ -2279,9 +2279,8 @@ function initProjectVideoModals() {
       let linkTitle = '';
       let linkDesc = '';
       if (project === 'carte11') {
-        link = '';
-        linkTitle = 'Case study coming soon';
-        linkDesc = 'A deeper write‑up is on the way.';
+        linkTitle = 'Read the Carte 1.1 case study';
+        linkDesc = 'Turning Carte into a full-fledged connection management app.';
       } else if (project === 'carte') {
         linkTitle = 'Read the Carte case study';
         linkDesc = 'Designing the bridge between print and digital.';
