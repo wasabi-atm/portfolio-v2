@@ -1,27 +1,7 @@
 // ==================== Global Navigation Renderer ====================
 const NAV_ITEMS = [
-  {
-    href: '/',
-    label: 'Home',
-    icon: (isCurrent = false) => `
-      <svg xmlns="http://www.w3.org/2000/svg"
-           class="w-5 h-5 md:hidden ${isCurrent ? 'text-black' : 'text-neutral-500 group-hover:text-black aria-[current=page]:text-black'}"
-           viewBox="0 0 24 24" ${isCurrent ? 'fill="currentColor"' : 'fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"'} aria-hidden="true">
-        <path d="M3 10.5L12 3l9 7.5V20a2 2 0 0 1-2 2h-5v-6h-4v6H5a2 2 0 0 1-2-2v-9.5z"/>
-      </svg>
-    `
-  },
-  {
-    href: '/blogs',
-    label: 'Articles',
-    icon: (isCurrent = false) => `
-      <svg xmlns="http://www.w3.org/2000/svg"
-           class="w-5 h-5 md:hidden ${isCurrent ? 'text-black' : 'text-neutral-500 group-hover:text-black aria-[current=page]:text-black'}"
-           viewBox="0 0 24 24" ${isCurrent ? 'fill="currentColor"' : 'fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"'} aria-hidden="true">
-        <path d="M6 2h9l5 5v15a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2zM15 2v6h6"/>
-      </svg>
-    `
-  }
+  { href: '/', label: 'Home', active: true },
+  { href: '#', label: 'About Me', active: false }
 ];
 
 function currentFilename() {
@@ -32,11 +12,7 @@ function currentFilename() {
 
     // Map clean URLs to their source HTML files
     const first = segs[0];
-    if (first === 'blogs') {
-      // /blogs or /blogs/article/:id
-      if (segs[1] === 'article') return 'article.html';
-      return 'blogs.html';
-    }
+    if (first === 'project') return 'project.html'; // Remapped from article.html
     if (first === 'connect') return 'connect.html';
     if (first === 'showcase') return 'showcase.html';
     if (first === 'carte') return 'carte.html';
@@ -49,493 +25,277 @@ function currentFilename() {
   }
 }
 
-function renderGlobalNav() {
-  const mount = document.getElementById('site-nav');
-  if (!mount) return; // page can opt-out by omitting the mount node
+// ==================== Sidebar Renderer ====================
+function renderSidebar() {
+  const mount = document.getElementById('sidebar-root');
+  if (!mount) return;
 
-  try {
-    // Normalize current page; treat article detail as part of Blogs
-    const hereRaw = currentFilename();
-    const onArticlePage = !!document.getElementById('blog-detail');
-    const here = onArticlePage ? 'article.html' : hereRaw;
-    const links = NAV_ITEMS.map(item => {
-      const isCurrent = (
-        (item.href === '/' && here === 'index.html') ||
-        (item.href === '/blogs' && (here === 'blogs.html' || here === 'article.html'))
-      );
-      const currentAttr = isCurrent ? 'aria-current="page"' : '';
-      return (
-        `<a role="tab" href="${item.href}" ${currentAttr}
-            class="group flex-none px-0 md:px-0 grid place-items-center [grid-auto-flow:row] md:[grid-auto-flow:column] gap-1 md:gap-0 text-center font-normal">
-          ${item.icon(isCurrent)}
-          <span class="px-4 sm:px-4 py-0.5 sm:py-1 rounded-full transition-colors text-neutral-500 md:text-neutral-500 aria-[current=page]:text-black group-hover:bg-zinc-100 group-hover:text-black text-sm md:text-l nav-underline">${item.label}</span>
-        </a>`
-      );
-    }).join('');
+  // Calculate active states
+  const isConnect = location.pathname.includes('connect.html');
+  const baseLinkClass = "block w-fit px-6 py-2 text-lg font-medium transition-colors rounded-full";
+  const activeClass = "bg-black text-white dark:bg-white dark:text-black";
+  const inactiveClass = "text-zinc-400 dark:text-zinc-500 hover:text-black dark:hover:text-white";
 
-    const connectActive = (here === 'connect.html');
-    const connectAvatar = (
-      '<a href="/connect" class="group inline-flex items-center justify-center p-1.5 rounded-full bg-white/95 backdrop-blur-lg backdrop-saturate-150 border border-zinc-200/90 shadow-[0_6px_16px_rgba(0,0,0,0.12)] ring-2 '
-      + (connectActive ? 'ring-green-600' : 'ring-white') + ' overflow-hidden transition-all duration-200 hover:bg-zinc-50 hover:shadow-[0_8px_20px_rgba(0,0,0,0.14)]" aria-label="Connect" id="connect-avatar">'
-      + '<img src="assets/ProfilePic.png" alt="" class="h-full w-full object-cover rounded-full ring-2 ' + (connectActive ? 'ring-black' : 'ring-transparent') + ' ring-inset transition-transform duration-200 group-hover:scale-[1.03]"/>'
-      + '<span class="sr-only">Connect</span>'
-      + '</a>'
-    );
+  const homeClass = `${baseLinkClass} ${!isConnect ? activeClass : inactiveClass}`;
+  const aboutClass = `${baseLinkClass} ${isConnect ? activeClass : inactiveClass}`;
 
-    mount.innerHTML = (
-      '<div class="fixed inset-x-0 z-50 bottom-6 md:bottom-auto md:top-6">'
-      + '<div class="w-full flex justify-center">'
-      + '<div class="flex items-center gap-2 sm:gap-3 nav-wrap">'
-      + '<fieldset role="tablist" aria-label="Primary navigation" id="primary-nav"'
-      + '  class="w-auto max-w-[94vw] sm:max-w-[88vw] md:w-[180px] flex items-center justify-center rounded-full bg-white/95 backdrop-blur-lg backdrop-saturate-150 border border-zinc-200/90 shadow-[0_6px_16px_rgba(0,0,0,0.12)] px-3 sm:px-4 py-3 sm:py-3.5 md:px-4 md:py-4 gap-2 sm:gap-3 md:gap-2">'
-      + '<legend class="sr-only">Navigation</legend>'
-      + links
-      + '</fieldset>'
-      + connectAvatar
-      + '</div>'
-      + '</div>'
-      + '</div>'
-    );
+  // Shared Socials HTML generator (so we don't duplicate code)
+  const renderSocials = (isMobileFooter = false) => {
+    // Responsive style variables
+    const containerClass = isMobileFooter
+      ? 'px-6 py-16 bg-zinc-50 dark:bg-zinc-900 border-t border-zinc-200 dark:border-zinc-800 space-y-10'
+      : 'mt-12 space-y-8';
 
-    // Ensure full-width fading gradient backdrop behind nav for separation
-    try {
-      let nb = document.getElementById('nav-backdrop');
-      if (!nb) {
-        nb = document.createElement('div');
-        nb.id = 'nav-backdrop';
-        document.body.appendChild(nb);
-      }
-    } catch { }
+    const iconSize = isMobileFooter ? 'h-8' : 'h-6';
+    const linkClass = isMobileFooter
+      ? 'p-2 -m-2 opacity-60 hover:opacity-100 transition-opacity dark:invert'
+      : 'opacity-40 hover:opacity-100 transition-opacity dark:invert';
 
-    // Intercept clicks on current page to avoid reload and give feedback
-    const intercept = (e) => {
-      const a = e.target.closest('a');
-      if (!a) return;
-      const href = a.getAttribute('href') || '';
-      const dest = href.split('#')[0];
-      // Normalize destination to our internal filename mapping
-      const toPage = (path = '') => {
-        try {
-          const p = path.replace(/[?#].*$/, '').replace(/\/+$/, '');
-          if (!p || p === '/') return 'index.html';
-          if (/^(https?:)?\/\//.test(p)) {
-            const u = new URL(p, location.origin);
-            return toPage(u.pathname);
-          }
-          const segs = p.split('/').filter(Boolean);
-          const first = segs[0];
-          if (first === 'blogs') {
-            if (segs[1] === 'article') return 'article.html';
-            return 'blogs.html';
-          }
-          if (first === 'connect') return 'connect.html';
-          if (first === 'showcase') return 'showcase.html';
-          if (p.endsWith('.html')) return p.split('/').pop();
-          return 'index.html';
-        } catch { return 'index.html'; }
-      };
-      const samePage = dest && ((onArticlePage ? 'article.html' : here) === toPage(dest));
-      // Only block when this click would reload the same page,
-      // or when clicking the connect avatar while already on connect.html
-      const isConnectAvatar = (here === 'connect.html') && (a.id === 'connect-avatar' || /(?:connect\.html|\/connect)$/.test(dest));
-      if (!(samePage || isConnectAvatar)) return;
-      e.preventDefault();
-      // If already on Blogs and the Blogs tab is clicked, reset filters to ALL
-      try {
-        // If on Blogs index and clicking Blogs, reset filters; if on article and clicking Blogs, allow navigation back to /blogs
-        if ((here === 'blogs.html' || onArticlePage) && /(?:blogs\.html|\/blogs)$/.test(dest)) {
-          if (window.__blogFilters && typeof window.__blogFilters.setActive === 'function') {
-            window.__blogFilters.setActive('ALL');
-            // Clean the URL params for a canonical ALL state
-            const url = '/blogs' + (location.hash || '');
-            history.replaceState(null, '', url);
-          }
-        }
-      } catch { }
-      const fs = mount.querySelector('#primary-nav');
-      if (fs) {
-        fs.classList.remove('shake-x');
-        void fs.offsetWidth; // restart animation
-        fs.classList.add('shake-x');
-        setTimeout(() => fs.classList.remove('shake-x'), 520);
-      }
-      // Also shake the avatar for extra feedback
-      const avatar = mount.querySelector('#connect-avatar');
-      if (avatar) {
-        avatar.classList.remove('shake-x');
-        void avatar.offsetWidth;
-        avatar.classList.add('shake-x');
-        setTimeout(() => avatar.classList.remove('shake-x'), 520);
-      }
-      let toast = document.getElementById('already-here-toast');
-      if (!toast) {
-        toast = document.createElement('div');
-        toast.id = 'already-here-toast';
-        toast.className = 'ios-toast';
-        toast.textContent = "You're already here";
-        document.body.appendChild(toast);
-      }
-      // Position toast relative to nav: below when nav on top; above when nav at bottom
-      const navWrap = mount.querySelector('.nav-wrap');
-      const rect = (navWrap || fs).getBoundingClientRect();
-      toast.style.bottom = 'auto';
-      toast.style.top = '0px';
-      toast.style.left = (rect.left + rect.width / 2) + 'px';
-      toast.style.transform = 'translateX(-50%)';
-      toast.classList.remove('hide');
-      // Ensure in DOM then measure height
-      requestAnimationFrame(() => {
-        const tRect = toast.getBoundingClientRect();
-        const isTopNav = window.innerWidth >= 768; // nav at top on md+
-        const top = isTopNav ? (rect.bottom + 10) : (rect.top - tRect.height - 10);
-        toast.style.top = Math.max(10, top) + 'px';
-        toast.classList.add('show');
-        setTimeout(() => { toast.classList.add('hide'); toast.classList.remove('show'); }, 1400);
-      });
-    };
-    mount.addEventListener('click', intercept);
-    // Make avatar and capsule responsive (avoid overflow on very small widths)
-    try {
-      const fs = mount.querySelector('#primary-nav');
-      const avatarEl = mount.querySelector('#connect-avatar');
-      const wrap = mount.querySelector('.nav-wrap');
-      const syncNavSizes = () => {
-        if (!fs || !avatarEl || !wrap) return;
-        // Avatar height follows capsule height (use offsetHeight to ignore transforms)
-        const h = Math.max(40, Math.round(fs.offsetHeight || fs.getBoundingClientRect().height));
-        avatarEl.style.height = h + 'px';
-        avatarEl.style.width = h + 'px';
-        // Capsule max width = viewport - avatar - gap - small margin buffer
-        const gap = parseFloat(getComputedStyle(wrap).columnGap) || 8;
-        const buffer = 16; // small side breathing room
-        const avail = Math.floor(window.innerWidth - avatarEl.getBoundingClientRect().width - gap - buffer);
-        const min = 160;
-        const cap = window.innerWidth >= 768 ? 180 : 240;
-        fs.style.maxWidth = Math.min(cap, Math.max(min, avail)) + 'px';
-      };
-      syncNavSizes();
-      if (window.ResizeObserver) {
-        const ro = new ResizeObserver(syncNavSizes);
-        ro.observe(fs);
-      }
-      window.addEventListener('resize', syncNavSizes);
-    } catch { }
+    const textClass = isMobileFooter
+      ? 'text-base font-medium text-zinc-500 dark:text-zinc-400 mb-4'
+      : 'text-sm text-zinc-500 dark:text-zinc-400 mb-3';
 
-    // Subtle 3D hover tilt for nav capsule (desktop only, reduced motion aware)
-    try {
-      const fs = mount.querySelector('#primary-nav');
-      const wrap = mount.querySelector('.nav-wrap');
-      const prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      const pointerFine = window.matchMedia && window.matchMedia('(hover:hover)').matches;
-      if (fs && wrap && !prefersReduced && pointerFine) {
-        wrap.style.perspective = '900px';
-        fs.style.transformStyle = 'preserve-3d';
-        fs.style.willChange = 'transform';
-        let raf = 0;
-        const max = 9; // slightly stronger tilt
-        const onMove = (e) => {
-          if (window.innerWidth < 768) return; // disable on mobile
-          const r = fs.getBoundingClientRect();
-          const x = e.clientX - r.left;
-          const y = e.clientY - r.top;
-          const dx = (x - r.width / 2) / (r.width / 2);
-          const dy = (y - r.height / 2) / (r.height / 2);
-          const rx = -(dy * max);
-          const ry = dx * max;
-          if (!raf) {
-            raf = requestAnimationFrame(() => {
-              raf = 0;
-              const intensity = Math.min(1, Math.hypot(dx, dy));
-              fs.style.transform = `rotateX(${rx}deg) rotateY(${ry}deg) scale(1.01)`;
-              fs.style.boxShadow = `0 10px 28px rgba(0,0,0,${(0.14 + 0.06 * intensity).toFixed(3)})`;
-            });
-          }
-        };
-        const onEnter = () => {
-          if (window.innerWidth < 768) return;
-          fs.style.transition = 'transform 120ms ease-out, box-shadow 150ms ease-out';
-        };
-        const onLeave = () => {
-          fs.style.transition = 'transform 220ms ease, box-shadow 200ms ease';
-          fs.style.transform = 'rotateX(0deg) rotateY(0deg)';
-          fs.style.boxShadow = '0 6px 16px rgba(0,0,0,0.12)';
-        };
-        fs.addEventListener('mousemove', onMove);
-        fs.addEventListener('mouseenter', onEnter);
-        fs.addEventListener('mouseleave', onLeave);
-      }
-    } catch { }
+    const blogTextClass = isMobileFooter
+      ? 'text-sm'
+      : 'text-xs';
 
-    // Subtle magnetic translation for the whole nav capsule (desktop)
-    try {
-      const fs = mount.querySelector('#primary-nav');
-      const wrap = mount.querySelector('.nav-wrap');
-      const prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      const pointerFine = window.matchMedia && window.matchMedia('(hover:hover)').matches;
-      if (fs && wrap && !prefersReduced && pointerFine) {
-        let raf2 = 0;
-        let hovering = false;
-        const maxT = 1; // max 1px translate (very subtle)
-        // augment existing handlers if present
-        const onEnter = () => { if (window.innerWidth < 768) return; hovering = true; };
-        const onLeave = () => { hovering = false; };
-        fs.addEventListener('mouseenter', onEnter);
-        fs.addEventListener('mouseleave', onLeave);
+    const arrowSize = isMobileFooter ? 'w-4 h-4' : 'w-3 h-3';
 
-        const onMag = (e) => {
-          if (hovering) return; // tilt handler will compose translation itself
-          if (raf2) return;
-          raf2 = requestAnimationFrame(() => {
-            raf2 = 0;
-            const r = fs.getBoundingClientRect();
-            const cx = r.left + r.width / 2;
-            const cy = r.top + r.height / 2;
-            const dx = e.clientX - cx;
-            const dy = e.clientY - cy;
-            const dist = Math.hypot(dx, dy);
-            const radius = 120;
-            if (dist < radius && window.innerWidth >= 768) {
-              const t = 1 - dist / radius;
-              const mag = maxT * t;
-              const inv = dist === 0 ? 0 : (mag / dist);
-              const tx = dx * inv;
-              const ty = dy * inv;
-              fs.style.transform = `translate(${tx.toFixed(2)}px, ${ty.toFixed(2)}px)`;
-            } else {
-              fs.style.transform = '';
-            }
-          });
-        };
-        window.addEventListener('mousemove', onMag, { passive: true });
-      }
-    } catch { }
+    return `
+    <div class="${containerClass}">
+        <div class="flex gap-8 ${blogTextClass} font-medium text-zinc-400 dark:text-zinc-500 uppercase tracking-wide">
+          <!-- <a href="https://blog.wirawibisana.com" target="_blank" rel="noopener" class="hover:text-black dark:hover:text-white flex items-center gap-2 transition-colors py-2">Blog <img src="assets/Sidebar Icons/Arrow Up Icon.svg" class="${arrowSize} dark:invert"></a> -->
+          <a href="https://medium.com/@wirawibisana" target="_blank" rel="noopener" class="hover:text-black dark:hover:text-white flex items-center gap-2 transition-colors py-2">Medium <img src="assets/Sidebar Icons/Arrow Up Icon.svg" class="${arrowSize} dark:invert"></a>
+          <a href="https://drive.google.com/uc?export=download&id=1yYLOBPcRKCmqCmS25Kql7Hf--xY9Ep_L" class="hover:text-black dark:hover:text-white flex items-center gap-2 transition-colors py-2">Resume <img src="assets/Sidebar Icons/Arrow Up Icon.svg" class="${arrowSize} dark:invert"></a>
+        </div>
 
-  } catch (e) {
-    console.error('[nav] render failed, using fallback', e);
-    const onConnect = (currentFilename() === 'connect.html');
-    mount.innerHTML = `
-      <div class="fixed inset-x-0 z-50 bottom-[calc(env(safe-area-inset-bottom)+36px)] md:bottom-auto md:top-6">
-        <div class="w-full flex justify-center">
-          <div class="flex items-center gap-2 nav-wrap">
-            <nav id="primary-nav-fallback" class="w-auto max-w-[94vw] sm:max-w-[88vw] md:w-[180px] flex items-center justify-center gap-2 sm:gap-3 rounded-full bg-white/95 backdrop-blur-lg backdrop-saturate-150 border border-zinc-200/90 shadow-[0_6px_16px_rgba(0,0,0,0.12)] px-3 sm:px-4 py-3 sm:py-3.5 md:px-4 md:py-4">
-              <a href="/" class="px-4 sm:px-4 py-0.5 sm:py-1 rounded-full text-sm text-neutral-600 hover:bg-zinc-100 transition-colors nav-underline">Home</a>
-              <a href="/blogs" class="px-4 sm:px-4 py-0.5 sm:py-1 rounded-full text-sm text-neutral-600 hover:bg-zinc-100 transition-colors nav-underline">Articles</a>
-            </nav>
-            <a href="/connect" class="group inline-flex items-center justify-center p-1.5 rounded-full bg-white/95 backdrop-blur-lg backdrop-saturate-150 border border-zinc-200/90 shadow-[0_6px_16px_rgba(0,0,0,0.12)] ring-2 ${onConnect ? 'ring-green-600' : 'ring-white'} overflow-hidden transition-all duration-200 hover:bg-zinc-50 hover:shadow-[0_8px_20px_rgba(0,0,0,0.14)]" aria-label="Connect" id="connect-avatar-fallback">
-                <img src="assets/ProfilePic.png" alt="" class="h-full w-full object-cover rounded-full ring-2 ring-inset ring-transparent transition-transform duration-200 group-hover:scale-[1.03]"/>
-                <span class="sr-only">Connect</span>
-            </a>
+        <hr class="border-zinc-200 dark:border-zinc-800">
+
+        <div>
+          <p class="${textClass}">I post videos about design</p>
+          <div class="flex gap-6">
+            <a href="https://www.instagram.com/wira.wibisana/reels/" target="_blank" rel="noopener" class="${linkClass}"><img src="assets/Sidebar Icons/Instagram SVG Icon.svg" class="${iconSize} w-auto"></a>
+            <a href="https://www.youtube.com/@wiraa.wibisana7777" target="_blank" rel="noopener" class="${linkClass}"><img src="assets/Sidebar Icons/YouTube SVG Icons (1).svg" class="${iconSize} w-auto"></a>
+            <a href="https://www.tiktok.com/@wira.wibisana" target="_blank" rel="noopener" class="${linkClass}"><img src="assets/Sidebar Icons/Tiktok SVG Icons (1).svg" class="${iconSize} w-auto"></a>
           </div>
         </div>
-      </div>`;
 
-    // Ensure gradient backdrop exists in fallback too
-    try {
-      let nb = document.getElementById('nav-backdrop');
-      if (!nb) {
-        nb = document.createElement('div');
-        nb.id = 'nav-backdrop';
-        document.body.appendChild(nb);
-      }
-    } catch { }
+        <div>
+          <p class="${textClass}">Contact me here!</p>
+          <div class="flex gap-6">
+            <a href="https://linkedin.com/in/wira29" target="_blank" rel="noopener" class="${linkClass}"><img src="assets/Sidebar Icons/LinkedIn SVG Icon.svg" class="${iconSize} w-auto"></a>
+            <a href="mailto:atmanawiera@gmail.com" class="${linkClass}"><img src="assets/Sidebar Icons/Mail SVG Icon (1).svg" class="${iconSize} w-auto"></a>
+          </div>
+        </div>
 
-    // Fallback: responsive sizing
-    try {
-      const fs = mount.querySelector('#primary-nav-fallback');
-      const avatarEl = mount.querySelector('#connect-avatar-fallback');
-      const wrap = mount.querySelector('.nav-wrap');
-      const syncNavSizes = () => {
-        if (!fs || !avatarEl || !wrap) return;
-        const h = Math.max(40, Math.round(fs.offsetHeight || fs.getBoundingClientRect().height));
-        avatarEl.style.height = h + 'px';
-        avatarEl.style.width = h + 'px';
-        const gap = parseFloat(getComputedStyle(wrap).columnGap) || 8;
-        const buffer = 16;
-        const avail = Math.floor(window.innerWidth - avatarEl.getBoundingClientRect().width - gap - buffer);
-        const min = 160;
-        const cap = window.innerWidth >= 768 ? 180 : 240;
-        fs.style.maxWidth = Math.min(cap, Math.max(min, avail)) + 'px';
-      };
-      syncNavSizes();
-      if (window.ResizeObserver) {
-        const ro = new ResizeObserver(syncNavSizes);
-        ro.observe(fs);
-      }
-      window.addEventListener('resize', syncNavSizes);
-      // Fallback tilt (desktop)
-      try {
-        const fsFb = mount.querySelector('#primary-nav-fallback');
-        const wrapFb = mount.querySelector('.nav-wrap');
-        const prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-        const pointerFine = window.matchMedia && window.matchMedia('(hover:hover)').matches;
-        if (fsFb && wrapFb && !prefersReduced && pointerFine) {
-          wrapFb.style.perspective = '900px';
-          fsFb.style.transformStyle = 'preserve-3d';
-          fsFb.style.willChange = 'transform';
-          let raf = 0;
-          const max = 9;
-          const onMove = (e) => {
-            if (window.innerWidth < 768) return;
-            const r = fsFb.getBoundingClientRect();
-            const x = e.clientX - r.left;
-            const y = e.clientY - r.top;
-            const dx = (x - r.width / 2) / (r.width / 2);
-            const dy = (y - r.height / 2) / (r.height / 2);
-            const rx = -(dy * max);
-            const ry = dx * max;
-            if (!raf) {
-              raf = requestAnimationFrame(() => {
-                raf = 0;
-                const intensity = Math.min(1, Math.hypot(dx, dy));
-                fsFb.style.transform = `rotateX(${rx}deg) rotateY(${ry}deg) scale(1.01)`;
-                fsFb.style.boxShadow = `0 10px 28px rgba(0,0,0,${(0.14 + 0.06 * intensity).toFixed(3)})`;
-              });
-            }
-          };
-          const onEnter = () => { if (window.innerWidth < 768) return; fsFb.style.transition = 'transform 120ms ease-out, box-shadow 150ms ease-out'; };
-          const onLeave = () => { fsFb.style.transition = 'transform 220ms ease, box-shadow 200ms ease'; fsFb.style.transform = 'rotateX(0deg) rotateY(0deg)'; fsFb.style.boxShadow = '0 6px 16px rgba(0,0,0,0.12)'; };
-          fsFb.addEventListener('mousemove', onMove);
-          fsFb.addEventListener('mouseenter', onEnter);
-          fsFb.addEventListener('mouseleave', onLeave);
-        }
-      } catch { }
+        <hr class="border-zinc-200 dark:border-zinc-800">
 
-      // Fallback: subtle magnetic translation for nav capsule
-      try {
-        const fsFb = mount.querySelector('#primary-nav-fallback');
-        const prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-        const pointerFine = window.matchMedia && window.matchMedia('(hover:hover)').matches;
-        if (fsFb && !prefersReduced && pointerFine) {
-          let raf2 = 0;
-          let hovering = false;
-          const maxT = 1; // subtler
-          fsFb.addEventListener('mouseenter', () => { if (window.innerWidth < 768) return; hovering = true; });
-          fsFb.addEventListener('mouseleave', () => { hovering = false; });
-          const onMag = (e) => {
-            if (hovering) return;
-            if (raf2) return;
-            raf2 = requestAnimationFrame(() => {
-              raf2 = 0;
-              const r = fsFb.getBoundingClientRect();
-              const cx = r.left + r.width / 2;
-              const cy = r.top + r.height / 2;
-              const dx = e.clientX - cx;
-              const dy = e.clientY - cy;
-              const dist = Math.hypot(dx, dy);
-              const radius = 120;
-              if (dist < radius && window.innerWidth >= 768) {
-                const t = 1 - dist / radius;
-                const mag = maxT * t;
-                const inv = dist === 0 ? 0 : (mag / dist);
-                const tx = dx * inv;
-                const ty = dy * inv;
-                fsFb.style.transform = `translate(${tx.toFixed(2)}px, ${ty.toFixed(2)}px)`;
-              } else {
-                fsFb.style.transform = '';
-              }
-            });
-          };
-          window.addEventListener('mousemove', onMag, { passive: true });
-        }
-      } catch { }
-
-      // Fallback: intercept clicks on current link
-      try {
-        const here = currentFilename();
-        const intercept = (e) => {
-          const a = e.target.closest('a');
-          if (!a) return;
-          const href = a.getAttribute('href') || '';
-          const dest = href.split('#')[0];
-          const samePage = dest && here === dest;
-          const isConnectAvatar = (here === 'connect.html') && (a.id === 'connect-avatar-fallback' || /connect\.html$/.test(dest));
-          if (!(samePage || isConnectAvatar)) return;
-          e.preventDefault();
-          const fs = mount.querySelector('#primary-nav-fallback');
-          if (fs) {
-            fs.classList.remove('shake-x');
-            void fs.offsetWidth;
-            fs.classList.add('shake-x');
-            setTimeout(() => fs.classList.remove('shake-x'), 520);
-          }
-          const avatar = mount.querySelector('#connect-avatar-fallback');
-          if (avatar) {
-            avatar.classList.remove('shake-x');
-            void avatar.offsetWidth;
-            avatar.classList.add('shake-x');
-            setTimeout(() => avatar.classList.remove('shake-x'), 520);
-          }
-          let toast = document.getElementById('already-here-toast');
-          if (!toast) {
-            toast = document.createElement('div');
-            toast.id = 'already-here-toast';
-            toast.className = 'ios-toast';
-            toast.textContent = "You're already here";
-            document.body.appendChild(toast);
-          }
-          // Position relative to bottom nav (fallback is identical layout)
-          const navWrap = mount.querySelector('.nav-wrap');
-          const rect = (navWrap || fs).getBoundingClientRect();
-          toast.style.bottom = 'auto';
-          toast.style.top = '0px';
-          toast.style.left = (rect.left + rect.width / 2) + 'px';
-          toast.style.transform = 'translateX(-50%)';
-          toast.classList.remove('hide');
-          requestAnimationFrame(() => {
-            const tRect = toast.getBoundingClientRect();
-            // Fallback nav is also bottom on mobile and top on desktop; mirror logic
-            const isTopNav = window.innerWidth >= 768;
-            const top = isTopNav ? (rect.bottom + 10) : (rect.top - tRect.height - 10);
-            toast.style.top = Math.max(10, top) + 'px';
-            toast.classList.add('show');
-            setTimeout(() => { toast.classList.add('hide'); toast.classList.remove('show'); }, 1400);
-          });
-        };
-        mount.addEventListener('click', intercept);
-      } catch { }
-    } catch { }
-  }
-}
-
-// Navigate to /blogs with a specific filter applied
-function navigateToBlogsWithFilter(tag = 'ALL') {
-  const safe = (tag || '').toString().trim();
-  const normalized = safe || 'ALL';
-  const dest = normalized === 'ALL' ? '/blogs' : `/blogs?tag=${encodeURIComponent(normalized)}`;
-  let handled = false;
-
-  try {
-    const here = currentFilename();
-    const onBlogs = (here === 'blogs.html');
-    if (onBlogs && window.__blogFilters && typeof window.__blogFilters.setActive === 'function') {
-      window.__blogFilters.setActive(normalized);
-      try { history.pushState(null, '', dest); } catch { }
-      handled = true;
-    }
-  } catch { }
-
-  if (!handled) {
-    try {
-      window.location.href = dest;
-    } catch {
-      try { window.location.assign(dest); } catch { }
-    }
-  }
-}
-
-try { window.navigateToBlogsWithFilter = navigateToBlogsWithFilter; } catch { }
-
-function initCaseStudiesShortcut() {
-  const triggers = document.querySelectorAll('[data-case-studies-trigger]');
-  if (!triggers.length) return;
-  const onClick = (e) => {
-    e.preventDefault();
-    navigateToBlogsWithFilter('Case Studies');
+        <button id="${isMobileFooter ? 'theme-toggle-mobile' : 'theme-toggle'}" class="opacity-40 hover:opacity-100 transition-opacity p-2 -m-2">
+          <img src="assets/Sidebar Icons/Moon Stars Icon.svg" class="${iconSize} w-6 dark:hidden">
+          <img src="assets/Sidebar Icons/Sun SVG Icon.svg" class="${iconSize} w-6 hidden dark:block invert">
+        </button>
+      </div>
+  `;
   };
-  triggers.forEach(el => {
-    el.addEventListener('click', onClick);
+
+  mount.innerHTML = `
+    <!-- Desktop Sidebar (Hidden on Mobile) -->
+    <aside class="hidden lg:flex fixed top-0 left-0 w-[348px] h-screen bg-zinc-50 dark:bg-zinc-900 border-r border-zinc-200 dark:border-zinc-800 flex-col p-12 overflow-y-auto z-50 transition-colors duration-300">
+      <!-- Header -->
+      <a href="index.html" class="mb-12 block group">
+        <h1 class="text-3xl font-semibold text-black dark:text-white tracking-tight mb-2 group-hover:opacity-70 transition-opacity">Wira Wibisana</h1>
+        <p class="text-lg text-zinc-500 dark:text-zinc-400 group-hover:opacity-70 transition-opacity">Product Designer</p>
+        <p class="text-lg text-zinc-500 dark:text-zinc-400 group-hover:opacity-70 transition-opacity">Based in Bali</p>
+      </a>
+
+      <hr class="border-zinc-200 dark:border-zinc-800 mb-12">
+
+      <!-- Nav -->
+      <nav class="space-y-4 flex-1">
+        <a href="index.html" class="${homeClass}">Home</a>
+        <a href="connect.html" class="${aboutClass}">About Me</a>
+      </nav>
+
+      <!-- Bottom Details (Desktop) -->
+      ${renderSocials(false)}
+    </aside>
+
+    <!-- Mobile Top Bar (Hidden on Desktop) -->
+    <header class="lg:hidden fixed top-0 left-0 w-full bg-white dark:bg-zinc-950 border-b border-zinc-200 dark:border-zinc-800 z-[60] px-6 py-4 flex justify-between items-center transition-colors">
+      <a href="index.html" class="font-semibold text-lg text-black dark:text-white">Wira Wibisana</a>
+      <button id="mobile-menu-btn" class="p-2 -mr-2 text-black dark:text-white focus:outline-none">
+        <!-- Menu Icon -->
+        <svg id="icon-menu" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+        <!-- Close Icon (Hidden) -->
+        <svg id="icon-close" class="hidden w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+      </button>
+    </header>
+
+    <!-- Mobile Menu Dropdown (Hugs content) -->
+    <div id="mobile-menu-overlay" class="lg:hidden fixed top-[69px] left-0 w-full bg-white dark:bg-zinc-950 border-b border-zinc-200 dark:border-zinc-800 z-[55] hidden flex-col p-6 space-y-4 transition-all shadow-xl">
+       <nav class="space-y-2 flex flex-col w-full">
+        <a href="index.html" class="block w-full text-center py-4 rounded-full text-2xl font-medium transition-colors ${!isConnect ? 'bg-black text-white dark:bg-white dark:text-black' : 'text-zinc-400 dark:text-zinc-500 hover:bg-zinc-100 dark:hover:bg-zinc-900'}">Home</a>
+        <a href="connect.html" class="block w-full text-center py-4 rounded-full text-2xl font-medium transition-colors ${isConnect ? 'bg-black text-white dark:bg-white dark:text-black' : 'text-zinc-400 dark:text-zinc-500 hover:bg-zinc-100 dark:hover:bg-zinc-900'}">About Me</a>
+      </nav>
+    </div>
+  `;
+
+  // Render Mobile Footer into specific root
+  const mobileFooterRoot = document.getElementById('mobile-footer-root');
+  if (mobileFooterRoot) {
+    mobileFooterRoot.innerHTML = renderSocials(true);
+  }
+
+  // --- Theme Toggle Logic (Shared) ---
+  const toggleTheme = () => {
+    document.documentElement.classList.toggle('dark');
+    try {
+      localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
+    } catch (e) { }
+  };
+
+  // Bind to Desktop Toggle
+  const deskToggle = document.getElementById('theme-toggle');
+  if (deskToggle) deskToggle.addEventListener('click', toggleTheme);
+
+  // Bind to Mobile Toggle
+  const mobToggle = document.getElementById('theme-toggle-mobile');
+  if (mobToggle) mobToggle.addEventListener('click', toggleTheme);
+
+  // Initial Check
+  if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+    document.documentElement.classList.add('dark');
+  } else {
+    document.documentElement.classList.remove('dark');
+  }
+
+  // --- Mobile Menu Logic ---
+  const menuBtn = document.getElementById('mobile-menu-btn');
+  const menuOverlay = document.getElementById('mobile-menu-overlay');
+  const iconMenu = document.getElementById('icon-menu');
+  const iconClose = document.getElementById('icon-close');
+
+  if (menuBtn && menuOverlay) {
+    menuBtn.addEventListener('click', () => {
+      const isExpanded = !menuOverlay.classList.contains('hidden');
+      if (isExpanded) {
+        // Close
+        menuOverlay.classList.add('hidden');
+        iconMenu.classList.remove('hidden');
+        iconClose.classList.add('hidden');
+      } else {
+        // Open
+        menuOverlay.classList.remove('hidden');
+        iconMenu.classList.add('hidden');
+        iconClose.classList.remove('hidden');
+      }
+    });
+  }
+
+  initProjectModal();
+}
+
+function initProjectModal() {
+  const modal = document.getElementById('project-modal');
+  const closeBtn = document.getElementById('modal-close');
+  const backdrop = document.getElementById('modal-backdrop');
+
+  if (!modal) return;
+
+  const openModal = (e) => {
+    e.preventDefault();
+    const link = e.currentTarget;
+    if (link.dataset.title) {
+      const titleEl = document.getElementById('modal-title');
+      if (titleEl) titleEl.textContent = link.dataset.title;
+    }
+
+    // Update Modal Videos
+    const vids = [
+      { id: 'modal-video-main', src: link.getAttribute('data-video-main') },
+      { id: 'modal-video-1', src: link.getAttribute('data-video-1') },
+      { id: 'modal-video-2', src: link.getAttribute('data-video-2') },
+      { id: 'modal-video-3', src: link.getAttribute('data-video-3') },
+      { id: 'modal-video-4', src: link.getAttribute('data-video-4') },
+    ];
+
+    vids.forEach(v => {
+      const el = document.getElementById(v.id);
+      if (el && v.src) {
+        // Only update if src is different to avoid flicker/reload if same
+        if (!el.src.endsWith(v.src)) {
+          el.src = v.src;
+          el.play().catch(() => { });
+        }
+      } else if (el && !v.src) {
+        // Fallback to Clamby if no data provided (e.g. Stoa) - mimicking previous static behavior
+        // Alternatively could clear it: el.src = '';
+        // But for now, let's reset to Clamby defaults if missing, or just leave as is?
+        // If we leave as is, clicking Carte 1.1 then Stoa will show Carte 1.1 videos for Stoa.
+        // Let's reset to Clamby defaults to be safe/consistent with previous state
+        if (v.id === 'modal-video-main') el.src = 'assets/clamby/Clamby Achievement.webm';
+        if (v.id === 'modal-video-1') el.src = 'assets/clamby/Clamby Data 1.webm';
+        if (v.id === 'modal-video-2') el.src = 'assets/clamby/Clamby Data 2.webm';
+        if (v.id === 'modal-video-3') el.src = 'assets/clamby/Clamby Data 3.webm';
+        if (v.id === 'modal-video-4') el.src = 'assets/clamby/Clamby Data 4.webm';
+        el.play().catch(() => { });
+      }
+    });
+
+    // Update Website Button
+    const websiteBtn = document.getElementById('modal-website-btn');
+    const websiteLabel = document.getElementById('modal-website-label');
+    const linkUrl = link.getAttribute('data-link');
+    const linkLabel = link.getAttribute('data-link-label') || 'Website';
+
+    if (websiteBtn) {
+      if (linkUrl) {
+        websiteBtn.href = linkUrl;
+        websiteBtn.classList.remove('hidden');
+        websiteBtn.style.display = 'flex'; // Ensure flex display is restored
+      } else {
+        websiteBtn.classList.add('hidden');
+        websiteBtn.style.display = 'none'; // Explicitly hide
+      }
+    }
+
+    if (websiteLabel) {
+      websiteLabel.textContent = linkLabel;
+    }
+
+    modal.classList.remove('hidden');
+    document.body.style.overflow = 'hidden'; // Lock text scroll
+  };
+
+  const closeModal = () => {
+    modal.classList.add('hidden');
+
+    // Pause all videos when closing
+    const vids = modal.querySelectorAll('video');
+    vids.forEach(v => v.pause());
+
+    document.body.style.overflow = ''; // Restore scroll
+  };
+
+  // Attach to all project links in index.html
+  // Identifying via the specific classes used in the grid
+  const projectLinks = document.querySelectorAll('a.group[href^="http"], a.group[href^="/project"]');
+  projectLinks.forEach(link => {
+    link.addEventListener('click', openModal);
+  });
+
+  if (closeBtn) closeBtn.addEventListener('click', closeModal);
+  if (backdrop) backdrop.addEventListener('click', closeModal);
+
+  // Close on Escape key
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && !modal.classList.contains('hidden')) {
+      closeModal();
+    }
   });
 }
+
+// (Removed navigateToBlogsWithFilter and initCaseStudiesShortcut)
 
 // ==================== Builder.io wiring ====================
 const BUILDER_API_KEY = '90c23362a6384ffabd3fd5a5978de250';
@@ -830,7 +590,7 @@ function blogRowHTML(b) {
   const q = b.slug ? `slug=${encodeURIComponent(b.slug)}` : `id=${encodeURIComponent(b.id)}`;
   return `
     <article class="py-3 md:py-6">
-      <a href="${BLOG_BASE}/article.html?${q}" class="group relative grid grid-cols-[1fr_auto] items-start gap-3 md:gap-4 rounded-xl px-3 py-2 md:px-3 md:py-3 transition-colors duration-200 hover:bg-zinc-200/60 hover:ring-1 hover:ring-zinc-300 focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:bg-zinc-200/50" data-card="blog-row">
+      <a href="${BLOG_BASE}/project.html?${q}" class="group relative grid grid-cols-[1fr_auto] items-start gap-3 md:gap-4 rounded-xl px-3 py-2 md:px-3 md:py-3 transition-colors duration-200 hover:bg-zinc-200/60 hover:ring-1 hover:ring-zinc-300 focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:bg-zinc-200/50" data-card="blog-row">
         <div class="relative z-10 min-w-0 space-y-1 md:space-y-2">
           <p class="text-xs md:text-sm text-zinc-600">
             ${author}
@@ -895,11 +655,11 @@ function homeCaseStudyCardHTML(b) {
   const BLOG_BASE = 'https://wirawibisana.com';
   const q = b.slug ? `slug=${encodeURIComponent(b.slug)}` : `id=${encodeURIComponent(b.id)}`;
   return `
-    <a href="${BLOG_BASE}/article.html?${q}" aria-label="Read case study: ${b.title}"
-       class="group h-full flex flex-col overflow-hidden rounded-2xl ring-1 ring-zinc-200/70 bg-white/60 hover:ring-zinc-300 hover:bg-white transition-shadow shadow-sm hover:shadow-md" data-card="case-card">
+    <a href="${BLOG_BASE}/project.html?${q}" aria-label="Read case study: ${b.title}"
+       class="group h-full flex flex-col overflow-hidden rounded-2xl ring-1 ring-zinc-200/70 dark:ring-white/10 bg-white/60 dark:bg-zinc-900/40 hover:ring-zinc-300 dark:hover:ring-zinc-700 hover:bg-white dark:hover:bg-zinc-800 transition-shadow shadow-sm hover:shadow-md" data-card="case-card">
       <div class="relative overflow-hidden">${img}</div>
       <div class="p-3 md:p-4 flex-1 flex flex-col gap-2">
-        <h3 class="text-base md:text-lg leading-snug text-black font-semibold line-clamp-2" data-title>${b.title}</h3>
+        <h3 class="text-base md:text-lg leading-snug text-black dark:text-zinc-100 font-semibold line-clamp-2" data-title>${b.title}</h3>
         ${b.description ? `<p class="text-sm text-zinc-400 flex-1" data-desc>${b.description}</p>` : ''}
         <div class="text-xs text-zinc-500 mt-1 inline-flex items-center gap-2">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-3.5 h-3.5 opacity-70">
@@ -966,9 +726,9 @@ async function loadHomePinnedCaseStudies() {
   }
 }
 
-// ==================== BLOG DETAIL SUPPORT ====================
-async function loadBlogDetail() {
-  const root = document.getElementById('blog-detail');
+// ==================== PROJECT DETAIL SUPPORT ====================
+async function loadProjectDetail() {
+  const root = document.getElementById('project-detail');
   if (!root) return;
 
   const params = new URLSearchParams(location.search);
@@ -977,9 +737,9 @@ async function loadBlogDetail() {
   if (!slug && !id) {
     try {
       const segs = (location.pathname || '').split('/').filter(Boolean);
-      const idx = segs.findIndex(s => s === 'blogs');
-      if (idx !== -1 && segs[idx + 1] === 'article' && segs[idx + 2]) {
-        slug = segs[idx + 2];
+      const idx = segs.findIndex(s => s === 'project');
+      if (idx !== -1 && segs[idx + 1]) {
+        slug = segs[idx + 1];
       }
     } catch { }
   }
@@ -1270,7 +1030,7 @@ async function loadBlogDetail() {
         <div>
           <div>
             <header class="space-y-3 relative">
-              <a href="/blogs" id="back-button" aria-label="Back to Blogs"
+              <a href="/" id="back-button" aria-label="Back to Home"
                  class="back-floating z-50 inline-flex items-center justify-center rounded-full bg-white/95 backdrop-blur-lg backdrop-saturate-150 border border-zinc-200/90 shadow-[0_6px_16px_rgba(0,0,0,0.12)] text-black">
                 <img src="assets/Chevron%20Icon.png" alt="" class="w-5 h-5" draggable="false"/>
               </a>
@@ -1413,10 +1173,10 @@ async function loadBlogDetail() {
     const syncBackLeft = () => {
       try {
         // Align left edge to the article text column (use first header text as anchor)
-        const anchor = document.querySelector('#blog-detail header h1')
-          || document.querySelector('#blog-detail header p')
-          || document.querySelector('#blog-detail article')
-          || document.querySelector('#blog-detail');
+        const anchor = document.querySelector('#project-detail header h1')
+          || document.querySelector('#project-detail header p')
+          || document.querySelector('#project-detail article')
+          || document.querySelector('#project-detail');
         if (!anchor) return;
         const rect = anchor.getBoundingClientRect();
         // Fixed positioning uses viewport; rect.left is viewport-relative
@@ -1430,10 +1190,6 @@ async function loadBlogDetail() {
       const ro = new ResizeObserver(syncBackSize);
       ro.observe(fs);
     }
-    const onResize = () => { syncBackSize(); syncBackLeft(); };
-    window.addEventListener('resize', onResize);
-    // Re-align after fonts/layout settle
-    setTimeout(syncBackLeft, 50);
     setTimeout(syncBackLeft, 250);
   }
 
@@ -1485,139 +1241,7 @@ function enhanceArticleImages(scope) {
   });
 }
 
-function renderBlogsList(list) {
-  const el = document.getElementById('blogs-list');
-  if (!el) return;
-  el.innerHTML = list.map(blogRowHTML).join('');
-  // After render, clamp descriptions to thumbnail height
-  applyDynamicDescClamps(el);
-}
-
-function uniqueSortedBlogTags(items) {
-  const set = new Set();
-  items.forEach(i => (i.tags || []).forEach(t => set.add(t)));
-  return Array.from(set).sort((a, b) => a.localeCompare(b));
-}
-
-function renderBlogFilters(items) {
-  const c = document.getElementById('blogs-filters');
-  if (!c) return;
-  const tags = uniqueSortedBlogTags(items);
-  const state = (window.__blogFilterState = window.__blogFilterState || { active: 'ALL' });
-  const canon = (s) => (s || '').toString().trim().toLowerCase();
-  const paint = () => {
-    const chip = (label, selected = false) => `
-      <button type="button" data-tag="${label}" aria-pressed="${selected ? 'true' : 'false'}"
-        class="rounded-full px-3 py-1 text-sm transition-colors border focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2 focus:ring-offset-zinc-100 ${selected ? 'bg-black text-white border-black hover:bg-black/90' : 'bg-white/70 text-zinc-400 border-zinc-300/60 hover:bg-zinc-100 hover:text-black hover:border-zinc-400'}">
-        ${label}
-      </button>`;
-    c.innerHTML = [chip('ALL', state.active === 'ALL'), ...tags.map(t => chip(t, state.active === t))].join('');
-  };
-  const resolveTag = (tag) => {
-    const want = canon(tag);
-    if (!want || want === 'all') return 'ALL';
-    // exact match first
-    let match = tags.find(t => canon(t) === want);
-    if (match) return match;
-    // then partial match (contains)
-    match = tags.find(t => canon(t).includes(want) || want.includes(canon(t)));
-    return match || 'ALL';
-  };
-  const applyFilter = (tag) => {
-    state.active = resolveTag(tag);
-    const filtered = state.active === 'ALL'
-      ? items.slice()
-      : items.filter(i => (i.tags || []).some(t => canon(t) === canon(state.active)));
-    renderBlogsList(filtered);
-    paint();
-  };
-  // Expose global controls for navbar and deep links
-  window.__blogFilters = {
-    setActive: applyFilter,
-    getActive: () => state.active,
-  };
-  paint();
-  c.onclick = (e) => {
-    const btn = e.target.closest('button[data-tag]');
-    if (!btn) return;
-    applyFilter(btn.getAttribute('data-tag'));
-  };
-}
-
-async function loadBlogsAndRender() {
-  const listEl = document.getElementById('blogs-list');
-  if (!listEl) return;
-  const filtersEl = document.getElementById('blogs-filters');
-  // Filters skeleton (rounded chips) while loading
-  if (filtersEl) {
-    const filterSkel = () => `
-      <div class="flex flex-wrap items-center gap-2 animate-pulse" aria-busy="true">
-        <div class="h-7 w-20 bg-zinc-200 rounded-full"></div>
-        <div class="h-7 w-12 bg-zinc-200 rounded-full"></div>
-        <div class="h-7 w-16 bg-zinc-200 rounded-full"></div>
-        <div class="h-7 w-24 bg-zinc-200 rounded-full"></div>
-        <div class="h-7 w-14 bg-zinc-200 rounded-full"></div>
-        <div class="h-7 w-10 bg-zinc-200 rounded-full"></div>
-      </div>`;
-    filtersEl.innerHTML = filterSkel();
-    filtersEl.setAttribute('aria-busy', 'true');
-  }
-  // Render skeleton rows to match list layout while loading
-  const skel = () => `
-    <div class="py-3 md:py-6">
-      <div class="relative grid grid-cols-[1fr_auto] items-start gap-3 md:gap-4 animate-pulse" aria-busy="true">
-        <div class="min-w-0 space-y-2">
-          <div class="h-3.5 bg-zinc-200 rounded w-40"></div>
-          <div class="h-6 bg-zinc-200 rounded w-4/5"></div>
-          <div class="hidden md:block h-4 bg-zinc-200 rounded w-3/5"></div>
-          <div class="h-3 bg-zinc-200 rounded w-24"></div>
-        </div>
-        <div class="block md:hidden w-24 h-24 bg-zinc-200 rounded-md"></div>
-        <div class="hidden md:block w-[320px] h-40 bg-zinc-200 rounded-md"></div>
-      </div>
-    </div>
-    <hr class="border-zinc-200"/>
-  `;
-  listEl.innerHTML = skel() + skel() + skel() + skel() + skel();
-  listEl.style.minHeight = '480px';
-  listEl.setAttribute('aria-busy', 'true');
-  await new Promise(res => requestAnimationFrame(() => setTimeout(res, 150)));
-  // Be permissive with params; avoid sort keys that may be rejected by Builder when fields contain spaces
-  try {
-    const raw = await fetchBuilder('blogs', { limit: 100, includeUnpublished: true });
-    console.log('[blogs raw]', raw);
-    const normalized = raw.map(normalizeBlog).sort((a, b) => (new Date(b.date || 0)) - (new Date(a.date || 0)));
-    if (!normalized.length) {
-      if (filtersEl) { filtersEl.innerHTML = ''; filtersEl.removeAttribute('aria-busy'); }
-      listEl.innerHTML = `<div class="px-6 py-8 text-zinc-400 space-y-2">
-        <p>No blog posts found.</p>
-        <ul class="list-disc pl-5 text-sm">
-          <li>Make sure your entry is <strong>Published</strong> in Builder (not a Draft).</li>
-          <li>Confirm the model name is <code>blogs</code> and the model ID matches.</li>
-          <li>Fields used: <em>Thumbnail</em>, <em>Blog title</em>, <em>Blog description</em>, <em>Blog date</em>, <em>Blog tags</em>.</li>
-        </ul>
-      </div>`;
-      return;
-    }
-    if (filtersEl) { filtersEl.removeAttribute('aria-busy'); }
-    // Initialize filters and optionally apply URL-provided tag
-    renderBlogFilters(normalized);
-    const params = new URLSearchParams(location.search);
-    const initialTag = params.get('tag');
-    if (window.__blogFilters && typeof window.__blogFilters.setActive === 'function') {
-      window.__blogFilters.setActive(initialTag || 'ALL');
-    } else {
-      renderBlogsList(normalized);
-    }
-  } catch (e) {
-    console.error('[blogs] fetch failed', e);
-    if (filtersEl) { filtersEl.innerHTML = ''; filtersEl.removeAttribute('aria-busy'); }
-    listEl.innerHTML = `<div class="px-6 py-8 text-red-600">Failed to load blogs.</div>`;
-  } finally {
-    listEl.style.minHeight = '';
-    listEl.removeAttribute('aria-busy');
-  }
-}
+// (Removed renderBlogsList, uniqueSortedBlogTags, renderBlogFilters, loadBlogsAndRender)
 
 // ==================== Dynamic multi-line clamp (bound to image height) ====================
 function computeLineHeightPx(el) {
@@ -1718,9 +1342,9 @@ function projectCardHTML(p) {
 
   const wrapperClasses = [
     'group h-full flex flex-col overflow-hidden rounded-2xl',
-    'ring-1 ring-zinc-200/70 bg-white/60 hover:ring-zinc-300 hover:bg-white',
+    'ring-1 ring-zinc-200/70 dark:ring-white/10 bg-white/60 dark:bg-zinc-900/40 hover:ring-zinc-300 dark:hover:ring-zinc-700 hover:bg-white dark:hover:bg-zinc-800',
     'transition-shadow shadow-sm hover:shadow-md',
-    'focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2 focus:ring-offset-white'
+    'focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2 focus:ring-offset-white dark:focus:ring-offset-black'
   ].join(' ');
 
   if (p.slug) {
@@ -2155,10 +1779,6 @@ style.textContent = `
     border-radius: 9999px;
   }
   /* Blog article: make mobile back button 50% smaller (circle and chevron) */
-  @media (max-width: 767.98px) {
-    #blog-detail #back-button.back-floating {
-      transform: scale(0.5);
-      transform-origin: top left;
     }
   }
   /* Full-width fading gradient behind nav for clearer separation */
@@ -2213,21 +1833,21 @@ style.textContent = `
   /* Remove extra bottom margin below footer to avoid visible white gap */
   /* Article typography: use sans (Roboto-first) for headings and body */
   /* Also force serif utility to resolve to sans within the article scope */
-  #blog-detail { --font-serif: var(--font-sans); }
-  #blog-detail h1, #blog-detail h2, #blog-detail h3,
-  #blog-detail h4, #blog-detail h5, #blog-detail h6 {
+  #project-detail { --font-serif: var(--font-sans); }
+  #project-detail h1, #project-detail h2, #project-detail h3,
+  #project-detail h4, #project-detail h5, #project-detail h6 {
     font-family: 'Roboto', ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji", sans-serif;
     letter-spacing: .1px;
   }
-  #blog-detail .prose,
-  #blog-detail .prose p,
-  #blog-detail .prose li,
-  #blog-detail .prose span,
-  #blog-detail .prose div {
+  #project-detail .prose,
+  #project-detail .prose p,
+  #project-detail .prose li,
+  #project-detail .prose span,
+  #project-detail .prose div {
     font-family: 'Roboto', ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji", sans-serif;
   }
   /* Ensure any Tailwind font-serif utility inside article is neutralized */
-  #blog-detail .font-serif { font-family: 'Roboto', ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji", sans-serif !important; }
+  #project-detail .font-serif { font-family: 'Roboto', ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji", sans-serif !important; }
 
   /* TOC: floating at right edge on md+; right-aligned links */
   @media (min-width: 768px) {
@@ -2301,13 +1921,13 @@ function openProjectModal(src, summaryHtml, longText, linkUrl, linkTitle, linkDe
   overlay.className = 'fixed inset-0 z-[999] bg-black/60 backdrop-blur-md flex items-center justify-center p-4 animate-fade-in';
 
   overlay.innerHTML = `
-    <div class="relative w-full max-w-4xl bg-white rounded-3xl shadow-2xl overflow-hidden transform transition-all animate-scale-in">
+    <div class="relative w-full max-w-4xl bg-white dark:bg-zinc-900 rounded-3xl shadow-2xl overflow-hidden transform transition-all animate-scale-in">
       <!-- Close button with better positioning and styling -->
       <button 
         aria-label="Close modal" 
-        class="absolute top-4 right-4 z-20 w-10 h-10 flex items-center justify-center rounded-full bg-white/95 backdrop-blur-sm border border-zinc-200/80 shadow-lg hover:bg-zinc-50 hover:border-zinc-300 active:scale-95 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2 group"
+        class="absolute top-4 right-4 z-20 w-10 h-10 flex items-center justify-center rounded-full bg-white/95 dark:bg-zinc-800/95 backdrop-blur-sm border border-zinc-200/80 dark:border-white/10 shadow-lg hover:bg-zinc-50 dark:hover:bg-zinc-700 hover:border-zinc-300 active:scale-95 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2 group"
       >
-        <svg class="w-5 h-5 text-zinc-600 group-hover:text-zinc-900 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg class="w-5 h-5 text-zinc-600 dark:text-zinc-300 group-hover:text-zinc-900 dark:group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12" />
         </svg>
       </button>
@@ -2328,13 +1948,13 @@ function openProjectModal(src, summaryHtml, longText, linkUrl, linkTitle, linkDe
       <!-- Content section with refined spacing and typography -->
       <div class="p-6 sm:p-8 space-y-4">
         ${summaryHtml ? `
-          <div class="text-sm sm:text-base text-zinc-600 leading-relaxed">
+          <div class="text-sm sm:text-base text-zinc-600 dark:text-zinc-300 leading-relaxed">
             ${summaryHtml}
           </div>
         ` : ''}
         
         ${longText ? `
-          <p class="text-sm sm:text-base text-zinc-700 leading-relaxed">
+          <p class="text-sm sm:text-base text-zinc-700 dark:text-zinc-300 leading-relaxed">
             ${longText}
           </p>
         ` : ''}
@@ -2484,13 +2104,13 @@ function renderEmbedLink(url, title, desc) {
 
       const html = `
         <a href="${url}" target="_blank" rel="noopener" class="block group">
-          <div class="flex items-start rounded-xl border border-zinc-200 hover:border-zinc-300 hover:shadow-md bg-white overflow-hidden transition-all duration-200">
+          <div class="flex items-start rounded-xl border border-zinc-200 dark:border-zinc-700 hover:border-zinc-300 dark:hover:border-zinc-600 hover:shadow-md bg-white dark:bg-zinc-800 overflow-hidden transition-all duration-200">
             <div class="flex-1 p-5 min-w-0">
-              <h2 class="text-base sm:text-lg font-semibold text-zinc-900 group-hover:text-black transition-colors line-clamp-2">
+              <h2 class="text-base sm:text-lg font-semibold text-zinc-900 dark:text-white group-hover:text-black dark:group-hover:text-white transition-colors line-clamp-2">
                 ${b.title || title || ''}
               </h2>
               ${b.description ? `
-                <p class="text-sm sm:text-base text-zinc-600 mt-2 line-clamp-2">
+                <p class="text-sm sm:text-base text-zinc-600 dark:text-zinc-400 mt-2 line-clamp-2">
                   ${b.description}
                 </p>
               ` : ''}
@@ -2576,8 +2196,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   } catch { }
 
-  renderGlobalNav();
-  initCaseStudiesShortcut();
+  // renderGlobalNav(); // Replaced by Sidebar
+  renderSidebar();
   initConnectPageAccordion();
   // Home: render pinned case studies (blogs with a truthy "is pinned" field)
   if (document.getElementById('home-pinned-grid')) {
@@ -2591,8 +2211,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
   loadProjectDetail();
-  loadBlogsAndRender();
-  loadBlogDetail();
+  loadProjectDetail();
   if (currentFilename() === 'index.html') initProjectVideoModals();
 
   // Re-clamp on resize (debounced via rAF)
@@ -2606,25 +2225,4 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 
-// Inject footer
-document.addEventListener("DOMContentLoaded", function () {
-  const footer = `
-    <footer class="w-full border-t border-zinc-200 mt-12 bg-zinc-200/40">
-      <div class="mx-auto w-full max-w-[1100px] px-6 sm:px-8 md:px-12 lg:px-24 xl:px-28 2xl:px-32 pt-6 pb-28 md:pt-8 md:pb-32">
-        <p class="text-lg md:text-xl text-black mb-4">
-          I'm available to chat and collaborate
-        </p>
-        <nav aria-label="Connect links" class="flex flex-wrap gap-4 text-base md:text-lg text-zinc-500">
-          <a href="https://drive.google.com/file/d/1mwBK0OjYgY03427YE0VkbEZ3agS-2YBs/view?usp=sharing" target="_blank" rel="noopener" class="underline-offset-4 hover:underline hover:text-black">Resume</a>
-          <a href="https://www.linkedin.com/in/wira29/" target="_blank" rel="noopener" class="underline-offset-4 hover:underline hover:text-black">LinkedIn</a>
-          <a href="mailto:hello@wirawibisana.com" class="underline-offset-4 hover:underline hover:text-black">Contact</a>
-          <a href="https://github.com/wasabi-atm" target="_blank" rel="noopener" class="underline-offset-4 hover:underline hover:text-black">GitHub</a>
-          <a href="https://www.threads.com/@wira.wibisana" target="_blank" rel="noopener" class="underline-offset-4 hover:underline hover:text-black">Threads</a>
-        </nav>
-      </div>
-    </footer>
-  `;
-
-  // Append footer to body
-  document.body.insertAdjacentHTML("beforeend", footer);
-});
+// Footer removed for sidebar layout

@@ -64,6 +64,7 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
+      darkMode: 'class',
       theme: {
         extend: {
           colors: { content: '#000000', muted: '#6A6A6A', connect: '#2A9320' }
@@ -72,7 +73,7 @@
     }
   </script>
 
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&amp;display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
   <link href="./dist/output.css" rel="stylesheet">
   <link id="site-favicon" rel="icon" type="image/png" href="assets/faviconneu.png">
   <script>
@@ -102,7 +103,7 @@
   </script>
 </head>
 
-<body class="min-h-dvh bg-zinc-100 antialiased font-['Roboto']">
+<body class="min-h-dvh bg-zinc-50 dark:bg-zinc-900 antialiased font-['Inter'] transition-colors duration-300">
 
   <!-- Pre-rendered intro overlay (shown via .show-intro on <html>) -->
   <div id="intro-greeting" aria-hidden="true">
@@ -111,214 +112,374 @@
     </div>
   </div>
 
-  <!-- Global nav will be injected by app.js -->
-  <div id="site-nav"></div>
+  <!-- Sidebar container -->
+  <div id="sidebar-root"></div>
 
-  <!-- Greeting (hero) -->
-  <main
-    class="mx-auto w-full max-w-[1100px] px-6 sm:px-8 md:px-12 lg:px-24 xl:px-28 2xl:px-32 mt-12 sm:mt-16 md:mt-24 lg:mt-28 pt-10 pb-8 sm:pt-10 sm:pb-8 md:pt-20 md:pb-16 lg:pt-28 lg:pb-24 space-y-2 sm:space-y-4 md:space-y-6 lg:space-y-8">
-    <div class="justify-start leading-tight tracking-tight">
-      <span class="text-zinc-400 text-2xl">Hi, I’m </span><span class="text-black text-2xl">Wira Wibisana</span>
-    </div>
-    <div class="justify-start leading-tight tracking-tight">
-      <span class="text-zinc-400 text-2xl">A </span><span class="text-black text-2xl">Product Designer</span>
-    </div>
-    <div class="justify-start leading-tight tracking-tight">
-      <span class="text-zinc-400 text-2xl">Focused on building delightful </span><span
-        class="text-black text-2xl">Apple-first experiences</span>
-    </div>
-    <div class="justify-start leading-tight tracking-tight">
-      <span class="text-zinc-400 text-2xl">Ready to craft products people </span><span class="text-black text-2xl">truly
-        love</span>
-    </div>
+  <!-- Main content wrapper -->
+  <div class="ml-0 lg:ml-[348px]">
+    <!-- Main Content Area -->
+    <main class="w-full max-w-[1600px] px-6 md:px-12 pt-24 pb-12 lg:py-12 space-y-16 lg:space-y-8">
 
-    <!-- CTA: Case Studies -->
-    <div class="pt-2 sm:pt-3 md:pt-4">
-      <a href="/blogs?tag=Case%20Studies" aria-label="View Case Studies" data-case-studies-trigger
-        class="inline-flex items-center rounded-full border border-zinc-300/70 bg-white/70 text-zinc-800 px-5 py-2 text-sm sm:text-base font-medium hover:bg-zinc-100 hover:text-black hover:border-zinc-400 focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2 focus:ring-offset-zinc-100 transition-colors">
-        Case Studies &gt;
-      </a>
-    </div>
-
-    <!-- App icon stack / mobile grid -->
-    <div class="pt-2">
-      <!-- Mobile/Tablet: horizontal row with fixed spacing (no hover) -->
-      <div class="lg:hidden">
-        <div class="flex items-center gap-4">
-          <a href="https://swiftsekai.framer.website/" target="_blank" rel="noopener" aria-label="Open Swisekai website"
-            class="flex items-center justify-center h-16 w-16 rounded-2xl border border-zinc-300/70 bg-white/80 hover:bg-zinc-100 active:bg-zinc-200 transition">
-            <img src="assets/Swisekai.png" alt="Swisekai app icon" class="h-10 w-10 object-contain" />
-          </a>
-          <a href="https://carte.wirawibisana.com" aria-label="Open Carte case study"
-            class="flex items-center justify-center h-16 w-16 rounded-2xl border border-zinc-300/70 bg-white/80 hover:bg-zinc-100 active:bg-zinc-200 transition">
-            <img src="assets/carteIcon.png" alt="Carte app icon" class="h-10 w-10 object-contain" />
-          </a>
-          <a href="https://clamby.id" target="_blank" rel="noopener" aria-label="Visit Clamby (case study in progress)"
-            class="flex items-center justify-center h-16 w-16 rounded-2xl border border-zinc-300/70 bg-white/80 hover:bg-zinc-100 active:bg-zinc-200 transition">
-            <img src="assets/ClambyIcon.png" alt="Clamby app icon" class="h-10 w-10 object-contain" />
-          </a>
+      <!-- 1. Featured Project: Clamby (Big Video + Text Bar) -->
+      <a href="https://clamby.id" target="_blank" rel="noopener noreferrer" class="group block space-y-4"
+        data-title="Clamby" data-link="https://clamby.id" data-video-main="assets/clamby/Clamby Achievement.webm"
+        data-video-1="assets/clamby/Clamby Data 1.webm" data-video-2="assets/clamby/Clamby Data 2.webm"
+        data-video-3="assets/clamby/Clamby Data 3.webm" data-video-4="assets/clamby/Clamby Data 4.webm">
+        <!-- Media Card -->
+        <div
+          class="overflow-hidden rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-zinc-100 dark:bg-zinc-900 w-full aspect-[1028/590] relative shadow-sm transition-all hover:shadow-md">
+          <video class="block w-full h-full object-cover" src="assets/Clamby Commercial.webm" autoplay muted loop
+            playsinline disablePictureInPicture preload="metadata" aria-label="Clamby commercial demo"></video>
         </div>
-      </div>
+        <!-- Text Card -->
+        <div
+          class="w-full rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-800 p-6 flex flex-col gap-6 transition-colors group-hover:border-zinc-300 dark:group-hover:border-zinc-700 shadow-sm group-hover:shadow-md">
+          <div class="flex justify-between items-start w-full">
+            <div class="space-y-1">
+              <h3 class="text-2xl lg:text-3xl font-semibold text-black dark:text-white">Clamby</h3>
+              <div class="text-xl text-zinc-500 dark:text-zinc-400 max-w-2xl">
+                An AI powered fashion mix-and-match app.
+              </div>
+            </div>
+            <div class="p-1">
+              <img src="assets/Sidebar Icons/Arrow Up Icon.svg"
+                class="w-8 h-8 opacity-40 group-hover:opacity-100 transition-opacity dark:invert" alt="View project">
+            </div>
+          </div>
+          <!-- Metrics Grid -->
+          <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 w-full">
+            <div
+              class="p-4 rounded-xl border border-zinc-200 dark:border-zinc-700 flex flex-col items-center justify-center text-center gap-1.5 min-h-[100px]">
+              <span class="text-sm font-medium text-zinc-500 dark:text-zinc-400">My Role:</span>
+              <span class="text-base lg:text-lg font-bold text-black dark:text-white leading-tight">Product Design
+                Lead</span>
+            </div>
+            <div
+              class="p-4 rounded-xl border border-zinc-200 dark:border-zinc-700 flex flex-col items-center justify-center text-center gap-1.5 min-h-[100px]">
+              <span class="text-sm font-medium text-zinc-500 dark:text-zinc-400">Design Components:</span>
+              <span class="text-base lg:text-lg font-bold text-black dark:text-white leading-tight">100+</span>
+            </div>
+            <div
+              class="p-4 rounded-xl border border-zinc-200 dark:border-zinc-700 flex flex-col items-center justify-center text-center gap-1.5 min-h-[100px]">
+              <span class="text-sm font-medium text-zinc-500 dark:text-zinc-400">Brand Tokens:</span>
+              <span class="text-base lg:text-lg font-bold text-black dark:text-white leading-tight">30+</span>
+            </div>
+            <div
+              class="p-4 rounded-xl border border-zinc-200 dark:border-zinc-700 flex flex-col items-center justify-center text-center gap-1.5 min-h-[100px]">
+              <span class="text-sm font-medium text-zinc-500 dark:text-zinc-400">User Interviews:</span>
+              <span class="text-base lg:text-lg font-bold text-black dark:text-white leading-tight">15</span>
+            </div>
+          </div>
+        </div>
+      </a>
 
-      <!-- Desktop (lg+): left-to-right icon ribbon -->
-      <div class="hidden lg:flex items-center gap-6 pt-2">
-        <a href="https://carte.wirawibisana.com" aria-label="Open Carte case study"
-          class="group relative flex h-20 w-20 items-center justify-center rounded-3xl border border-zinc-300/70 bg-white/80 transition hover:-translate-y-1 hover:border-zinc-400 hover:bg-white shadow-sm">
-          <img src="assets/carteIcon.png" alt="Carte app icon" class="peer h-12 w-12 object-contain" />
-          <span role="tooltip"
-            class="pointer-events-none absolute left-1/2 top-full z-50 mt-2 -translate-x-1/2 translate-y-1 opacity-0 transition duration-200 peer-hover:opacity-100 peer-hover:translate-y-0 peer-focus-visible:opacity-100">
-            <span
-              class="block rounded-md border border-zinc-200 bg-white px-3 py-2 text-xs text-zinc-700 shadow-md whitespace-nowrap">Carte
-              - Save business cards to contacts privately</span>
-          </span>
-        </a>
-        <a href="https://swiftsekai.framer.website/" title="Swisekai" aria-label="Open Swisekai website" target="_blank"
-          rel="noopener"
-          class="group relative flex h-20 w-20 items-center justify-center rounded-3xl border border-zinc-300/70 bg-white/80 transition hover:-translate-y-1 hover:border-zinc-400 hover:bg-white shadow-sm">
-          <img src="assets/Swisekai.png" alt="Swisekai app icon" class="peer h-12 w-12 object-contain" />
-          <span role="tooltip"
-            class="pointer-events-none absolute left-1/2 top-full z-50 mt-2 -translate-x-1/2 translate-y-1 opacity-0 transition duration-200 peer-hover:opacity-100 peer-hover:translate-y-0 peer-focus-visible:opacity-100">
-            <span
-              class="block rounded-md border border-zinc-200 bg-white px-3 py-2 text-xs text-zinc-700 shadow-md whitespace-nowrap">SwiSekai
-              - Learn Swift in an Engaging Way</span>
-          </span>
-        </a>
-        <a href="https://clamby.id" title="Clamby" target="_blank" rel="noopener"
-          aria-label="Visit Clamby (case study in progress)"
-          class="group relative flex h-20 w-20 items-center justify-center rounded-3xl border border-zinc-300/70 bg-white/80 transition hover:-translate-y-1 hover:border-zinc-400 hover:bg-white shadow-sm">
-          <img src="assets/ClambyIcon.png" alt="Clamby app icon" class="peer h-12 w-12 object-contain" />
-          <span role="tooltip"
-            class="pointer-events-none absolute left-1/2 top-full z-50 mt-2 -translate-x-1/2 translate-y-1 opacity-0 transition duration-200 peer-hover:opacity-100 peer-hover:translate-y-0 peer-focus-visible:opacity-100">
-            <span
-              class="block rounded-md border border-zinc-200 bg-white px-3 py-2 text-xs text-zinc-700 shadow-md whitespace-nowrap">Clamby
-              - Your AI Fashion Assistant</span>
-          </span>
-        </a>
-      </div>
-    </div>
-  </main>
+      <!-- 2. Grid Projects (Alternating Split Cards) -->
+
+      <!-- Row 1: Carte 1.1 (Media Left, Text Right) -->
+      <a href="/project.html?id=2f57f30cf7364c1d8fa079a0d7319885" class="group grid grid-cols-1 lg:grid-cols-2 gap-4"
+        data-title="Carte 1.1" data-link="https://carte.wirawibisana.com"
+        data-video-main="assets/Carte 1-1/Carte 1-1 Achievement.webm"
+        data-video-1="assets/Carte 1-1/Carte 1-1 Data 1.webm" data-video-2="assets/Carte 1-1/Carte 1-1 Data 2.webm"
+        data-video-3="assets/Carte 1-1/Carte 1-1 Data 3.webm" data-video-4="assets/Carte 1-1/Carte 1-1 Data 4.webm">
+        <!-- Media -->
+        <div
+          class="overflow-hidden rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-zinc-100 dark:bg-zinc-900 aspect-[1028/590] lg:aspect-square relative shadow-sm transition-all group-hover:shadow-md">
+          <video class="block w-full h-full object-cover" src="assets/Carte1point1.webm" autoplay muted loop playsinline
+            preload="metadata" aria-label="Carte 1.1 demo"></video>
+        </div>
+        <!-- Text -->
+        <div
+          class="rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-800 p-6 lg:p-8 flex flex-col gap-6 lg:gap-8 transition-colors group-hover:border-zinc-300 dark:group-hover:border-zinc-700 shadow-sm group-hover:shadow-md h-full">
+          <div class="flex flex-col gap-1 w-full">
+            <div class="flex justify-between items-start w-full">
+              <h3 class="text-2xl lg:text-3xl font-semibold text-black dark:text-white">Carte 1.1</h3>
+              <img src="assets/Sidebar Icons/Arrow Up Icon.svg"
+                class="w-8 h-8 opacity-40 group-hover:opacity-100 transition-opacity dark:invert" alt="View project">
+            </div>
+            <p class="text-xl text-zinc-500 dark:text-zinc-400 leading-relaxed">
+              Improving Notification UX, Camera Control, and unified connection experience.
+            </p>
+          </div>
+          <!-- Metrics Grid -->
+          <div class="grid grid-cols-2 gap-3 w-full mt-auto">
+            <div
+              class="p-3 lg:p-4 rounded-xl border border-zinc-200 dark:border-zinc-700 flex flex-col items-center justify-center text-center gap-1 min-h-[90px]">
+              <span class="text-sm font-medium text-zinc-500 dark:text-zinc-400">My Role:</span>
+              <span class="text-base lg:text-lg font-bold text-black dark:text-white leading-tight">Solo Design
+                Lead</span>
+            </div>
+            <div
+              class="p-3 lg:p-4 rounded-xl border border-zinc-200 dark:border-zinc-700 flex flex-col items-center justify-center text-center gap-1 min-h-[90px]">
+              <span class="text-sm font-medium text-zinc-500 dark:text-zinc-400">User Interviews:</span>
+              <span class="text-base lg:text-lg font-bold text-black dark:text-white leading-tight">6</span>
+            </div>
+            <div
+              class="p-3 lg:p-4 rounded-xl border border-zinc-200 dark:border-zinc-700 flex flex-col items-center justify-center text-center gap-1 min-h-[90px]">
+              <span class="text-sm font-medium text-zinc-500 dark:text-zinc-400">Users Gained:</span>
+              <span class="text-base lg:text-lg font-bold text-black dark:text-white leading-tight">200+</span>
+            </div>
+            <div
+              class="p-3 lg:p-4 rounded-xl border border-zinc-200 dark:border-zinc-700 flex flex-col items-center justify-center text-center gap-1 min-h-[90px]">
+              <span class="text-sm font-medium text-zinc-500 dark:text-zinc-400">Business Implemented:</span>
+              <span class="text-base lg:text-lg font-bold text-black dark:text-white leading-tight">Subscription
+                Model</span>
+            </div>
+          </div>
+        </div>
+      </a>
+
+      <!-- Row 2: Carte (Text Left, Media Right) -->
+      <a href="/project.html?id=20aa74f2ed1443a4afe252b5d0c0afa7" class="group grid grid-cols-1 lg:grid-cols-2 gap-4"
+        data-title="Carte" data-link="https://carte.wirawibisana.com"
+        data-video-main="assets/Carte/Carte Achievement.webm" data-video-1="assets/Carte/Carte Data 1.webm"
+        data-video-2="assets/Carte/Carte Data 2.webm" data-video-3="assets/Carte/Carte Data 3.webm"
+        data-video-4="assets/Carte/Carte Data 4.webm">
+        <!-- Text (Order 2 on Mobile -> Order 1 on Desktop) -->
+        <div
+          class="rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-800 p-6 lg:p-8 flex flex-col gap-6 lg:gap-8 transition-colors group-hover:border-zinc-300 dark:group-hover:border-zinc-700 shadow-sm group-hover:shadow-md h-full order-2 lg:order-1">
+          <div class="flex flex-col gap-1 w-full">
+            <div class="flex justify-between items-start w-full">
+              <h3 class="text-2xl lg:text-3xl font-semibold text-black dark:text-white">Carte</h3>
+              <img src="assets/Sidebar Icons/Arrow Up Icon.svg"
+                class="w-8 h-8 opacity-40 group-hover:opacity-100 transition-opacity dark:invert" alt="View project">
+            </div>
+            <p class="text-xl text-zinc-500 dark:text-zinc-400 leading-relaxed">
+              My first iOS app. Designed with Apple's newest Liquid Glass aesthetic in mind.
+            </p>
+          </div>
+          <!-- Metrics Grid -->
+          <div class="grid grid-cols-2 gap-3 w-full mt-auto">
+            <div
+              class="p-3 lg:p-4 rounded-xl border border-zinc-200 dark:border-zinc-700 flex flex-col items-center justify-center text-center gap-1 min-h-[90px]">
+              <span class="text-sm font-medium text-zinc-500 dark:text-zinc-400">My Role:</span>
+              <span class="text-base lg:text-lg font-bold text-black dark:text-white leading-tight">Solo Design
+                Lead</span>
+            </div>
+            <div
+              class="p-3 lg:p-4 rounded-xl border border-zinc-200 dark:border-zinc-700 flex flex-col items-center justify-center text-center gap-1 min-h-[90px]">
+              <span class="text-sm font-medium text-zinc-500 dark:text-zinc-400">User Interviews:</span>
+              <span class="text-base lg:text-lg font-bold text-black dark:text-white leading-tight">8</span>
+            </div>
+            <div
+              class="p-3 lg:p-4 rounded-xl border border-zinc-200 dark:border-zinc-700 flex flex-col items-center justify-center text-center gap-1 min-h-[90px]">
+              <span class="text-sm font-medium text-zinc-500 dark:text-zinc-400">App Store Rank:</span>
+              <span class="text-base lg:text-lg font-bold text-black dark:text-white leading-tight">#4 in
+                Business</span>
+            </div>
+            <div
+              class="p-3 lg:p-4 rounded-xl border border-zinc-200 dark:border-zinc-700 flex flex-col items-center justify-center text-center gap-1 min-h-[90px]">
+              <span class="text-sm font-medium text-zinc-500 dark:text-zinc-400">Project Timeline:</span>
+              <span class="text-base lg:text-lg font-bold text-black dark:text-white leading-tight">4 Months</span>
+            </div>
+          </div>
+        </div>
+        <!-- Media (Order 1 on Mobile -> Order 2 on Desktop) -->
+        <div
+          class="overflow-hidden rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-zinc-100 dark:bg-zinc-900 aspect-[1028/590] lg:aspect-square relative shadow-sm transition-all group-hover:shadow-md order-1 lg:order-2">
+          <video class="block w-full h-full object-cover" src="assets/Carte.webm" autoplay muted loop playsinline
+            preload="metadata" aria-label="Carte demo"></video>
+        </div>
+      </a>
+
+      <!-- Row 3: Stoa (Media Left, Text Right) -->
+      <a href="/project.html?id=c287c8562e804bcb88dfe9f54eac4a7e" class="group grid grid-cols-1 lg:grid-cols-2 gap-4"
+        data-title="Stoa"
+        data-link="https://www.figma.com/proto/ccXT3GMwSinknd4kXK7u8q/Challenge-3---Team-8?node-id=1004-4173&t=WpjYElmg4kDvKEqh-1"
+        data-link-label="Prototype" data-video-main="assets/Stoa/Stoa Achievement.webm"
+        data-video-1="assets/Stoa/Stoa Data 1.webm" data-video-2="assets/Stoa/Stoa Data 2.webm"
+        data-video-3="assets/Stoa/Stoa Data 3.webm" data-video-4="assets/Stoa/Stoa Data 4.webm">
+        <!-- Media -->
+        <div
+          class="overflow-hidden rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-zinc-100 dark:bg-zinc-900 aspect-[1028/590] lg:aspect-square relative shadow-sm transition-all group-hover:shadow-md">
+          <video class="block w-full h-full object-cover" src="assets/Stoa Showcase Nue.webm" autoplay muted loop
+            playsinline preload="metadata" aria-label="Stoa demo"></video>
+        </div>
+        <!-- Text -->
+        <div
+          class="rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-800 p-6 lg:p-8 flex flex-col gap-6 lg:gap-8 transition-colors group-hover:border-zinc-300 dark:group-hover:border-zinc-700 shadow-sm group-hover:shadow-md h-full">
+          <div class="flex flex-col gap-1 w-full">
+            <div class="flex justify-between items-start w-full">
+              <h3 class="text-2xl lg:text-3xl font-semibold text-black dark:text-white">Stoa</h3>
+              <img src="assets/Sidebar Icons/Arrow Up Icon.svg"
+                class="w-8 h-8 opacity-40 group-hover:opacity-100 transition-opacity dark:invert" alt="View project">
+            </div>
+            <p class="text-xl text-zinc-500 dark:text-zinc-400 leading-relaxed">
+              An accessibility-first mindfulness app rooted in Stoic philosophy.
+            </p>
+          </div>
+          <!-- Metrics Grid -->
+          <div class="grid grid-cols-2 gap-3 w-full mt-auto">
+            <div
+              class="p-3 lg:p-4 rounded-xl border border-zinc-200 dark:border-zinc-700 flex flex-col items-center justify-center text-center gap-1 min-h-[90px]">
+              <span class="text-sm font-medium text-zinc-500 dark:text-zinc-400">My Role:</span>
+              <span class="text-base lg:text-lg font-bold text-black dark:text-white leading-tight">UI/UX
+                Designer</span>
+            </div>
+            <div
+              class="p-3 lg:p-4 rounded-xl border border-zinc-200 dark:border-zinc-700 flex flex-col items-center justify-center text-center gap-1 min-h-[90px]">
+              <span class="text-sm font-medium text-zinc-500 dark:text-zinc-400">User Interviews:</span>
+              <span class="text-base lg:text-lg font-bold text-black dark:text-white leading-tight">6</span>
+            </div>
+            <div
+              class="p-3 lg:p-4 rounded-xl border border-zinc-200 dark:border-zinc-700 flex flex-col items-center justify-center text-center gap-1 min-h-[90px]">
+              <span class="text-sm font-medium text-zinc-500 dark:text-zinc-400">Accessibility:</span>
+              <span class="text-base lg:text-lg font-bold text-black dark:text-white leading-tight">Reduce Motion</span>
+            </div>
+            <div
+              class="p-3 lg:p-4 rounded-xl border border-zinc-200 dark:border-zinc-700 flex flex-col items-center justify-center text-center gap-1 min-h-[90px]">
+              <span class="text-sm font-medium text-zinc-500 dark:text-zinc-400">Project Timeline:</span>
+              <span class="text-base lg:text-lg font-bold text-black dark:text-white leading-tight">6 Weeks</span>
+            </div>
+          </div>
+        </div>
+      </a>
+
+      <!-- Row 4: Swisekai (Text Left, Media Right) -->
+      <a href="/project.html?id=7fa04fbb7fe446f1a05f8307ca972c86" class="group grid grid-cols-1 lg:grid-cols-2 gap-4"
+        data-title="SwiSekai" data-link="https://swiftsekai.framer.website"
+        data-video-main="assets/SwiSekai/SwiSekai Achievement.webm" data-video-1="assets/SwiSekai/SwiSekai Data 1.webm"
+        data-video-2="assets/SwiSekai/SwiSekai Data 2.webm" data-video-3="assets/SwiSekai/SwiSekai Data 3.webm"
+        data-video-4="assets/SwiSekai/SwiSekai Data 4.webm">
+        <!-- Text (Order 2 on Mobile -> Order 1 on Desktop) -->
+        <div
+          class="rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-800 p-6 lg:p-8 flex flex-col gap-6 lg:gap-8 transition-colors group-hover:border-zinc-300 dark:group-hover:border-zinc-700 shadow-sm group-hover:shadow-md h-full order-2 lg:order-1">
+          <div class="flex flex-col gap-1 w-full">
+            <div class="flex justify-between items-start w-full">
+              <h3 class="text-2xl lg:text-3xl font-semibold text-black dark:text-white">SwiSekai</h3>
+              <img src="assets/Sidebar Icons/Arrow Up Icon.svg"
+                class="w-8 h-8 opacity-40 group-hover:opacity-100 transition-opacity dark:invert" alt="View project">
+            </div>
+            <p class="text-xl text-zinc-500 dark:text-zinc-400 leading-relaxed">
+              An ultra-responsive macOS companion for learning programming in Swift.
+            </p>
+          </div>
+          <!-- Metrics Grid -->
+          <div class="grid grid-cols-2 gap-3 w-full mt-auto">
+            <div
+              class="p-3 lg:p-4 rounded-xl border border-zinc-200 dark:border-zinc-700 flex flex-col items-center justify-center text-center gap-1 min-h-[90px]">
+              <span class="text-sm font-medium text-zinc-500 dark:text-zinc-400">My Role:</span>
+              <span class="text-base lg:text-lg font-bold text-black dark:text-white leading-tight">Product
+                Designer</span>
+            </div>
+            <div
+              class="p-3 lg:p-4 rounded-xl border border-zinc-200 dark:border-zinc-700 flex flex-col items-center justify-center text-center gap-1 min-h-[90px]">
+              <span class="text-sm font-medium text-zinc-500 dark:text-zinc-400">Curriculum:</span>
+              <span class="text-base lg:text-lg font-bold text-black dark:text-white leading-tight">32 Lessons</span>
+            </div>
+            <div
+              class="p-3 lg:p-4 rounded-xl border border-zinc-200 dark:border-zinc-700 flex flex-col items-center justify-center text-center gap-1 min-h-[90px]">
+              <span class="text-sm font-medium text-zinc-500 dark:text-zinc-400">Platform:</span>
+              <span class="text-base lg:text-lg font-bold text-black dark:text-white leading-tight">macOS</span>
+            </div>
+            <div
+              class="p-3 lg:p-4 rounded-xl border border-zinc-200 dark:border-zinc-700 flex flex-col items-center justify-center text-center gap-1 min-h-[90px]">
+              <span class="text-sm font-medium text-zinc-500 dark:text-zinc-400">User Projects:</span>
+              <span class="text-base lg:text-lg font-bold text-black dark:text-white leading-tight">20+</span>
+            </div>
+          </div>
+        </div>
+        <!-- Media (Order 1 on Mobile -> Order 2 on Desktop) -->
+        <div
+          class="overflow-hidden rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-zinc-100 dark:bg-zinc-900 aspect-[1028/590] lg:aspect-square relative shadow-sm transition-all group-hover:shadow-md order-1 lg:order-2">
+          <video class="block w-full h-full object-cover" src="assets/Swisekai Showcase Neu.webm" autoplay muted loop
+            playsinline preload="metadata" poster="assets/Swisekai.webp" aria-label="Swisekai demo"></video>
+        </div>
+      </a>
+
+    </main>
+  </div>
 
   <!-- Section separator -->
-  <hr class="mx-auto w-full max-w-[1100px] border-t border-zinc-200/80 my-4 sm:my-6 md:my-10" />
 
 
-  <!-- Design works grid: 2x2 -->
-  <section
-    class="mx-auto w-full max-w-[1100px] px-6 sm:px-8 md:px-12 lg:px-24 xl:px-28 2xl:px-32 pt-12 pb-6 md:pt-20 md:pb-10">
-    <h2 class="text-xl sm:text-2xl leading-snug text-content mb-6 md:mb-8">My Projects</h2>
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-10 md:gap-x-8 md:gap-y-8">
-      <!-- 1: Carte 1.1 -->
-      <figure class="rounded-2xl relative" data-project="carte11"
-        data-link="/article?id=2f57f30cf7364c1d8fa079a0d7319885"
-        data-long="This update focused on networking, turning Carte from a simple business card scanner to a full-fledged connection management app.">
-        <video class="block w-full aspect-[4/3] object-cover rounded-2xl" src="assets/Carte1point1.webm" autoplay muted
-          loop playsinline preload="metadata" aria-label="Carte 1.1 demo"></video>
-        <figcaption class="mt-2 text-sm sm:text-base text-muted leading-snug pl-3 md:pl-4">
-          Carte 1.1: Notification UX,
-          <span class="relative inline-block group">
-            <span
-              class="underline underline-offset-4 decoration-zinc-400 group-hover:decoration-black cursor-help">Camera
-              Control</span>
-            <span role="tooltip"
-              class="pointer-events-none absolute right-0 top-full z-50 mt-2 w-[min(90vw,260px)] translate-y-1 opacity-0 group-hover:opacity-100 group-hover:translate-y-0 transition duration-200">
-              <span class="block rounded-md border border-zinc-200 bg-white px-3 py-2 text-xs text-zinc-700 shadow-md">
-                The iPhone 16 family and up has a dedicated Camera Control button on the right side of the device that
-                functions as a physical shutter button
-              </span>
-            </span>
-          </span>
-          , more Liquid Glass.
-        </figcaption>
-      </figure>
 
-      <!-- 2: Carte -->
-      <figure class="rounded-2xl relative" data-project="carte" data-link="/article?id=20aa74f2ed1443a4afe252b5d0c0afa7"
-        data-long="Carte is my first concept-to-product developed app that I designed and 'coded' myself. It started from a personal problem that I wanted to solve.">
-        <video class="block w-full aspect-[4/3] object-cover rounded-2xl" src="assets/Carte.webm" autoplay muted loop
-          playsinline preload="metadata" aria-label="Carte demo"></video>
-        <figcaption class="mt-2 text-sm sm:text-base text-muted leading-snug pl-3 md:pl-4">
-          Carte is an <b>iOS app</b> that uses Apple's newest
-          <span class="relative inline-block group">
-            <span
-              class="underline underline-offset-4 decoration-zinc-400 group-hover:decoration-black cursor-help">Liquid
-              Glass</span>
-            <span role="tooltip"
-              class="pointer-events-none absolute right-0 top-full z-50 mt-2 w-[min(90vw,260px)] translate-y-1 opacity-0 group-hover:opacity-100 group-hover:translate-y-0 transition duration-200">
-              <span class="block rounded-md border border-zinc-200 bg-white px-3 py-2 text-xs text-zinc-700 shadow-md">
-                Liquid Glass is a dynamic, translucent material with depth, subtle blur, and specular highlights that
-                responds to motion and context.
-              </span>
-            </span>
-          </span>
-          design.
-        </figcaption>
-      </figure>
 
-      <!-- 3: Stoa -->
-      <figure class="rounded-2xl relative" data-project="stoa" data-link="/article?id=c287c8562e804bcb88dfe9f54eac4a7e"
-        data-long="Learning deeper about product design made me realize how important equal access for everyone is. When creating Stoa, the principles of accessibility was my team's focus.">
-        <video class="block w-full aspect-[4/3] object-cover rounded-2xl" src="assets/Stoa Showcase Nue.webm" autoplay
-          muted loop playsinline preload="metadata" aria-label="Stoa demo"></video>
-        <figcaption class="mt-2 text-sm sm:text-base text-muted leading-snug pl-3 md:pl-4">
-          Stoa is an
-          <span class="relative inline-block group">
-            <span
-              class="underline underline-offset-4 decoration-zinc-400 group-hover:decoration-black cursor-help">accessibility
-              friendly</span>
-            <span role="tooltip"
-              class="pointer-events-none absolute right-0 top-full z-50 mt-2 w-[min(90vw,260px)] translate-y-1 opacity-0 group-hover:opacity-100 group-hover:translate-y-0 transition duration-200">
-              <span class="block rounded-md border border-zinc-200 bg-white px-3 py-2 text-xs text-zinc-700 shadow-md">
-                Designed with inclusive color contrast, large tap targets, Dynamic Type, VoiceOver labels, and reduced
-                motion support.
-              </span>
-            </span>
-          </span>
-          &nbsp;<b>iOS app</b> for mindfulness with stoic philosophy.
-        </figcaption>
-      </figure>
+  <!-- Case studies (pinned from Builder) - REMOVED for blog separation -->
+  <!-- <section class="mx-auto w-full max-w-[1100px] ..."> ... </section> -->
 
-      <!-- 4: Swisekai -->
-      <figure class="rounded-2xl relative" data-project="swisekai"
-        data-link="/article?id=7fa04fbb7fe446f1a05f8307ca972c86"
-        data-long="My team's first MacOS app that helps new programmers learn with a responsive, delightful desktop experience that adapts to the context of learning in split screen.">
-        <video class="block w-full aspect-[4/3] object-cover rounded-2xl" src="assets/Swisekai Showcase Neu.webm"
-          autoplay muted loop playsinline preload="metadata" poster="assets/Swisekai.webp"
-          aria-label="Swisekai demo"></video>
-        <figcaption class="mt-2 text-sm sm:text-base text-muted leading-snug pl-3 md:pl-4">
-          SwiSekai is an
-          <span class="relative inline-block group">
-            <span
-              class="underline underline-offset-4 decoration-zinc-400 group-hover:decoration-black cursor-help">Ultra-responsive</span>
-            <span role="tooltip"
-              class="pointer-events-none absolute right-0 top-full z-50 mt-2 w-[min(90vw,260px)] translate-y-1 opacity-0 group-hover:opacity-100 group-hover:translate-y-0 transition duration-200">
-              <span class="block rounded-md border border-zinc-200 bg-white px-3 py-2 text-xs text-zinc-700 shadow-md">
-                Ultra-responsive means buttery-smooth interactions, minimal input latency, and layouts that adapt
-                instantly across window sizes and system settings.
-              </span>
-            </span>
-          </span>
-          <b>MacOS app</b> designed to be a companion for new programmers.
-        </figcaption>
-      </figure>
+  <!-- Project Quick View Modal -->
+  <div id="project-modal" class="fixed inset-0 z-[100] hidden" aria-hidden="true">
+    <!-- Backdrop -->
+    <div class="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity" id="modal-backdrop"></div>
+
+    <!-- Modal Container (32px padding from edges) -->
+    <div class="absolute inset-0 p-8 flex items-center justify-center pointer-events-none">
+      <!-- Card -->
+      <div
+        class="w-full h-full bg-white dark:bg-zinc-900 rounded-[32px] shadow-2xl overflow-hidden flex flex-col pointer-events-auto relative">
+
+        <!-- Header -->
+        <div
+          class="flex items-start justify-between px-6 py-6 border-b border-zinc-100 dark:border-zinc-800 shrink-0 gap-4">
+          <div class="flex flex-col md:flex-row md:items-center gap-4 md:gap-6 w-full overflow-hidden">
+            <h2 id="modal-title"
+              class="text-3xl md:text-4xl font-semibold text-black dark:text-white truncate lg:max-w-md">Clamby
+            </h2>
+            <div class="flex gap-3 shrink-0 flex-wrap">
+              <a href="#" id="modal-website-btn" target="_blank" rel="noopener noreferrer"
+                class="px-5 py-2.5 bg-black text-white hover:bg-zinc-600 dark:bg-white dark:text-black dark:hover:bg-zinc-300 rounded-full text-base font-medium flex items-center gap-2 whitespace-nowrap transition-all active:scale-95 hover:scale-105">
+                <span id="modal-website-label">Website</span> <svg class="w-4 h-4" fill="none" stroke="currentColor"
+                  viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 17L17 7M7 7h10v10"></path>
+                </svg>
+              </a>
+              <!-- <a href="#"
+                class="px-5 py-2.5 bg-black text-white hover:bg-zinc-600 dark:bg-white dark:text-black dark:hover:bg-zinc-300 rounded-full text-base font-medium flex items-center gap-2 whitespace-nowrap transition-all active:scale-95 hover:scale-105">
+                Case Study <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 17L17 7M7 7h10v10"></path>
+                </svg>
+              </a> -->
+            </div>
+          </div>
+          <button id="modal-close"
+            class="p-2 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-full transition-colors shrink-0 -mt-2 -mr-2">
+            <svg
+              class="w-8 h-8 text-zinc-400 dark:text-zinc-500 hover:text-black dark:hover:text-white transition-colors"
+              fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+          </button>
+        </div>
+
+        <!-- Non-scrollable Content -->
+        <div class="flex-1 p-4 flex flex-col gap-4 min-h-0">
+          <!-- Achievement Block (Flex grow to fill space) -->
+          <div
+            class="w-full flex-[2] bg-zinc-200 dark:bg-zinc-800 rounded-2xl flex items-center justify-center min-h-0 overflow-hidden relative group">
+            <video id="modal-video-main" class="absolute inset-0 w-full h-full object-cover"
+              src="assets/clamby/Clamby Achievement.webm" autoplay muted loop playsinline></video>
+          </div>
+
+          <!-- Data Grid (Fixed height portion relative to achievement, or flex-1) -->
+          <div class="w-full flex-1 grid grid-cols-2 md:grid-cols-4 gap-4 min-h-0">
+            <div
+              class="bg-zinc-200 dark:bg-zinc-800 rounded-2xl flex items-center justify-center overflow-hidden relative group">
+              <video id="modal-video-1" class="absolute inset-0 w-full h-full object-cover"
+                src="assets/clamby/Clamby Data 1.webm" autoplay muted loop playsinline></video>
+            </div>
+            <div
+              class="bg-zinc-200 dark:bg-zinc-800 rounded-2xl flex items-center justify-center overflow-hidden relative group">
+              <video id="modal-video-2" class="absolute inset-0 w-full h-full object-cover"
+                src="assets/clamby/Clamby Data 2.webm" autoplay muted loop playsinline></video>
+            </div>
+            <div
+              class="bg-zinc-200 dark:bg-zinc-800 rounded-2xl flex items-center justify-center overflow-hidden relative group">
+              <video id="modal-video-3" class="absolute inset-0 w-full h-full object-cover"
+                src="assets/clamby/Clamby Data 3.webm" autoplay muted loop playsinline></video>
+            </div>
+            <div
+              class="bg-zinc-200 dark:bg-zinc-800 rounded-2xl flex items-center justify-center overflow-hidden relative group">
+              <video id="modal-video-4" class="absolute inset-0 w-full h-full object-cover"
+                src="assets/clamby/Clamby Data 4.webm" autoplay muted loop playsinline></video>
+            </div>
+          </div>
+        </div>
+
+      </div>
     </div>
-  </section>
+  </div>
 
-  <!-- Section separator -->
-  <hr class="mx-auto w-full max-w-[1100px] border-t border-zinc-200/80 my-8 sm:my-10 md:my-14" />
-
-
-
-  <!-- Case studies (pinned from Builder) -->
-  <section
-    class="mx-auto w-full max-w-[1100px] px-6 sm:px-8 md:px-12 lg:px-24 xl:px-28 2xl:px-32 pt-6 md:pt-10 pb-2 md:pb-6">
-    <div class="flex items-baseline justify-between mb-4 md:mb-6">
-      <h2 class="text-xl sm:text-2xl leading-snug text-content">Project Articles</h2>
-      <a href="/blogs"
-        class="text-sm md:text-base text-zinc-500 hover:text-black underline-offset-4 hover:underline">See All →</a>
-    </div>
-    <div id="home-pinned-grid" class="px-0 divide-y divide-zinc-200 bg-white/0"></div>
-  </section>
-
+  <div id="mobile-footer-root" class="lg:hidden"></div>
   <script src="app.js"></script>
 </body>
 

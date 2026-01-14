@@ -4,11 +4,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Blogs – Portfolio</title>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet" />
+  <title>About Me – Portfolio</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
-    tailwind.config = { theme: { extend: {} } }
+    tailwind.config = { darkMode: 'class', theme: { extend: {} } }
   </script>
   <link href="./dist/output.css" rel="stylesheet">
   <link id="site-favicon" rel="icon" type="image/png" href="assets/faviconneu.png">
@@ -30,109 +30,133 @@
   </script>
 </head>
 
-<body class="min-h-dvh bg-zinc-100 antialiased font-['Roboto']">
-  <div id="site-nav"></div>
+<body class="min-h-dvh bg-zinc-50 dark:bg-zinc-900 antialiased font-['Inter'] transition-colors duration-300">
+  <div id="sidebar-root"></div>
 
-  <!-- Main content container (match index.html margins) -->
-  <main
-    class="mx-auto w-full max-w-[1100px] px-6 sm:px-8 md:px-12 lg:px-24 xl:px-28 2xl:px-32 mt-12 sm:mt-16 md:mt-24 lg:mt-28 py-12 sm:py-12 md:py-24 space-y-6">
+  <!-- Main content wrapper -->
+  <div class="ml-0 lg:ml-[348px]">
+    <!-- Main Content Area -->
+    <main class="w-full max-w-[1600px] px-6 md:px-12 pt-24 pb-12 lg:py-12 space-y-12">
 
-    <!-- Title -->
-    <header>
-      <h1 class="text-3xl md:text-4xl font-light leading-tight"><span class="text-zinc-400">About </span><span
-          class="text-black">Wira</span></h1>
-    </header>
+      <!-- Title -->
+      <header>
+        <h1 class="text-3xl md:text-4xl font-light leading-tight"><span class="text-zinc-400 dark:text-zinc-500">About
+          </span><span class="text-black dark:text-white">Wira</span></h1>
+      </header>
 
-    <!-- Content -->
-    <section class="grid grid-cols-1 md:grid-cols-[1fr_1.25fr] gap-6 md:gap-12 items-start">
-      <!-- Left: portrait -->
-      <div>
-        <img id="connect-portrait" src="assets/ProfilePic.png" data-default-src="assets/ProfilePic.png"
-          alt="Portrait / coffee desk"
-          class="w-full max-w-sm sm:max-w-md md:max-w-full aspect-[4/5] object-cover rounded-[30px] mx-auto" />
-      </div>
-      <!-- Right: text + accordion -->
-      <div>
-        <p class="text-2xl md:text-[34px] font-semibold">Product Designer</p>
-        <p class="text-lg md:text-xl text-zinc-400 mt-1">Based in Bali</p>
-        <div id="about-accordion" class="mt-4 border-t border-zinc-200">
-          <!-- Row 1 -->
-          <div class="acc-item border-b border-zinc-200">
-            <button class="acc-btn w-full grid grid-cols-[1fr_auto] items-center gap-4 py-4 text-left"
-              aria-expanded="false" data-acc="toggle" data-portrait-swap="assets/internationalRelations.JPG">
-              <span class="text-base md:text-lg">Educational background in <b>International Relations</b></span>
-              <svg class="chev w-5 h-5 text-zinc-500 transition-transform" viewBox="0 0 20 20" fill="currentColor"
-                aria-hidden="true">
-                <path d="M7 5l6 5-6 5V5z" />
-              </svg>
-            </button>
-            <div class="acc-panel overflow-hidden max-h-0">
-              <div class="px-0 pb-4 acc-strong text-sm md:text-base">
-                I studied International Relations because it is a field that combines many things I can learn: politics,
-                economics, culture, history, and many more. It has given me a strong foundation in understanding how
-                people and societies interact, which I apply to my design work.
+      <!-- Content -->
+      <section class="grid grid-cols-1 lg:grid-cols-[400px_1fr] gap-12 items-start">
+        <!-- Left: portrait -->
+        <div>
+          <img id="connect-portrait" src="assets/ProfilePic.png" data-default-src="assets/ProfilePic.png"
+            alt="Portrait / coffee desk" class="w-full aspect-[4/5] object-cover rounded-2xl shadow-sm" />
+        </div>
+        <!-- Right: text + accordion -->
+        <div class="space-y-6">
+          <div>
+            <p class="text-3xl md:text-5xl font-semibold tracking-tight text-black dark:text-white">Product Designer</p>
+            <p class="text-xl text-zinc-400 dark:text-zinc-500 mt-2">Based in Bali</p>
+          </div>
+
+          <div id="about-accordion" class="w-full border-t border-zinc-200 dark:border-zinc-800">
+            <!-- Row 1 -->
+            <div class="acc-item border-b border-zinc-200 dark:border-zinc-800 group">
+              <button class="acc-btn w-full grid grid-cols-[1fr_auto] items-center gap-4 py-6 text-left"
+                aria-expanded="false" data-acc="toggle" data-portrait-swap="assets/internationalRelations.JPG">
+                <span
+                  class="text-xl md:text-2xl text-zinc-600 dark:text-zinc-400 group-hover:text-black dark:group-hover:text-white transition-colors">Educational
+                  background in <b class="text-black dark:text-white">International Relations</b></span>
+                <svg
+                  class="chev w-6 h-6 text-zinc-300 dark:text-zinc-600 group-hover:text-black dark:group-hover:text-white transition-colors"
+                  viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                  <path d="M7 5l6 5-6 5V5z" />
+                </svg>
+              </button>
+              <div class="acc-panel overflow-hidden max-h-0">
+                <div class="px-0 pb-6 text-lg text-zinc-500 dark:text-zinc-400 leading-relaxed max-w-3xl">
+                  I studied International Relations because it is a field that combines many things I can learn:
+                  politics,
+                  economics, culture, history, and many more. It has given me a strong foundation in understanding how
+                  people and societies interact, which I apply to my design work.
+                </div>
               </div>
             </div>
-          </div>
-          <!-- Row 2 -->
-          <div class="acc-item border-b border-zinc-200">
-            <button class="acc-btn w-full grid grid-cols-[1fr_auto] items-center gap-4 py-4 text-left"
-              aria-expanded="false" data-acc="toggle" data-portrait-swap="assets/volunteering.jpg">
-              <span class="text-base md:text-lg">I love <b>volunteering</b> and <b>supporting social causes</b></span>
-              <svg class="chev w-5 h-5 text-zinc-500 transition-transform" viewBox="0 0 20 20" fill="currentColor"
-                aria-hidden="true">
-                <path d="M7 5l6 5-6 5V5z" />
-              </svg>
-            </button>
-            <div class="acc-panel overflow-hidden max-h-0">
-              <div class="px-0 pb-4 acc-strong text-sm md:text-base">
-                I regularly involve myself in community programs around education and international relations. I believe
-                that giving back to society is important, and it also helps me gain insights from many people I met that
-                I can apply to my design work.
+            <!-- Row 2 -->
+            <div class="acc-item border-b border-zinc-200 dark:border-zinc-800 group">
+              <button class="acc-btn w-full grid grid-cols-[1fr_auto] items-center gap-4 py-6 text-left"
+                aria-expanded="false" data-acc="toggle" data-portrait-swap="assets/volunteering.jpg">
+                <span
+                  class="text-xl md:text-2xl text-zinc-600 dark:text-zinc-400 group-hover:text-black dark:group-hover:text-white transition-colors">I
+                  love <b class="text-black dark:text-white">volunteering</b> and <b
+                    class="text-black dark:text-white">supporting social causes</b></span>
+                <svg
+                  class="chev w-6 h-6 text-zinc-300 dark:text-zinc-600 group-hover:text-black dark:group-hover:text-white transition-colors"
+                  viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                  <path d="M7 5l6 5-6 5V5z" />
+                </svg>
+              </button>
+              <div class="acc-panel overflow-hidden max-h-0">
+                <div class="px-0 pb-6 text-lg text-zinc-500 dark:text-zinc-400 leading-relaxed max-w-3xl">
+                  I regularly involve myself in community programs around education and international relations. I
+                  believe
+                  that giving back to society is important, and it also helps me gain insights from many people I met
+                  that
+                  I can apply to my design work.
+                </div>
               </div>
             </div>
-          </div>
-          <!-- Row 3 -->
-          <div class="acc-item border-b border-zinc-200">
-            <button class="acc-btn w-full grid grid-cols-[1fr_auto] items-center gap-4 py-4 text-left"
-              aria-expanded="false" data-acc="toggle" data-portrait-swap="assets/design.jpg">
-              <span class="text-base md:text-lg">I design to <b>solve real problems</b></span>
-              <svg class="chev w-5 h-5 text-zinc-500 transition-transform" viewBox="0 0 20 20" fill="currentColor"
-                aria-hidden="true">
-                <path d="M7 5l6 5-6 5V5z" />
-              </svg>
-            </button>
-            <div class="acc-panel overflow-hidden max-h-0">
-              <div class="px-0 pb-4 acc-strong text-sm md:text-base">
-                I love observing how people interact with products and services, and I design to make those interactions
-                better. My goal is to create experiences that are not only functional but also delightful and meaningful
-                for every layer of society.
+            <!-- Row 3 -->
+            <div class="acc-item border-b border-zinc-200 dark:border-zinc-800 group">
+              <button class="acc-btn w-full grid grid-cols-[1fr_auto] items-center gap-4 py-6 text-left"
+                aria-expanded="false" data-acc="toggle" data-portrait-swap="assets/design.jpg">
+                <span
+                  class="text-xl md:text-2xl text-zinc-600 dark:text-zinc-400 group-hover:text-black dark:group-hover:text-white transition-colors">I
+                  design to <b class="text-black dark:text-white">solve real problems</b></span>
+                <svg
+                  class="chev w-6 h-6 text-zinc-300 dark:text-zinc-600 group-hover:text-black dark:group-hover:text-white transition-colors"
+                  viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                  <path d="M7 5l6 5-6 5V5z" />
+                </svg>
+              </button>
+              <div class="acc-panel overflow-hidden max-h-0">
+                <div class="px-0 pb-6 text-lg text-zinc-500 dark:text-zinc-400 leading-relaxed max-w-3xl">
+                  I love observing how people interact with products and services, and I design to make those
+                  interactions
+                  better. My goal is to create experiences that are not only functional but also delightful and
+                  meaningful
+                  for every layer of society.
+                </div>
               </div>
             </div>
-          </div>
-          <!-- Row 4 -->
-          <div class="acc-item">
-            <button class="acc-btn w-full grid grid-cols-[1fr_auto] items-center gap-4 py-4 text-left"
-              aria-expanded="false" data-acc="toggle">
-              <span class="text-base md:text-lg">I like <b>learning new things</b></span>
-              <svg class="chev w-5 h-5 text-zinc-500 transition-transform" viewBox="0 0 20 20" fill="currentColor"
-                aria-hidden="true">
-                <path d="M7 5l6 5-6 5V5z" />
-              </svg>
-            </button>
-            <div class="acc-panel overflow-hidden max-h-0">
-              <div class="px-0 pb-4 acc-strong text-sm md:text-base">
-                Currently learning to code, I believe the ability to understand how code works will help me design
-                better products. I also enjoy learning about new design tools and methodologies to keep my skills sharp
-                and relevant.
+            <!-- Row 4 -->
+            <div class="acc-item border-b border-zinc-200 dark:border-zinc-800 group">
+              <button class="acc-btn w-full grid grid-cols-[1fr_auto] items-center gap-4 py-6 text-left"
+                aria-expanded="false" data-acc="toggle" data-portrait-swap="assets/LearningNewThings.JPG">
+                <span
+                  class="text-xl md:text-2xl text-zinc-600 dark:text-zinc-400 group-hover:text-black dark:group-hover:text-white transition-colors">I
+                  like <b class="text-black dark:text-white">learning new things</b></span>
+                <svg
+                  class="chev w-6 h-6 text-zinc-300 dark:text-zinc-600 group-hover:text-black dark:group-hover:text-white transition-colors"
+                  viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                  <path d="M7 5l6 5-6 5V5z" />
+                </svg>
+              </button>
+              <div class="acc-panel overflow-hidden max-h-0">
+                <div class="px-0 pb-6 text-lg text-zinc-500 dark:text-zinc-400 leading-relaxed max-w-3xl">
+                  Currently learning to code, I believe the ability to understand how code works will help me design
+                  better products. I also enjoy learning about new design tools and methodologies to keep my skills
+                  sharp
+                  and relevant.
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-    </section>
-  </main>
+      </section>
+    </main>
+  </div>
 
+  <div id="mobile-footer-root" class="lg:hidden"></div>
   <script src="app.js"></script>
 </body>
 
