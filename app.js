@@ -31,7 +31,7 @@ function renderSidebar() {
   if (!mount) return;
 
   // Calculate active states
-  const isConnect = location.pathname.includes('connect.html');
+  const isConnect = currentFilename() === 'connect.html';
   const baseLinkClass = "block w-fit px-6 py-2 text-lg font-medium transition-colors rounded-full";
   const activeClass = "bg-black text-white dark:bg-white dark:text-black";
   const inactiveClass = "text-zinc-400 dark:text-zinc-500 hover:text-black dark:hover:text-white";
@@ -233,11 +233,11 @@ function initProjectModal() {
         // But for now, let's reset to Clamby defaults if missing, or just leave as is?
         // If we leave as is, clicking Carte 1.1 then Stoa will show Carte 1.1 videos for Stoa.
         // Let's reset to Clamby defaults to be safe/consistent with previous state
-        if (v.id === 'modal-video-main') el.src = 'assets/clamby/Clamby Achievement.webm';
-        if (v.id === 'modal-video-1') el.src = 'assets/clamby/Clamby Data 1.webm';
-        if (v.id === 'modal-video-2') el.src = 'assets/clamby/Clamby Data 2.webm';
-        if (v.id === 'modal-video-3') el.src = 'assets/clamby/Clamby Data 3.webm';
-        if (v.id === 'modal-video-4') el.src = 'assets/clamby/Clamby Data 4.webm';
+        if (v.id === 'modal-video-main') el.src = 'assets/Clamby/Clamby Achievement.webm';
+        if (v.id === 'modal-video-1') el.src = 'assets/Clamby/Clamby Data 1.webm';
+        if (v.id === 'modal-video-2') el.src = 'assets/Clamby/Clamby Data 2.webm';
+        if (v.id === 'modal-video-3') el.src = 'assets/Clamby/Clamby Data 3.webm';
+        if (v.id === 'modal-video-4') el.src = 'assets/Clamby/Clamby Data 4.webm';
         el.play().catch(() => { });
       }
     });
