@@ -210,35 +210,61 @@ function initProjectModal() {
       if (titleEl) titleEl.textContent = link.dataset.title;
     }
 
-    // Update Modal Videos
-    const vids = [
-      { id: 'modal-video-main', src: link.getAttribute('data-video-main') },
-      { id: 'modal-video-1', src: link.getAttribute('data-video-1') },
-      { id: 'modal-video-2', src: link.getAttribute('data-video-2') },
-      { id: 'modal-video-3', src: link.getAttribute('data-video-3') },
-      { id: 'modal-video-4', src: link.getAttribute('data-video-4') },
+    // Update Modal Content (Videos or Images)
+    const mediaSlots = [
+      { idBase: 'modal-iframe-main', idVideo: 'modal-video-main', idImg: 'modal-img-main', src: link.getAttribute('data-video-main') },
+      { idBase: 'modal-iframe-1', idVideo: 'modal-video-1', idImg: 'modal-img-1', src: link.getAttribute('data-video-1') },
+      { idBase: 'modal-iframe-2', idVideo: 'modal-video-2', idImg: 'modal-img-2', src: link.getAttribute('data-video-2') },
+      { idBase: 'modal-iframe-3', idVideo: 'modal-video-3', idImg: 'modal-img-3', src: link.getAttribute('data-video-3') },
+      { idBase: 'modal-iframe-4', idVideo: 'modal-video-4', idImg: 'modal-img-4', src: link.getAttribute('data-video-4') },
     ];
 
-    vids.forEach(v => {
-      const el = document.getElementById(v.id);
-      if (el && v.src) {
-        // Only update if src is different to avoid flicker/reload if same
-        if (!el.src.endsWith(v.src)) {
-          el.src = v.src;
-          el.play().catch(() => { });
+    mediaSlots.forEach(slot => {
+      const vidEl = document.getElementById(slot.idVideo);
+      const imgEl = document.getElementById(slot.idImg);
+
+      let source = slot.src;
+
+      // Fallback defaults if source is missing (Clamby defaults)
+      if (!source) {
+        if (slot.idVideo === 'modal-video-main') source = 'assets/Clamby/Clamby Achievement.webm';
+        if (slot.idVideo === 'modal-video-1') source = 'assets/Clamby/Clamby Data 1.webm';
+        if (slot.idVideo === 'modal-video-2') source = 'assets/Clamby/Clamby Data 2.webm';
+        if (slot.idVideo === 'modal-video-3') source = 'assets/Clamby/Clamby Data 3.webm';
+        if (slot.idVideo === 'modal-video-4') source = 'assets/Clamby/Clamby Data 4.webm';
+      }
+
+      if (source) {
+        // Check if image
+        const isImage = /\.(png|jpg|jpeg|webp|gif|svg)$/i.test(source);
+
+        if (isImage) {
+          // Show Image, Hide Video
+          if (vidEl) {
+            vidEl.classList.add('hidden');
+            vidEl.pause();
+          }
+          if (imgEl) {
+            imgEl.src = source;
+            imgEl.classList.remove('hidden');
+          }
+        } else {
+          // Show Video, Hide Image
+          if (imgEl) {
+            imgEl.classList.add('hidden');
+          }
+          if (vidEl) {
+            vidEl.classList.remove('hidden');
+            // Only update src if different to avoid flicker
+            if (!vidEl.src.endsWith(source)) {
+              vidEl.src = source;
+              vidEl.play().catch(() => { });
+            } else {
+              // Ensure playing if it was paused
+              vidEl.play().catch(() => { });
+            }
+          }
         }
-      } else if (el && !v.src) {
-        // Fallback to Clamby if no data provided (e.g. Stoa) - mimicking previous static behavior
-        // Alternatively could clear it: el.src = '';
-        // But for now, let's reset to Clamby defaults if missing, or just leave as is?
-        // If we leave as is, clicking Carte 1.1 then Stoa will show Carte 1.1 videos for Stoa.
-        // Let's reset to Clamby defaults to be safe/consistent with previous state
-        if (v.id === 'modal-video-main') el.src = 'assets/Clamby/Clamby Achievement.webm';
-        if (v.id === 'modal-video-1') el.src = 'assets/Clamby/Clamby Data 1.webm';
-        if (v.id === 'modal-video-2') el.src = 'assets/Clamby/Clamby Data 2.webm';
-        if (v.id === 'modal-video-3') el.src = 'assets/Clamby/Clamby Data 3.webm';
-        if (v.id === 'modal-video-4') el.src = 'assets/Clamby/Clamby Data 4.webm';
-        el.play().catch(() => { });
       }
     });
 
