@@ -81,15 +81,25 @@ export async function loadHomePinnedCaseStudies() {
 const STATE = { all: [], filtered: [], activeTag: 'ALL' };
 
 function normalizeProject(entry) {
-    const d = entry.data || {};
+    const d = entry?.data || {};
+
+    const title = d.title || d.Name || 'Untitled Project';
+    const description = d.description || '';
+
+    // Tags array normalization
+    let tags = Array.isArray(d.projectTags) ? d.projectTags : (Array.isArray(d.tags) ? d.tags : []);
+    tags = tags.map(t => typeof t === 'string' ? t : (t?.value || t?.name || '')).filter(Boolean);
+
+    // Thumbnail normalization
+    let thumb = typeof d.thumbnail === 'string' ? d.thumbnail : (d.thumbnail?.url || d.coverImage?.url || d.image?.url || '');
+
     return {
         id: entry.id,
-        title: d.title || 'Untitled Project',
-        description: d.description || '', // plain text short desc
-        thumbnail: d.thumbnail || d.image, // url
-        tags: d.tags || [], // array of strings
+        title,
+        description,
+        thumbnail: thumb,
+        tags,
         link: d.link || '', // external link?
-        // ... any other fields
     };
 }
 
