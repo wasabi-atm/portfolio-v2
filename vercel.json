@@ -25,7 +25,7 @@
     },
     {
       "source": "/article",
-      "destination": "/article.html"
+      "destination": "/blog/article.html"
     },
     {
       "source": "/blog/:slug",
@@ -37,7 +37,7 @@
     },
     {
       "source": "/blogs/article/:slug",
-      "destination": "/article.html?slug=:slug"
+      "destination": "/blog/article.html?slug=:slug"
     }
   ],
   "redirects": [

@@ -332,7 +332,7 @@ function initProjectModal() {
 
   // Attach to all project links in index.html
   // Identifying via the specific classes used in the grid
-  const projectLinks = document.querySelectorAll('a.group[href^="http"], a.group[href^="/project"]');
+  const projectLinks = document.querySelectorAll('a.group[href^="http"], a.group[href^="/project"], a.group[href^="/showcase"]');
   projectLinks.forEach(link => {
     link.addEventListener('click', openModal);
   });
@@ -732,12 +732,17 @@ function blogRowHTML(b) {
   // If we are in root, article is in blog folder: 'blog/article.html'
   // BUT cleanest is using root relative '/blog/article.html' IF on a server.
   // For 'Go Live' (simple file server), relative is safer.
-  const articlePath = deep ? 'article.html' : 'blog/article.html';
+  // const articlePath = deep ? 'article.html' : 'blog/article.html';
+
+  // FIXED: Vercel "cleanUrls" causes 404 if we link to .html directly with search params in some cases,
+  // or simply looks "ugly". We now use pretty URLs which Vercel rewrites catch.
+  // Rewrite rule: /blog/:slug -> /blog/article.html?slug=:slug
+  const articleHref = b.slug ? `/blog/${b.slug}` : `/blog/article.html?id=${b.id}`;
 
   const q = b.slug ? `slug=${encodeURIComponent(b.slug)}` : `id=${encodeURIComponent(b.id)}`;
   return `
     <article class="py-3 md:py-6">
-      <a href="${articlePath}?${q}" class="group relative grid grid-cols-[1fr_auto] items-start gap-3 md:gap-4 rounded-xl px-3 py-2 md:px-3 md:py-3 transition-colors duration-200 hover:bg-zinc-200/60 hover:ring-1 hover:ring-zinc-300 focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:bg-zinc-200/50" data-card="blog-row">
+      <a href="${articleHref}" class="group relative grid grid-cols-[1fr_auto] items-start gap-3 md:gap-4 rounded-xl px-3 py-2 md:px-3 md:py-3 transition-colors duration-200 hover:bg-zinc-200/60 hover:ring-1 hover:ring-zinc-300 focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:bg-zinc-200/50" data-card="blog-row">
         <div class="relative z-10 min-w-0 space-y-1 md:space-y-2">
           <p class="text-xs md:text-sm text-zinc-600">
             ${author}
