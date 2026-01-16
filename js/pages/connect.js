@@ -29,3 +29,34 @@ export function initConnectPageAccordion() {
         });
     });
 }
+
+export function initTestimonialsCarousel() {
+    const container = document.getElementById('testimonials-container');
+    const prevBtn = document.getElementById('testimonials-prev');
+    const nextBtn = document.getElementById('testimonials-next');
+
+    if (!container || !prevBtn || !nextBtn) return;
+
+    // Get the width of one card including gap
+    const getScrollAmount = () => {
+        const firstCard = container.querySelector('.snap-start');
+        if (!firstCard) return 320; // fallback
+        const cardWidth = firstCard.offsetWidth;
+        const gap = 16; // gap-4 = 1rem = 16px
+        return cardWidth + gap;
+    };
+
+    prevBtn.addEventListener('click', () => {
+        container.scrollBy({
+            left: -getScrollAmount(),
+            behavior: 'smooth'
+        });
+    });
+
+    nextBtn.addEventListener('click', () => {
+        container.scrollBy({
+            left: getScrollAmount(),
+            behavior: 'smooth'
+        });
+    });
+}
