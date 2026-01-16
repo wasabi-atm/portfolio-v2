@@ -17,31 +17,20 @@
 
 
 
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      darkMode: 'class',
-      theme: {
-        extend: {
-          colors: { content: '#000000', muted: '#6A6A6A', connect: '#2A9320' }
-        }
-      }
-    }
-  </script>
 
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
   <link href="./dist/output.css" rel="stylesheet">
   <link id="site-favicon" rel="icon" type="image/png" href="assets/faviconneu.png">
   <script>
-      // Fallback guard: if this deployment serves the Carte subdomain,
-      // force-route to the Carte page even without server rewrites.
-      (function () {
-        try {
-          if (/^carte\./.test(location.hostname) && location.pathname !== '/carte.html') {
-            location.replace('/carte.html');
-          }
-        } catch (e) { }
-      })();
+    // Fallback guard: if this deployment serves the Carte subdomain,
+    // force-route to the Carte page even without server rewrites.
+    (function () {
+      try {
+        if (/^carte\./.test(location.hostname) && location.pathname !== '/carte.html') {
+          location.replace('/carte.html');
+        }
+      } catch (e) { }
+    })();
     (function () {
       try {
         var link = document.querySelector('link#site-favicon');

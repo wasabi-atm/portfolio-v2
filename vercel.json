@@ -61,5 +61,16 @@
       "destination": "/showcase",
       "permanent": true
     }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "Permissions-Policy",
+          "value": "browsing-topics=()"
+        }
+      ]
+    }
   ]
 }

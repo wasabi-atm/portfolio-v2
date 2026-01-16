@@ -54,10 +54,18 @@ export function initProjectModal() {
                     }
                 } else {
                     // Show Video
+                    // Show Video
                     if (vidEl) {
                         vidEl.classList.remove('hidden');
-                        vidEl.src = source;
-                        vidEl.play().catch(() => { });
+                        // Ensure we handle spaces/encoding correctly
+                        vidEl.src = encodeURI(source);
+                        vidEl.load(); // Critical for some browsers to pick up new source immediately
+                        const playPromise = vidEl.play();
+                        if (playPromise !== undefined) {
+                            playPromise.catch(error => {
+                                console.warn('Auto-play prevented:', error);
+                            });
+                        }
                     }
                 }
             }

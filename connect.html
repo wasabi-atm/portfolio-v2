@@ -12,41 +12,23 @@
   <meta property="og:url" content="https://wirawibisana.com/connect.html" />
   <meta property="og:type" content="profile" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-  <script src="https://cdn.tailwindcss.com"></script>
-  <style>
-    /* Hide scrollbar for Chrome, Safari and Opera */
-    .no-scrollbar::-webkit-scrollbar {
-      display: none;
-    }
-
-    /* Hide scrollbar for IE, Edge and Firefox */
-    .no-scrollbar {
-      -ms-overflow-style: none;
-      /* IE and Edge */
-      scrollbar-width: none;
-      /* Firefox */
-    }
-  </style>
-  <script>
-    tailwind.config = { darkMode: 'class', theme: { extend: {} } }
-  </script>
   <link href="./dist/output.css" rel="stylesheet">
   <link id="site-favicon" rel="icon" type="image/png" href="assets/faviconneu.png">
   <script>
-      (function () {
-        try {
-          var link = document.querySelector('link#site-favicon');
-          if (!link) {
-            link = document.createElement('link');
-            link.id = 'site-favicon';
-            link.rel = 'icon';
-            link.type = 'image/png';
-            document.head.appendChild(link);
-          }
-          var onCarte = /^carte\./i.test(location.hostname) || /(^|\.)carte\.wirawibisana\.com$/i.test(location.hostname);
-          link.href = onCarte ? 'assets/carteFavicon.png' : 'assets/faviconneu.png';
-        } catch (e) { }
-      })();
+    (function () {
+      try {
+        var link = document.querySelector('link#site-favicon');
+        if (!link) {
+          link = document.createElement('link');
+          link.id = 'site-favicon';
+          link.rel = 'icon';
+          link.type = 'image/png';
+          document.head.appendChild(link);
+        }
+        var onCarte = /^carte\./i.test(location.hostname) || /(^|\.)carte\.wirawibisana\.com$/i.test(location.hostname);
+        link.href = onCarte ? 'assets/carteFavicon.png' : 'assets/faviconneu.png';
+      } catch (e) { }
+    })();
   </script>
 </head>
 
@@ -129,7 +111,8 @@
                 <!-- Figma -->
                 <div
                   class="relative group aspect-square flex items-center justify-center bg-white dark:bg-zinc-700 rounded-xl p-2.5 shadow-sm border border-zinc-200 dark:border-zinc-600 transition-transform hover:scale-105">
-                  <img src="assets/Design%20Stack/Figma%20icon.png" alt="Figma" class="w-full h-full object-contain">
+                  <img src="assets/Design%20Stack/Figma%20icon.png" alt="Figma" class="w-full h-full object-contain"
+                    loading="lazy">
                   <div
                     class="absolute -top-10 left-1/2 -translate-x-1/2 bg-black text-white text-xs font-medium px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-10 shadow-lg">
                     Figma</div>
@@ -139,7 +122,7 @@
                 <div
                   class="relative group aspect-square flex items-center justify-center bg-white dark:bg-zinc-700 rounded-xl p-2.5 shadow-sm border border-zinc-200 dark:border-zinc-600 transition-transform hover:scale-105">
                   <img src="assets/Design%20Stack/Lottie%20Icon%20Download.webp" alt="Lottie"
-                    class="w-full h-full object-contain">
+                    class="w-full h-full object-contain" loading="lazy">
                   <div
                     class="absolute -top-10 left-1/2 -translate-x-1/2 bg-black text-white text-xs font-medium px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-10 shadow-lg">
                     Lottie</div>
@@ -149,7 +132,7 @@
                 <div
                   class="relative group aspect-square flex items-center justify-center bg-white dark:bg-zinc-700 rounded-xl p-2.5 shadow-sm border border-zinc-200 dark:border-zinc-600 transition-transform hover:scale-105">
                   <img src="assets/Design%20Stack/Affinity%20Icon.webp" alt="Affinity"
-                    class="w-full h-full object-contain">
+                    class="w-full h-full object-contain" loading="lazy">
                   <div
                     class="absolute -top-10 left-1/2 -translate-x-1/2 bg-black text-white text-xs font-medium px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-10 shadow-lg">
                     Affinity</div>
@@ -159,7 +142,7 @@
                 <div
                   class="relative group aspect-square flex items-center justify-center bg-white dark:bg-zinc-700 rounded-xl p-2.5 shadow-sm border border-zinc-200 dark:border-zinc-600 transition-transform hover:scale-105">
                   <img src="assets/Design%20Stack/Photoshop%20Icon.png" alt="Photoshop"
-                    class="w-full h-full object-contain">
+                    class="w-full h-full object-contain" loading="lazy">
                   <div
                     class="absolute -top-10 left-1/2 -translate-x-1/2 bg-black text-white text-xs font-medium px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-10 shadow-lg">
                     Photoshop</div>
@@ -169,7 +152,7 @@
                 <div
                   class="relative group aspect-square flex items-center justify-center bg-white dark:bg-zinc-700 rounded-xl p-2.5 shadow-sm border border-zinc-200 dark:border-zinc-600 transition-transform hover:scale-105">
                   <img src="assets/Design%20Stack/Illustrator%20Icon.png" alt="Illustrator"
-                    class="w-full h-full object-contain">
+                    class="w-full h-full object-contain" loading="lazy">
                   <div
                     class="absolute -top-10 left-1/2 -translate-x-1/2 bg-black text-white text-xs font-medium px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-10 shadow-lg">
                     Illustrator</div>
@@ -179,7 +162,7 @@
                 <div
                   class="relative group aspect-square flex items-center justify-center bg-white dark:bg-zinc-700 rounded-xl p-2.5 shadow-sm border border-zinc-200 dark:border-zinc-600 transition-transform hover:scale-105">
                   <img src="assets/Design%20Stack/Indesign%20Icon.png" alt="InDesign"
-                    class="w-full h-full object-contain">
+                    class="w-full h-full object-contain" loading="lazy">
                   <div
                     class="absolute -top-10 left-1/2 -translate-x-1/2 bg-black text-white text-xs font-medium px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-10 shadow-lg">
                     InDesign</div>
@@ -189,7 +172,7 @@
                 <div
                   class="relative group aspect-square flex items-center justify-center bg-white dark:bg-zinc-700 rounded-xl p-2.5 shadow-sm border border-zinc-200 dark:border-zinc-600 transition-transform hover:scale-105">
                   <img src="assets/Design%20Stack/After%20Effects%20Icon.png" alt="After Effects"
-                    class="w-full h-full object-contain">
+                    class="w-full h-full object-contain" loading="lazy">
                   <div
                     class="absolute -top-10 left-1/2 -translate-x-1/2 bg-black text-white text-xs font-medium px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-10 shadow-lg">
                     After Effects</div>
@@ -199,7 +182,7 @@
                 <div
                   class="relative group aspect-square flex items-center justify-center bg-white dark:bg-zinc-700 rounded-xl p-2.5 shadow-sm border border-zinc-200 dark:border-zinc-600 transition-transform hover:scale-105">
                   <img src="assets/Design%20Stack/Premiere%20Pro%20Icon.png" alt="Premiere Pro"
-                    class="w-full h-full object-contain">
+                    class="w-full h-full object-contain" loading="lazy">
                   <div
                     class="absolute -top-10 left-1/2 -translate-x-1/2 bg-black text-white text-xs font-medium px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-10 shadow-lg">
                     Premiere Pro</div>
@@ -215,7 +198,8 @@
                 <!-- HTML 5 -->
                 <div
                   class="relative group aspect-square flex items-center justify-center bg-white dark:bg-zinc-700 rounded-xl p-2.5 shadow-sm border border-zinc-200 dark:border-zinc-600 transition-transform hover:scale-105">
-                  <img src="assets/Tech%20Stack/HTML%205%20Icon.png" alt="HTML 5" class="w-full h-full object-contain">
+                  <img src="assets/Tech%20Stack/HTML%205%20Icon.png" alt="HTML 5" class="w-full h-full object-contain"
+                    loading="lazy">
                   <div
                     class="absolute -top-10 left-1/2 -translate-x-1/2 bg-black text-white text-xs font-medium px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-10 shadow-lg">
                     HTML 5</div>
@@ -224,7 +208,8 @@
                 <!-- CSS -->
                 <div
                   class="relative group aspect-square flex items-center justify-center bg-white dark:bg-zinc-700 rounded-xl p-2.5 shadow-sm border border-zinc-200 dark:border-zinc-600 transition-transform hover:scale-105">
-                  <img src="assets/Tech%20Stack/CSS%20Icon.png" alt="CSS" class="w-full h-full object-contain">
+                  <img src="assets/Tech%20Stack/CSS%20Icon.png" alt="CSS" class="w-full h-full object-contain"
+                    loading="lazy">
                   <div
                     class="absolute -top-10 left-1/2 -translate-x-1/2 bg-black text-white text-xs font-medium px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-10 shadow-lg">
                     CSS</div>
@@ -234,7 +219,7 @@
                 <div
                   class="relative group aspect-square flex items-center justify-center bg-white dark:bg-zinc-700 rounded-xl p-2.5 shadow-sm border border-zinc-200 dark:border-zinc-600 transition-transform hover:scale-105">
                   <img src="assets/Tech%20Stack/Javascript%20Icon.png" alt="JavaScript"
-                    class="w-full h-full object-contain">
+                    class="w-full h-full object-contain" loading="lazy">
                   <div
                     class="absolute -top-10 left-1/2 -translate-x-1/2 bg-black text-white text-xs font-medium px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-10 shadow-lg">
                     JavaScript</div>
@@ -244,7 +229,7 @@
                 <div
                   class="relative group aspect-square flex items-center justify-center bg-white dark:bg-zinc-700 rounded-xl p-2.5 shadow-sm border border-zinc-200 dark:border-zinc-600 transition-transform hover:scale-105">
                   <img src="assets/Tech%20Stack/Tailwind%20CSS%20Logo.png" alt="Tailwind CSS"
-                    class="w-full h-full object-contain">
+                    class="w-full h-full object-contain" loading="lazy">
                   <div
                     class="absolute -top-10 left-1/2 -translate-x-1/2 bg-black text-white text-xs font-medium px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-10 shadow-lg">
                     Tailwind CSS</div>
@@ -253,7 +238,8 @@
                 <!-- Next.js -->
                 <div
                   class="relative group aspect-square flex items-center justify-center bg-white dark:bg-zinc-700 rounded-xl p-2.5 shadow-sm border border-zinc-200 dark:border-zinc-600 transition-transform hover:scale-105">
-                  <img src="assets/Tech%20Stack/Next.js%20Icon.png" alt="Next.js" class="w-full h-full object-contain">
+                  <img src="assets/Tech%20Stack/Next.js%20Icon.png" alt="Next.js" class="w-full h-full object-contain"
+                    loading="lazy">
                   <div
                     class="absolute -top-10 left-1/2 -translate-x-1/2 bg-black text-white text-xs font-medium px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-10 shadow-lg">
                     Next.js</div>
@@ -262,7 +248,8 @@
                 <!-- Swift -->
                 <div
                   class="relative group aspect-square flex items-center justify-center bg-white dark:bg-zinc-700 rounded-xl p-2.5 shadow-sm border border-zinc-200 dark:border-zinc-600 transition-transform hover:scale-105">
-                  <img src="assets/Tech%20Stack/Swift%20Icon.png" alt="Swift" class="w-full h-full object-contain">
+                  <img src="assets/Tech%20Stack/Swift%20Icon.png" alt="Swift" class="w-full h-full object-contain"
+                    loading="lazy">
                   <div
                     class="absolute -top-10 left-1/2 -translate-x-1/2 bg-black text-white text-xs font-medium px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-10 shadow-lg">
                     Swift</div>
@@ -279,7 +266,7 @@
                 <div
                   class="relative group aspect-square flex items-center justify-center bg-white dark:bg-zinc-700 rounded-xl p-2.5 shadow-sm border border-zinc-200 dark:border-zinc-600 transition-transform hover:scale-105">
                   <img src="assets/Management%20Stack/Notion%20Icon.png" alt="Notion"
-                    class="w-full h-full object-contain">
+                    class="w-full h-full object-contain" loading="lazy">
                   <div
                     class="absolute -top-10 left-1/2 -translate-x-1/2 bg-black text-white text-xs font-medium px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-10 shadow-lg">
                     Notion</div>
@@ -288,8 +275,8 @@
                 <!-- Slack -->
                 <div
                   class="relative group aspect-square flex items-center justify-center bg-white dark:bg-zinc-700 rounded-xl p-2.5 shadow-sm border border-zinc-200 dark:border-zinc-600 transition-transform hover:scale-105">
-                  <img src="assets/Management%20Stack/Slack%20Icon.png" alt="Slack"
-                    class="w-full h-full object-contain">
+                  <img src="assets/Management%20Stack/Slack%20Icon.png" alt="Slack" class="w-full h-full object-contain"
+                    loading="lazy">
                   <div
                     class="absolute -top-10 left-1/2 -translate-x-1/2 bg-black text-white text-xs font-medium px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-10 shadow-lg">
                     Slack</div>
@@ -298,7 +285,8 @@
                 <!-- Jira -->
                 <div
                   class="relative group aspect-square flex items-center justify-center bg-white dark:bg-zinc-700 rounded-xl p-2.5 shadow-sm border border-zinc-200 dark:border-zinc-600 transition-transform hover:scale-105">
-                  <img src="assets/Management%20Stack/Jira%20Icon.png" alt="Jira" class="w-full h-full object-contain">
+                  <img src="assets/Management%20Stack/Jira%20Icon.png" alt="Jira" class="w-full h-full object-contain"
+                    loading="lazy">
                   <div
                     class="absolute -top-10 left-1/2 -translate-x-1/2 bg-black text-white text-xs font-medium px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-10 shadow-lg">
                     Jira</div>
@@ -308,7 +296,7 @@
                 <div
                   class="relative group aspect-square flex items-center justify-center bg-white dark:bg-zinc-700 rounded-xl p-2.5 shadow-sm border border-zinc-200 dark:border-zinc-600 transition-transform hover:scale-105">
                   <img src="assets/Management%20Stack/Confluence%20Icon.png" alt="Confluence"
-                    class="w-full h-full object-contain">
+                    class="w-full h-full object-contain" loading="lazy">
                   <div
                     class="absolute -top-10 left-1/2 -translate-x-1/2 bg-black text-white text-xs font-medium px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-10 shadow-lg">
                     Confluence</div>

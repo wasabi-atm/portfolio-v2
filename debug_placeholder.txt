@@ -1,0 +1,7 @@
+// Debug script to fetch builder data
+// usage: node debug_builder_data.js
+
+const API_KEY = '2f57f30cf7364c1d8fa079a0d7319885'; // Extracted from project context/files if available, or I'll look for it in api.js. 
+// Wait, I should verify the API Key first. I'll read api.js to be sure.
+// But for now I'll use the one I saw in previous diffs or assume I need to find it.
+// Let's read api.js first to be safe, then I'll write the script.

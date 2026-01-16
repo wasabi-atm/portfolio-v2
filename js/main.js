@@ -8,21 +8,35 @@ import { initProjectModal } from './components/modal.js';
 
 // Init Prefetch
 function initPrefetch() {
-    const links = document.querySelectorAll('aside a[href^="/"], a[href^="/"]');
-    const seen = new Set();
+    // Aggressively prefetch sidebar links and other internal links
+    const prefetchLinks = () => {
+        const links = document.querySelectorAll('aside a[href^="/"], a[href^="/"]');
+        const seen = new Set();
 
-    links.forEach(link => {
-        link.addEventListener('mouseenter', () => {
-            const href = link.getAttribute('href');
-            if (!href || href.startsWith('http') || href.startsWith('#') || seen.has(href)) return;
+        links.forEach(link => {
+            let href = link.getAttribute('href');
+            if (!href || href.startsWith('http') || href.startsWith('#') || href.startsWith('javascript')) return;
 
+            // Normalize
+            if (href.endsWith('/') && href.length > 1) href = href + 'index.html';
+
+            if (seen.has(href)) return;
             seen.add(href);
+
             const linkEl = document.createElement('link');
             linkEl.rel = 'prefetch';
             linkEl.href = href;
             document.head.appendChild(linkEl);
+            console.log('Prefetching:', href);
         });
-    });
+    };
+
+    // Run after main load to prioritize critical resources
+    if (document.readyState === 'complete') {
+        setTimeout(prefetchLinks, 1000);
+    } else {
+        window.addEventListener('load', () => setTimeout(prefetchLinks, 1000));
+    }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -43,7 +57,7 @@ document.addEventListener('DOMContentLoaded', () => {
         loadBlogsAndRender();
     }
 
-    if (document.getElementById('project-detail')) {
+    if (document.getElementById('project-detail') || document.getElementById('blog-detail')) {
         loadProjectDetail();
     }
 

@@ -54,8 +54,8 @@ function normalizeBlogLinks(val) {
 
 export function blogRowHTML(b) {
   const thumb = b.thumbnail;
-  // Use clean URL for blog
-  const href = b.slug ? `/blog/${encodeURIComponent(b.slug)}` : `/article.html?id=${encodeURIComponent(b.id)}`;
+  // Use absolute path for article to work from both / and /blog/ dirs
+  const href = b.slug ? `/article.html?slug=${encodeURIComponent(b.slug)}` : `/article.html?id=${encodeURIComponent(b.id)}`;
   const dateStr = formatBlogDateShort(b.date);
   const role = (b.tags && b.tags[0]) ? b.tags[0] : 'Article';
 
@@ -86,7 +86,7 @@ export function blogRowHTML(b) {
            </p>
            
            <div class="mt-2 text-sm font-medium text-black dark:text-white underline decoration-zinc-300 underline-offset-4 group-hover:decoration-black dark:group-hover:decoration-white transition-all">
-             Read Case Study
+             Read Article
            </div>
         </div>
       </a>
