@@ -11,8 +11,8 @@
     <script>
         tailwind.config = { darkMode: 'class', theme: { extend: {} } }
     </script>
-    <link href="../dist/output.css" rel="stylesheet">
-    <link id="site-favicon" rel="icon" type="image/png" href="../assets/faviconneu.png">
+    <link href="dist/output.css" rel="stylesheet">
+    <link id="site-favicon" rel="icon" type="image/png" href="assets/faviconneu.png">
     <script>
             (function () {
                 try {
@@ -25,7 +25,7 @@
                         document.head.appendChild(link);
                     }
                     var onCarte = /^carte\./i.test(location.hostname) || /(^|\.)carte\.wirawibisana\.com$/i.test(location.hostname);
-                    link.href = onCarte ? '../assets/carteFavicon.png' : '../assets/faviconneu.png';
+                    link.href = onCarte ? 'assets/carteFavicon.png' : 'assets/faviconneu.png';
                 } catch (e) { }
             })();
     </script>
@@ -39,7 +39,7 @@
     <main id="blog-detail" class="w-full min-h-screen relative"></main>
 
     <div id="mobile-footer-root" class="lg:hidden"></div>
-    <script type="module" src="../js/main.js"></script>
+    <script type="module" src="js/main.js"></script>
 </body>
 
 </html>

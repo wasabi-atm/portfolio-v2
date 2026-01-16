@@ -55,7 +55,7 @@ function normalizeBlogLinks(val) {
 export function blogRowHTML(b) {
   const thumb = b.thumbnail;
   // Use clean URL for blog
-  const href = b.slug ? `/blog/${encodeURIComponent(b.slug)}` : `article.html?id=${encodeURIComponent(b.id)}`;
+  const href = b.slug ? `/blog/${encodeURIComponent(b.slug)}` : `/article.html?id=${encodeURIComponent(b.id)}`;
   const dateStr = formatBlogDateShort(b.date);
   const role = (b.tags && b.tags[0]) ? b.tags[0] : 'Article';
 
