@@ -56,6 +56,11 @@ export function initProjectModal() {
                     // Show Video - use the already-encoded source
                     if (vidEl) {
                         vidEl.classList.remove('hidden');
+
+                        // Generate poster path from video source (replace .webm with _poster.jpg)
+                        const posterSource = source.replace(/\.webm$/i, '_poster.jpg');
+                        vidEl.poster = posterSource;
+
                         vidEl.src = source;
                         vidEl.load(); // Critical for some browsers to pick up new source immediately
                         const playPromise = vidEl.play();
