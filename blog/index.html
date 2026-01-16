@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Article – Portfolio</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = { darkMode: 'class', theme: { extend: {} } }
+    </script>
+    <link href="../dist/output.css" rel="stylesheet">
+    <link id="site-favicon" rel="icon" type="image/png" href="../assets/faviconneu.png">
+    <script>
+            (function () {
+                try {
+                    var link = document.querySelector('link#site-favicon');
+                    if (!link) {
+                        link = document.createElement('link');
+                        link.id = 'site-favicon';
+                        link.rel = 'icon';
+                        link.type = 'image/png';
+                        document.head.appendChild(link);
+                    }
+                    var onCarte = /^carte\./i.test(location.hostname) || /(^|\.)carte\.wirawibisana\.com$/i.test(location.hostname);
+                    link.href = onCarte ? '../assets/carteFavicon.png' : '../assets/faviconneu.png';
+                } catch (e) { }
+            })();
+    </script>
+</head>
+
+<body class="min-h-dvh bg-zinc-50 dark:bg-zinc-900 text-black dark:text-white antialiased font-sans"
+    style="font-family: 'Inter', sans-serif;">
+    <!-- Sidebar Root (Modified from site-nav) -->
+    <div id="sidebar-root"></div>
+
+    <main class="lg:ml-[348px] mx-auto w-auto max-w-[1400px] px-6 sm:px-8 md:px-12 pt-24 pb-24 space-y-8">
+        <header class="mb-12 space-y-6">
+            <div class="space-y-4">
+                <h1 class="text-4xl md:text-5xl font-bold tracking-tight text-zinc-900 dark:text-white">Blog & Case
+                    Studies</h1>
+                <p class="text-lg text-zinc-500 dark:text-zinc-400 max-w-2xl leading-relaxed">
+                    Thoughts on product design, engineering, and the process of building digital experiences.
+                </p>
+            </div>
+            <nav id="blogs-filters" class="flex flex-wrap items-center gap-2 text-sm pt-2"></nav>
+        </header>
+
+        <section id="blogs-list" class="px-0 divide-y divide-zinc-200 bg-white/0"></section>
+    </main>
+
+    <div id="mobile-footer-root" class="lg:hidden"></div>
+    <script src="../app.js"></script>
+</body>
+
+</html>

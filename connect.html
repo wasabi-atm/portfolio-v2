@@ -12,6 +12,20 @@
   <meta property="og:type" content="profile" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
   <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* Hide scrollbar for Chrome, Safari and Opera */
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+
+    /* Hide scrollbar for IE, Edge and Firefox */
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      /* IE and Edge */
+      scrollbar-width: none;
+      /* Firefox */
+    }
+  </style>
   <script>
     tailwind.config = { darkMode: 'class', theme: { extend: {} } }
   </script>
@@ -43,120 +57,491 @@
     <!-- Main Content Area -->
     <main class="w-full max-w-[1600px] px-6 md:px-12 pt-24 pb-12 lg:py-12 space-y-12">
 
-      <!-- Title -->
-      <header>
-        <h1 class="text-3xl md:text-4xl font-light leading-tight"><span class="text-zinc-400 dark:text-zinc-500">About
-          </span><span class="text-black dark:text-white">Wira</span></h1>
-      </header>
+      <!-- Title removed -->
 
       <!-- Content -->
-      <section class="grid grid-cols-1 lg:grid-cols-[400px_1fr] gap-12 items-start">
-        <!-- Left: portrait -->
-        <div>
-          <img id="connect-portrait" src="assets/ProfilePic.png" data-default-src="assets/ProfilePic.png"
-            alt="Portrait / coffee desk" class="w-full aspect-[4/5] object-cover rounded-2xl shadow-sm" />
+      <!-- Bento Grid Content -->
+      <section class="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 auto-rows-auto">
+
+        <!-- 1. What I solve (Col span 2) -->
+        <div class="md:col-span-2 bg-zinc-200 dark:bg-zinc-800 rounded-3xl p-6 md:p-8 flex flex-col gap-4">
+          <h2 class="text-2xl md:text-3xl font-semibold text-black dark:text-white">What I solve</h2>
+          <ul class="list-disc list-outside pl-5 space-y-2 text-base text-zinc-600 dark:text-zinc-400 leading-relaxed">
+            <li>Reduce UX friction in consumer apps.</li>
+            <li>Bridge product thinking + visual execution.</li>
+            <li>Gaps between design intent and development reality.</li>
+          </ul>
         </div>
-        <!-- Right: text + accordion -->
-        <div class="space-y-6">
-          <div>
-            <p class="text-3xl md:text-5xl font-semibold tracking-tight text-black dark:text-white">Product Designer</p>
-            <p class="text-xl text-zinc-400 dark:text-zinc-500 mt-2">Based in Bali</p>
+
+        <!-- 2. How I work (Col span 1, Row span 2) -->
+        <div
+          class="md:col-span-1 md:row-span-2 bg-zinc-200 dark:bg-zinc-800 rounded-3xl p-6 md:p-8 flex flex-col gap-6 min-h-[300px]">
+          <h2 class="text-2xl md:text-3xl font-semibold text-black dark:text-white">How I work</h2>
+          <div class="grid grid-cols-2 gap-3 flex-1">
+            <!-- Item 1 -->
+            <div class="bg-white/60 dark:bg-zinc-700/50 p-4 rounded-2xl flex flex-col gap-3 justify-start">
+              <div class="text-3xl">💡</div>
+              <p class="text-sm font-medium text-zinc-600 dark:text-zinc-300 leading-snug">Start with the why, not the
+                UI</p>
+            </div>
+            <!-- Item 2 -->
+            <div class="bg-white/60 dark:bg-zinc-700/50 p-4 rounded-2xl flex flex-col gap-3 justify-start">
+              <div class="text-3xl">🔒</div>
+              <p class="text-sm font-medium text-zinc-600 dark:text-zinc-300 leading-snug">Design for real constraints,
+                not ideal scenarios</p>
+            </div>
+            <!-- Item 3 -->
+            <div class="bg-white/60 dark:bg-zinc-700/50 p-4 rounded-2xl flex flex-col gap-3 justify-start">
+              <div class="text-3xl">🔍</div>
+              <p class="text-sm font-medium text-zinc-600 dark:text-zinc-300 leading-snug">Prefer clarity over
+                decoration</p>
+            </div>
+            <!-- Item 4 -->
+            <div class="bg-white/60 dark:bg-zinc-700/50 p-4 rounded-2xl flex flex-col gap-3 justify-start">
+              <div class="text-3xl">🚀</div>
+              <p class="text-sm font-medium text-zinc-600 dark:text-zinc-300 leading-snug">Ship, learn, and iterate fast
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. My Impacts (Col span 2) -->
+        <div class="md:col-span-2 bg-zinc-200 dark:bg-zinc-800 rounded-3xl p-6 md:p-8 flex flex-col gap-4">
+          <h2 class="text-2xl md:text-3xl font-semibold text-black dark:text-white">My Impacts</h2>
+          <ul class="list-disc list-outside pl-5 space-y-2 text-base text-zinc-600 dark:text-zinc-400 leading-relaxed">
+            <li>Shipped a consumer app to the App Store as Product Design Lead.</li>
+            <li>Worked in a fast paced Singapore & Bali Agency environment for 2+ years.</li>
+            <li>Balanced speed, brand consistency, and usability in live projects.</li>
+          </ul>
+        </div>
+
+        <!-- 4. My Working Stack (Col span 2) -->
+        <div class="md:col-span-2 bg-zinc-200 dark:bg-zinc-800 rounded-3xl p-6 md:p-8 flex flex-col gap-6">
+          <h2 class="text-2xl md:text-3xl font-semibold text-black dark:text-white">My Working Stack</h2>
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+            <!-- Design Stack -->
+            <div class="space-y-4">
+              <h3 class="text-base font-medium text-zinc-500 dark:text-zinc-400">Design</h3>
+              <!-- Fixed 4 columns to ensure 2 rows for 8 items -->
+              <div class="grid grid-cols-4 gap-3">
+
+                <!-- Figma -->
+                <div
+                  class="relative group aspect-square flex items-center justify-center bg-white dark:bg-zinc-700 rounded-xl p-2.5 shadow-sm border border-zinc-200 dark:border-zinc-600 transition-transform hover:scale-105">
+                  <img src="assets/Design%20Stack/Figma%20icon.png" alt="Figma" class="w-full h-full object-contain">
+                  <div
+                    class="absolute -top-10 left-1/2 -translate-x-1/2 bg-black text-white text-xs font-medium px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-10 shadow-lg">
+                    Figma</div>
+                </div>
+
+                <!-- Lottie -->
+                <div
+                  class="relative group aspect-square flex items-center justify-center bg-white dark:bg-zinc-700 rounded-xl p-2.5 shadow-sm border border-zinc-200 dark:border-zinc-600 transition-transform hover:scale-105">
+                  <img src="assets/Design%20Stack/Lottie%20Icon%20Download.webp" alt="Lottie"
+                    class="w-full h-full object-contain">
+                  <div
+                    class="absolute -top-10 left-1/2 -translate-x-1/2 bg-black text-white text-xs font-medium px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-10 shadow-lg">
+                    Lottie</div>
+                </div>
+
+                <!-- Affinity -->
+                <div
+                  class="relative group aspect-square flex items-center justify-center bg-white dark:bg-zinc-700 rounded-xl p-2.5 shadow-sm border border-zinc-200 dark:border-zinc-600 transition-transform hover:scale-105">
+                  <img src="assets/Design%20Stack/Affinity%20Icon.webp" alt="Affinity"
+                    class="w-full h-full object-contain">
+                  <div
+                    class="absolute -top-10 left-1/2 -translate-x-1/2 bg-black text-white text-xs font-medium px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-10 shadow-lg">
+                    Affinity</div>
+                </div>
+
+                <!-- Photoshop -->
+                <div
+                  class="relative group aspect-square flex items-center justify-center bg-white dark:bg-zinc-700 rounded-xl p-2.5 shadow-sm border border-zinc-200 dark:border-zinc-600 transition-transform hover:scale-105">
+                  <img src="assets/Design%20Stack/Photoshop%20Icon.png" alt="Photoshop"
+                    class="w-full h-full object-contain">
+                  <div
+                    class="absolute -top-10 left-1/2 -translate-x-1/2 bg-black text-white text-xs font-medium px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-10 shadow-lg">
+                    Photoshop</div>
+                </div>
+
+                <!-- Illustrator -->
+                <div
+                  class="relative group aspect-square flex items-center justify-center bg-white dark:bg-zinc-700 rounded-xl p-2.5 shadow-sm border border-zinc-200 dark:border-zinc-600 transition-transform hover:scale-105">
+                  <img src="assets/Design%20Stack/Illustrator%20Icon.png" alt="Illustrator"
+                    class="w-full h-full object-contain">
+                  <div
+                    class="absolute -top-10 left-1/2 -translate-x-1/2 bg-black text-white text-xs font-medium px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-10 shadow-lg">
+                    Illustrator</div>
+                </div>
+
+                <!-- InDesign -->
+                <div
+                  class="relative group aspect-square flex items-center justify-center bg-white dark:bg-zinc-700 rounded-xl p-2.5 shadow-sm border border-zinc-200 dark:border-zinc-600 transition-transform hover:scale-105">
+                  <img src="assets/Design%20Stack/Indesign%20Icon.png" alt="InDesign"
+                    class="w-full h-full object-contain">
+                  <div
+                    class="absolute -top-10 left-1/2 -translate-x-1/2 bg-black text-white text-xs font-medium px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-10 shadow-lg">
+                    InDesign</div>
+                </div>
+
+                <!-- After Effects -->
+                <div
+                  class="relative group aspect-square flex items-center justify-center bg-white dark:bg-zinc-700 rounded-xl p-2.5 shadow-sm border border-zinc-200 dark:border-zinc-600 transition-transform hover:scale-105">
+                  <img src="assets/Design%20Stack/After%20Effects%20Icon.png" alt="After Effects"
+                    class="w-full h-full object-contain">
+                  <div
+                    class="absolute -top-10 left-1/2 -translate-x-1/2 bg-black text-white text-xs font-medium px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-10 shadow-lg">
+                    After Effects</div>
+                </div>
+
+                <!-- Premiere Pro -->
+                <div
+                  class="relative group aspect-square flex items-center justify-center bg-white dark:bg-zinc-700 rounded-xl p-2.5 shadow-sm border border-zinc-200 dark:border-zinc-600 transition-transform hover:scale-105">
+                  <img src="assets/Design%20Stack/Premiere%20Pro%20Icon.png" alt="Premiere Pro"
+                    class="w-full h-full object-contain">
+                  <div
+                    class="absolute -top-10 left-1/2 -translate-x-1/2 bg-black text-white text-xs font-medium px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-10 shadow-lg">
+                    Premiere Pro</div>
+                </div>
+
+              </div>
+            </div>
+            <!-- Tech Stack -->
+            <div class="space-y-4">
+              <h3 class="text-base font-medium text-zinc-500 dark:text-zinc-400">Tech</h3>
+              <div class="grid grid-cols-4 gap-3">
+
+                <!-- HTML 5 -->
+                <div
+                  class="relative group aspect-square flex items-center justify-center bg-white dark:bg-zinc-700 rounded-xl p-2.5 shadow-sm border border-zinc-200 dark:border-zinc-600 transition-transform hover:scale-105">
+                  <img src="assets/Tech%20Stack/HTML%205%20Icon.png" alt="HTML 5" class="w-full h-full object-contain">
+                  <div
+                    class="absolute -top-10 left-1/2 -translate-x-1/2 bg-black text-white text-xs font-medium px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-10 shadow-lg">
+                    HTML 5</div>
+                </div>
+
+                <!-- CSS -->
+                <div
+                  class="relative group aspect-square flex items-center justify-center bg-white dark:bg-zinc-700 rounded-xl p-2.5 shadow-sm border border-zinc-200 dark:border-zinc-600 transition-transform hover:scale-105">
+                  <img src="assets/Tech%20Stack/CSS%20Icon.png" alt="CSS" class="w-full h-full object-contain">
+                  <div
+                    class="absolute -top-10 left-1/2 -translate-x-1/2 bg-black text-white text-xs font-medium px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-10 shadow-lg">
+                    CSS</div>
+                </div>
+
+                <!-- JavaScript -->
+                <div
+                  class="relative group aspect-square flex items-center justify-center bg-white dark:bg-zinc-700 rounded-xl p-2.5 shadow-sm border border-zinc-200 dark:border-zinc-600 transition-transform hover:scale-105">
+                  <img src="assets/Tech%20Stack/Javascript%20Icon.png" alt="JavaScript"
+                    class="w-full h-full object-contain">
+                  <div
+                    class="absolute -top-10 left-1/2 -translate-x-1/2 bg-black text-white text-xs font-medium px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-10 shadow-lg">
+                    JavaScript</div>
+                </div>
+
+                <!-- Tailwind CSS -->
+                <div
+                  class="relative group aspect-square flex items-center justify-center bg-white dark:bg-zinc-700 rounded-xl p-2.5 shadow-sm border border-zinc-200 dark:border-zinc-600 transition-transform hover:scale-105">
+                  <img src="assets/Tech%20Stack/Tailwind%20CSS%20Logo.png" alt="Tailwind CSS"
+                    class="w-full h-full object-contain">
+                  <div
+                    class="absolute -top-10 left-1/2 -translate-x-1/2 bg-black text-white text-xs font-medium px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-10 shadow-lg">
+                    Tailwind CSS</div>
+                </div>
+
+                <!-- Next.js -->
+                <div
+                  class="relative group aspect-square flex items-center justify-center bg-white dark:bg-zinc-700 rounded-xl p-2.5 shadow-sm border border-zinc-200 dark:border-zinc-600 transition-transform hover:scale-105">
+                  <img src="assets/Tech%20Stack/Next.js%20Icon.png" alt="Next.js" class="w-full h-full object-contain">
+                  <div
+                    class="absolute -top-10 left-1/2 -translate-x-1/2 bg-black text-white text-xs font-medium px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-10 shadow-lg">
+                    Next.js</div>
+                </div>
+
+                <!-- Swift -->
+                <div
+                  class="relative group aspect-square flex items-center justify-center bg-white dark:bg-zinc-700 rounded-xl p-2.5 shadow-sm border border-zinc-200 dark:border-zinc-600 transition-transform hover:scale-105">
+                  <img src="assets/Tech%20Stack/Swift%20Icon.png" alt="Swift" class="w-full h-full object-contain">
+                  <div
+                    class="absolute -top-10 left-1/2 -translate-x-1/2 bg-black text-white text-xs font-medium px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-10 shadow-lg">
+                    Swift</div>
+                </div>
+
+              </div>
+            </div>
+            <!-- Management Stack -->
+            <div class="space-y-4">
+              <h3 class="text-base font-medium text-zinc-500 dark:text-zinc-400">Management</h3>
+              <div class="grid grid-cols-4 gap-3">
+
+                <!-- Notion -->
+                <div
+                  class="relative group aspect-square flex items-center justify-center bg-white dark:bg-zinc-700 rounded-xl p-2.5 shadow-sm border border-zinc-200 dark:border-zinc-600 transition-transform hover:scale-105">
+                  <img src="assets/Management%20Stack/Notion%20Icon.png" alt="Notion"
+                    class="w-full h-full object-contain">
+                  <div
+                    class="absolute -top-10 left-1/2 -translate-x-1/2 bg-black text-white text-xs font-medium px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-10 shadow-lg">
+                    Notion</div>
+                </div>
+
+                <!-- Slack -->
+                <div
+                  class="relative group aspect-square flex items-center justify-center bg-white dark:bg-zinc-700 rounded-xl p-2.5 shadow-sm border border-zinc-200 dark:border-zinc-600 transition-transform hover:scale-105">
+                  <img src="assets/Management%20Stack/Slack%20Icon.png" alt="Slack"
+                    class="w-full h-full object-contain">
+                  <div
+                    class="absolute -top-10 left-1/2 -translate-x-1/2 bg-black text-white text-xs font-medium px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-10 shadow-lg">
+                    Slack</div>
+                </div>
+
+                <!-- Jira -->
+                <div
+                  class="relative group aspect-square flex items-center justify-center bg-white dark:bg-zinc-700 rounded-xl p-2.5 shadow-sm border border-zinc-200 dark:border-zinc-600 transition-transform hover:scale-105">
+                  <img src="assets/Management%20Stack/Jira%20Icon.png" alt="Jira" class="w-full h-full object-contain">
+                  <div
+                    class="absolute -top-10 left-1/2 -translate-x-1/2 bg-black text-white text-xs font-medium px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-10 shadow-lg">
+                    Jira</div>
+                </div>
+
+                <!-- Confluence -->
+                <div
+                  class="relative group aspect-square flex items-center justify-center bg-white dark:bg-zinc-700 rounded-xl p-2.5 shadow-sm border border-zinc-200 dark:border-zinc-600 transition-transform hover:scale-105">
+                  <img src="assets/Management%20Stack/Confluence%20Icon.png" alt="Confluence"
+                    class="w-full h-full object-contain">
+                  <div
+                    class="absolute -top-10 left-1/2 -translate-x-1/2 bg-black text-white text-xs font-medium px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-10 shadow-lg">
+                    Confluence</div>
+                </div>
+
+                <!-- Miro -->
+                <div
+                  class="relative group aspect-square flex items-center justify-center bg-white dark:bg-zinc-700 rounded-xl p-2.5 shadow-sm border border-zinc-200 dark:border-zinc-600 transition-transform hover:scale-105">
+                  <img src="assets/Management%20Stack/Miro%20Logo%20Icon.png" alt="Miro"
+                    class="w-full h-full object-contain">
+                  <div
+                    class="absolute -top-10 left-1/2 -translate-x-1/2 bg-black text-white text-xs font-medium px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-10 shadow-lg">
+                    Miro</div>
+                </div>
+
+                <!-- ClickUp -->
+                <div
+                  class="relative group aspect-square flex items-center justify-center bg-white dark:bg-zinc-700 rounded-xl p-2.5 shadow-sm border border-zinc-200 dark:border-zinc-600 transition-transform hover:scale-105">
+                  <img src="assets/Management%20Stack/ClickUp%20Icon.avif" alt="ClickUp"
+                    class="w-full h-full object-contain">
+                  <div
+                    class="absolute -top-10 left-1/2 -translate-x-1/2 bg-black text-white text-xs font-medium px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-10 shadow-lg">
+                    ClickUp</div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 5. Roles I Fit (Col span 1) -->
+        <div class="md:col-span-1 bg-zinc-200 dark:bg-zinc-800 rounded-3xl p-6 md:p-8 flex flex-col gap-4">
+          <h2 class="text-2xl md:text-3xl font-semibold text-black dark:text-white">Roles I Fit</h2>
+          <ul class="list-disc list-outside pl-5 space-y-2 text-base text-zinc-600 dark:text-zinc-400 leading-relaxed">
+            <li>Product Designer</li>
+            <li>UI/UX Designer</li>
+            <li>Marketing Specialist</li>
+          </ul>
+        </div>
+
+        <!-- 6. What Teammates Say (Col span 2) -->
+        <div
+          class="md:col-span-2 bg-zinc-200 dark:bg-zinc-800 rounded-3xl p-6 md:p-8 flex flex-col gap-6 overflow-hidden">
+          <div class="flex justify-between items-center">
+            <h2 class="text-2xl md:text-3xl font-semibold text-black dark:text-white">What they say</h2>
+            <div class="flex gap-2">
+              <button id="testimonials-prev"
+                class="w-10 h-10 rounded-full bg-white dark:bg-zinc-700 flex items-center justify-center hover:bg-zinc-100 dark:hover:bg-zinc-600 transition-colors shadow-sm focus:outline-none"
+                aria-label="Previous testimonial">
+                <svg xmlns="http://www.w3.org/2000/svg"
+                  class="w-5 h-5 text-zinc-600 dark:text-zinc-300 transform rotate-180" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M5 12h14M12 5l7 7-7 7" />
+                </svg>
+              </button>
+              <button id="testimonials-next"
+                class="w-10 h-10 rounded-full bg-white dark:bg-zinc-700 flex items-center justify-center hover:bg-zinc-100 dark:hover:bg-zinc-600 transition-colors shadow-sm focus:outline-none"
+                aria-label="Next testimonial">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-zinc-600 dark:text-zinc-300"
+                  viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                  stroke-linejoin="round">
+                  <path d="M5 12h14M12 5l7 7-7 7" />
+                </svg>
+              </button>
+            </div>
           </div>
 
-          <div id="about-accordion" class="w-full border-t border-zinc-200 dark:border-zinc-800">
-            <!-- Row 1 -->
-            <div class="acc-item border-b border-zinc-200 dark:border-zinc-800 group">
-              <button class="acc-btn w-full grid grid-cols-[1fr_auto] items-center gap-4 py-6 text-left"
-                aria-expanded="false" data-acc="toggle" data-portrait-swap="assets/internationalRelations.JPG">
-                <span
-                  class="text-xl md:text-2xl text-zinc-600 dark:text-zinc-400 group-hover:text-black dark:group-hover:text-white transition-colors">Educational
-                  background in <b class="text-black dark:text-white">International Relations</b></span>
-                <svg
-                  class="chev w-6 h-6 text-zinc-300 dark:text-zinc-600 group-hover:text-black dark:group-hover:text-white transition-colors"
-                  viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                  <path d="M7 5l6 5-6 5V5z" />
-                </svg>
-              </button>
-              <div class="acc-panel overflow-hidden max-h-0">
-                <div class="px-0 pb-6 text-lg text-zinc-500 dark:text-zinc-400 leading-relaxed max-w-3xl">
-                  I studied International Relations because it is a field that combines many things I can learn:
-                  politics,
-                  economics, culture, history, and many more. It has given me a strong foundation in understanding how
-                  people and societies interact, which I apply to my design work.
+          <div id="testimonials-container"
+            class="flex gap-4 overflow-x-auto snap-x snap-mandatory pb-4 no-scrollbar -mr-8 pr-8">
+
+            <!-- Card 1 -->
+            <div
+              class="snap-start min-w-[280px] md:min-w-[320px] bg-white dark:bg-zinc-900/50 p-5 rounded-2xl flex flex-col gap-4 border border-zinc-100 dark:border-zinc-700/50 shadow-sm">
+              <p class="text-zinc-600 dark:text-zinc-300 leading-relaxed text-[15px]">"Wira works really well with
+                coders because he understands tech limitations and feasibility."</p>
+              <div class="flex items-center gap-3 mt-auto">
+                <div
+                  class="w-10 h-10 rounded-full bg-gradient-to-br from-blue-100 to-blue-200 dark:from-blue-900 dark:to-blue-800 flex items-center justify-center text-blue-600 dark:text-blue-200">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                  </svg>
                 </div>
+                <div class="text-sm font-medium text-black dark:text-white">iOS Developer</div>
               </div>
             </div>
-            <!-- Row 2 -->
-            <div class="acc-item border-b border-zinc-200 dark:border-zinc-800 group">
-              <button class="acc-btn w-full grid grid-cols-[1fr_auto] items-center gap-4 py-6 text-left"
-                aria-expanded="false" data-acc="toggle" data-portrait-swap="assets/volunteering.jpg">
-                <span
-                  class="text-xl md:text-2xl text-zinc-600 dark:text-zinc-400 group-hover:text-black dark:group-hover:text-white transition-colors">I
-                  love <b class="text-black dark:text-white">volunteering</b> and <b
-                    class="text-black dark:text-white">supporting social causes</b></span>
-                <svg
-                  class="chev w-6 h-6 text-zinc-300 dark:text-zinc-600 group-hover:text-black dark:group-hover:text-white transition-colors"
-                  viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                  <path d="M7 5l6 5-6 5V5z" />
-                </svg>
-              </button>
-              <div class="acc-panel overflow-hidden max-h-0">
-                <div class="px-0 pb-6 text-lg text-zinc-500 dark:text-zinc-400 leading-relaxed max-w-3xl">
-                  I regularly involve myself in community programs around education and international relations. I
-                  believe
-                  that giving back to society is important, and it also helps me gain insights from many people I met
-                  that
-                  I can apply to my design work.
+
+            <!-- Card 2 -->
+            <div
+              class="snap-start min-w-[280px] md:min-w-[320px] bg-white dark:bg-zinc-900/50 p-5 rounded-2xl flex flex-col gap-4 border border-zinc-100 dark:border-zinc-700/50 shadow-sm">
+              <p class="text-zinc-600 dark:text-zinc-300 leading-relaxed text-[15px]">"He captured the authentic
+                Japanese aesthetic perfectly but optimized it for the Singaporean crowd."</p>
+              <div class="flex items-center gap-3 mt-auto">
+                <div
+                  class="w-10 h-10 rounded-full bg-gradient-to-br from-red-100 to-red-200 dark:from-red-900 dark:to-red-800 flex items-center justify-center text-red-600 dark:text-red-200">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                  </svg>
                 </div>
+                <div class="text-sm font-medium text-black dark:text-white">Creative Director (SG)</div>
               </div>
             </div>
-            <!-- Row 3 -->
-            <div class="acc-item border-b border-zinc-200 dark:border-zinc-800 group">
-              <button class="acc-btn w-full grid grid-cols-[1fr_auto] items-center gap-4 py-6 text-left"
-                aria-expanded="false" data-acc="toggle" data-portrait-swap="assets/design.jpg">
-                <span
-                  class="text-xl md:text-2xl text-zinc-600 dark:text-zinc-400 group-hover:text-black dark:group-hover:text-white transition-colors">I
-                  design to <b class="text-black dark:text-white">solve real problems</b></span>
-                <svg
-                  class="chev w-6 h-6 text-zinc-300 dark:text-zinc-600 group-hover:text-black dark:group-hover:text-white transition-colors"
-                  viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                  <path d="M7 5l6 5-6 5V5z" />
-                </svg>
-              </button>
-              <div class="acc-panel overflow-hidden max-h-0">
-                <div class="px-0 pb-6 text-lg text-zinc-500 dark:text-zinc-400 leading-relaxed max-w-3xl">
-                  I love observing how people interact with products and services, and I design to make those
-                  interactions
-                  better. My goal is to create experiences that are not only functional but also delightful and
-                  meaningful
-                  for every layer of society.
+
+            <!-- Card 3 -->
+            <div
+              class="snap-start min-w-[280px] md:min-w-[320px] bg-white dark:bg-zinc-900/50 p-5 rounded-2xl flex flex-col gap-4 border border-zinc-100 dark:border-zinc-700/50 shadow-sm">
+              <p class="text-zinc-600 dark:text-zinc-300 leading-relaxed text-[15px]">"I'm glad Wira could translate the
+                design I had in mind into actionable specs for the coders."</p>
+              <div class="flex items-center gap-3 mt-auto">
+                <div
+                  class="w-10 h-10 rounded-full bg-gradient-to-br from-purple-100 to-purple-200 dark:from-purple-900 dark:to-purple-800 flex items-center justify-center text-purple-600 dark:text-purple-200">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                  </svg>
                 </div>
+                <div class="text-sm font-medium text-black dark:text-white">Product Manager</div>
               </div>
             </div>
-            <!-- Row 4 -->
-            <div class="acc-item border-b border-zinc-200 dark:border-zinc-800 group">
-              <button class="acc-btn w-full grid grid-cols-[1fr_auto] items-center gap-4 py-6 text-left"
-                aria-expanded="false" data-acc="toggle" data-portrait-swap="assets/LearningNewThings.JPG">
-                <span
-                  class="text-xl md:text-2xl text-zinc-600 dark:text-zinc-400 group-hover:text-black dark:group-hover:text-white transition-colors">I
-                  like <b class="text-black dark:text-white">learning new things</b></span>
-                <svg
-                  class="chev w-6 h-6 text-zinc-300 dark:text-zinc-600 group-hover:text-black dark:group-hover:text-white transition-colors"
-                  viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                  <path d="M7 5l6 5-6 5V5z" />
-                </svg>
-              </button>
-              <div class="acc-panel overflow-hidden max-h-0">
-                <div class="px-0 pb-6 text-lg text-zinc-500 dark:text-zinc-400 leading-relaxed max-w-3xl">
-                  Currently learning to code, I believe the ability to understand how code works will help me design
-                  better products. I also enjoy learning about new design tools and methodologies to keep my skills
-                  sharp
-                  and relevant.
+
+            <!-- Card 4 -->
+            <div
+              class="snap-start min-w-[280px] md:min-w-[320px] bg-white dark:bg-zinc-900/50 p-5 rounded-2xl flex flex-col gap-4 border border-zinc-100 dark:border-zinc-700/50 shadow-sm">
+              <p class="text-zinc-600 dark:text-zinc-300 leading-relaxed text-[15px]">"Japanese F&B clients are
+                particular about details. Wira’s eye for layout satisfied even our strictest owners."</p>
+              <div class="flex items-center gap-3 mt-auto">
+                <div
+                  class="w-10 h-10 rounded-full bg-gradient-to-br from-amber-100 to-amber-200 dark:from-amber-900 dark:to-amber-800 flex items-center justify-center text-amber-600 dark:text-amber-200">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                  </svg>
                 </div>
+                <div class="text-sm font-medium text-black dark:text-white">Restaurant Manager</div>
               </div>
             </div>
+
+            <!-- Card 5 -->
+            <div
+              class="snap-start min-w-[280px] md:min-w-[320px] bg-white dark:bg-zinc-900/50 p-5 rounded-2xl flex flex-col gap-4 border border-zinc-100 dark:border-zinc-700/50 shadow-sm">
+              <p class="text-zinc-600 dark:text-zinc-300 leading-relaxed text-[15px]">"Wira is able to adapt to tight
+                deadlines and sudden scope changes without breaking the user flow."</p>
+              <div class="flex items-center gap-3 mt-auto">
+                <div
+                  class="w-10 h-10 rounded-full bg-gradient-to-br from-emerald-100 to-emerald-200 dark:from-emerald-900 dark:to-emerald-800 flex items-center justify-center text-emerald-600 dark:text-emerald-200">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                  </svg>
+                </div>
+                <div class="text-sm font-medium text-black dark:text-white">UX Lead</div>
+              </div>
+            </div>
+
+            <!-- Card 6 -->
+            <div
+              class="snap-start min-w-[280px] md:min-w-[320px] bg-white dark:bg-zinc-900/50 p-5 rounded-2xl flex flex-col gap-4 border border-zinc-100 dark:border-zinc-700/50 shadow-sm">
+              <p class="text-zinc-600 dark:text-zinc-300 leading-relaxed text-[15px]">"His campaigns didn't just look
+                good; they filled seats. He knows how to position seasonal menus."</p>
+              <div class="flex items-center gap-3 mt-auto">
+                <div
+                  class="w-10 h-10 rounded-full bg-gradient-to-br from-orange-100 to-orange-200 dark:from-orange-900 dark:to-orange-800 flex items-center justify-center text-orange-600 dark:text-orange-200">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                  </svg>
+                </div>
+                <div class="text-sm font-medium text-black dark:text-white">Marketing Head</div>
+              </div>
+            </div>
+
+            <!-- Card 7 -->
+            <div
+              class="snap-start min-w-[280px] md:min-w-[320px] bg-white dark:bg-zinc-900/50 p-5 rounded-2xl flex flex-col gap-4 border border-zinc-100 dark:border-zinc-700/50 shadow-sm">
+              <p class="text-zinc-600 dark:text-zinc-300 leading-relaxed text-[15px]">"He eliminates the friction
+                between design and engineering by validating designs early."</p>
+              <div class="flex items-center gap-3 mt-auto">
+                <div
+                  class="w-10 h-10 rounded-full bg-gradient-to-br from-cyan-100 to-cyan-200 dark:from-cyan-900 dark:to-cyan-800 flex items-center justify-center text-cyan-600 dark:text-cyan-200">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                  </svg>
+                </div>
+                <div class="text-sm font-medium text-black dark:text-white">Senior Engineer</div>
+              </div>
+            </div>
+
+            <!-- Card 8 -->
+            <div
+              class="snap-start min-w-[280px] md:min-w-[320px] bg-white dark:bg-zinc-900/50 p-5 rounded-2xl flex flex-col gap-4 border border-zinc-100 dark:border-zinc-700/50 shadow-sm">
+              <p class="text-zinc-600 dark:text-zinc-300 leading-relaxed text-[15px]">"Agency life in Singapore is
+                intense. Wira handled the pressure and delivered high-quality assets."</p>
+              <div class="flex items-center gap-3 mt-auto">
+                <div
+                  class="w-10 h-10 rounded-full bg-gradient-to-br from-fuchsia-100 to-fuchsia-200 dark:from-fuchsia-900 dark:to-fuchsia-800 flex items-center justify-center text-fuchsia-600 dark:text-fuchsia-200">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                  </svg>
+                </div>
+                <div class="text-sm font-medium text-black dark:text-white">Art Director</div>
+              </div>
+            </div>
+
           </div>
         </div>
+
+        <!-- 7. Ready to work! (Col span 1) -->
+        <a href="mailto:atmanawiera@gmail.com"
+          class="md:col-span-1 bg-zinc-200 dark:bg-zinc-800 rounded-3xl p-6 md:p-8 flex flex-col justify-between gap-4 min-h-[200px] group transition-all duration-300 hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black hover:scale-[1.02] hover:shadow-xl">
+          <div class="flex justify-between items-start w-full">
+            <h2
+              class="text-2xl md:text-3xl font-semibold text-black dark:text-white group-hover:text-white dark:group-hover:text-black transition-colors">
+              Ready to work!</h2>
+            <img src="assets/Sidebar Icons/Arrow Up Icon.svg"
+              class="w-8 h-8 opacity-40 group-hover:opacity-100 transition-all dark:invert group-hover:invert dark:group-hover:invert-0"
+              alt="Contact arrow">
+          </div>
+          <p
+            class="text-base text-zinc-600 dark:text-zinc-400 group-hover:text-zinc-300 dark:group-hover:text-zinc-600 transition-colors mt-auto">
+            Drop me an email.
+          </p>
+        </a>
+
       </section>
     </main>
   </div>

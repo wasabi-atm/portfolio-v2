@@ -3,18 +3,64 @@
   "cleanUrls": true,
   "trailingSlash": false,
   "rewrites": [
-    { "source": "/", "destination": "/index.html" },
-    { "source": "/blogs", "destination": "/blogs.html" },
-    { "source": "/connect", "destination": "/connect.html" },
-    { "source": "/showcase", "destination": "/showcase.html" },
-    { "source": "/article", "destination": "/article.html" },
-    { "source": "/blogs/article/:slug", "destination": "/article.html?slug=:slug" }
+    {
+      "source": "/",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/blogs",
+      "destination": "/blogs.html"
+    },
+    {
+      "source": "/blog",
+      "destination": "/blog/index.html"
+    },
+    {
+      "source": "/connect",
+      "destination": "/connect.html"
+    },
+    {
+      "source": "/showcase",
+      "destination": "/showcase.html"
+    },
+    {
+      "source": "/article",
+      "destination": "/article.html"
+    },
+    {
+      "source": "/blog/:slug",
+      "destination": "/blog/article.html?slug=:slug"
+    },
+    {
+      "source": "/blogs/article/:slug",
+      "destination": "/article.html?slug=:slug"
+    }
   ],
   "redirects": [
-    { "source": "/index.html", "destination": "/", "permanent": true },
-    { "source": "/blogs.html", "destination": "/blogs", "permanent": true },
-    { "source": "/connect.html", "destination": "/connect", "permanent": true },
-    { "source": "/showcase.html", "destination": "/showcase", "permanent": true },
-    { "source": "/article.html", "destination": "/blogs", "permanent": true }
+    {
+      "source": "/index.html",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/blogs.html",
+      "destination": "/blogs",
+      "permanent": true
+    },
+    {
+      "source": "/connect.html",
+      "destination": "/connect",
+      "permanent": true
+    },
+    {
+      "source": "/showcase.html",
+      "destination": "/showcase",
+      "permanent": true
+    },
+    {
+      "source": "/article.html",
+      "destination": "/blogs",
+      "permanent": true
+    }
   ]
 }
