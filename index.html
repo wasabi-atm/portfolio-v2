@@ -14,59 +14,8 @@
   <meta property="og:type" content="website" />
 
   <!-- Early intro overlay styles and flag; ensures overlay paints before content -->
-  <style>
-    #intro-greeting {
-      display: none;
-    }
 
-    .show-intro #intro-greeting {
-      display: grid;
-      position: fixed;
-      inset: 0;
-      z-index: 9999;
-      place-items: center;
-      background: #000;
-      color: #fff;
-      opacity: 1;
-      transition: opacity .6s ease;
-    }
 
-    .show-intro #intro-greeting .bubble {
-      transform: translateY(8px) scale(.98);
-      opacity: 0;
-      animation: intro-pop .6s ease forwards .15s;
-      text-align: center;
-    }
-
-    @keyframes intro-pop {
-      to {
-        transform: translateY(0) scale(1);
-        opacity: 1;
-      }
-    }
-  </style>
-  <script>
-    // Mark document to show intro overlay ASAP on first session visit to Home
-    (function () {
-      try {
-        if (!sessionStorage.getItem('intro_greeted')) {
-          document.documentElement.classList.add('show-intro');
-          // Set flag early so navigation during overlay timeframe doesn't retrigger
-          sessionStorage.setItem('intro_greeted', '1');
-        }
-      } catch (e) { }
-    })();
-    // If returning via bfcache or after first visit, ensure overlay is not shown
-    window.addEventListener('pageshow', function () {
-      try {
-        if (sessionStorage.getItem('intro_greeted')) {
-          document.documentElement.classList.remove('show-intro');
-          var ov = document.getElementById('intro-greeting');
-          if (ov) { ov.classList.add('hide'); }
-        }
-      } catch (e) { }
-    });
-  </script>
 
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
@@ -113,11 +62,7 @@
 <body class="min-h-dvh bg-zinc-50 dark:bg-zinc-900 antialiased font-['Inter'] transition-colors duration-300">
 
   <!-- Pre-rendered intro overlay (shown via .show-intro on <html>) -->
-  <div id="intro-greeting" aria-hidden="true">
-    <div class="bubble">
-      <div style="font-size: clamp(22px,4vw,36px); font-weight: 600; letter-spacing: .2px;">Om Swastyastu 🙏🏻</div>
-    </div>
-  </div>
+
 
   <!-- Sidebar container -->
   <div id="sidebar-root"></div>
@@ -135,7 +80,7 @@
         <!-- Media Card -->
         <div
           class="overflow-hidden rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-zinc-100 dark:bg-zinc-900 w-full aspect-[1028/590] relative shadow-sm transition-all hover:shadow-md">
-          <video class="block w-full h-full object-cover" src="assets/ClambyCommercial.webm" autoplay muted loop
+          <video class="block w-full h-full object-cover" src="assets/ClambyCommercial1.webm" autoplay muted loop
             playsinline disablePictureInPicture preload="metadata" aria-label="Clamby commercial demo"></video>
         </div>
         <!-- Text Card -->
