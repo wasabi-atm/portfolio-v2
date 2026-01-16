@@ -1,8 +1,7 @@
-// ==================== Global Navigation Renderer ====================
 const NAV_ITEMS = [
   { href: '/', label: 'Projects', active: true },
-  { href: 'connect.html', label: 'Why Hire Me', active: false },
-  { href: 'blog/', label: 'Blog', active: false }
+  { href: '/connect', label: 'Why Hire Me', active: false },
+  { href: '/blog', label: 'Blog', active: false }
 ];
 
 function currentFilename() {
@@ -128,7 +127,7 @@ function renderSidebar() {
     <!-- Desktop Sidebar (Hidden on Mobile) -->
     <aside class="hidden lg:flex fixed top-0 left-0 w-[348px] h-screen bg-zinc-50 dark:bg-zinc-900 border-r border-zinc-200 dark:border-zinc-800 flex-col p-12 overflow-y-auto z-50 transition-colors duration-300">
       <!-- Header -->
-      <a href="${resolveLink('index.html')}" class="mb-12 block group">
+      <a href="/" class="mb-12 block group">
         <h1 class="text-3xl font-semibold text-black dark:text-white tracking-tight mb-2 group-hover:opacity-70 transition-opacity">Wira Wibisana</h1>
         <p class="text-lg text-zinc-500 dark:text-zinc-400 group-hover:opacity-70 transition-opacity">Product Designer</p>
         <p class="text-lg text-zinc-500 dark:text-zinc-400 group-hover:opacity-70 transition-opacity">Based in Bali</p>
@@ -138,9 +137,9 @@ function renderSidebar() {
 
       <!-- Nav -->
       <nav class="space-y-4 flex-1">
-        <a href="${resolveLink('index.html')}" class="${homeClass}">Projects</a>
-        <a href="${resolveLink('connect.html')}" class="${aboutClass}">Why Hire Me?</a>
-        <a href="${resolveLink('blog/')}" class="${blogClass}">Blog & Case Studies</a>
+        <a href="/" class="${homeClass}">Projects</a>
+        <a href="/connect" class="${aboutClass}">Why Hire Me?</a>
+        <a href="/blog" class="${blogClass}">Blog & Case Studies</a>
       </nav>
 
       <!-- Bottom Details (Desktop) -->
@@ -159,11 +158,11 @@ function renderSidebar() {
     </header>
 
     <!-- Mobile Menu Dropdown (Hugs content) -->
-    <div id="mobile-menu-overlay" class="lg:hidden fixed top-[69px] left-0 w-full bg-white dark:bg-zinc-950 border-b border-zinc-200 dark:border-zinc-800 z-[55] hidden flex-col p-6 space-y-4 transition-all shadow-xl">
+     <div id="mobile-menu-overlay" class="lg:hidden fixed top-[69px] left-0 w-full bg-white dark:bg-zinc-950 border-b border-zinc-200 dark:border-zinc-800 z-[55] hidden flex-col p-6 space-y-4 transition-all shadow-xl">
        <nav class="space-y-2 flex flex-col w-full">
-        <a href="${resolveLink('index.html')}" class="${mHomeClass}">Projects</a>
-        <a href="${resolveLink('connect.html')}" class="${mAboutClass}">Why Hire Me?</a>
-        <a href="${resolveLink('blog/')}" class="${mBlogClass}">Blog & Case Studies</a>
+        <a href="/" class="${mHomeClass}">Projects</a>
+        <a href="/connect" class="${mAboutClass}">Why Hire Me?</a>
+        <a href="/blog" class="${mBlogClass}">Blog & Case Studies</a>
       </nav>
     </div>
   `;
@@ -1496,7 +1495,7 @@ function projectCardHTML(p) {
   ].join(' ');
 
   if (p.slug) {
-    return `<a href="/showcase?slug=${encodeURIComponent(p.slug)}" class="${wrapperClasses}" data-card="case-card">${inner}</a>`;
+    return `<a href="/showcase/${encodeURIComponent(p.slug)}" class="${wrapperClasses}" data-card="case-card">${inner}</a>`;
   }
   return `<div class="${wrapperClasses} cursor-pointer" data-card="case-card">${inner}</div>`;
 }
@@ -1773,9 +1772,38 @@ async function loadProjectDetail() {
   if (!root) return;
 
   const params = new URLSearchParams(location.search);
-  const slug = params.get('slug');
+  let slug = params.get('slug');
   if (!slug) {
-    root.innerHTML = `<p class="px-6 py-8 text-zinc-400">Missing <code>slug</code> in URL.</p>`;
+    // Fallback: parse from pathname /showcase/slug or /project.html?slug=...
+    try {
+      const parts = location.pathname.split('/').filter(Boolean);
+      // If we are at /showcase/xyz, parts might be ['showcase', 'xyz']
+      const sIndex = parts.indexOf('showcase');
+      if (sIndex !== -1 && parts[sIndex + 1]) {
+        slug = parts[sIndex + 1];
+      }
+    } catch { }
+  }
+
+  if (!slug) {
+    // Attempt ID fallback if needed, or error
+    const id = params.get('id');
+    if (!id) {
+      root.innerHTML = `<p class="px-6 py-8 text-zinc-400">Missing <code>slug</code> or <code>id</code> in URL.</p>`;
+      return;
+    }
+    // If ID exists, we can try to fetch by ID (legacy support)
+    // For now, let's just proceed to fetch and hope fetchBuilder handles ID if we pass it correctly?
+    // Actually typically fetchBuilder usage relies on query map.
+    // Let's stick to slug requirement or fetch by ID if slug missing.
+    const rowsId = await fetchBuilder('projects', { limit: 1, 'query.id': id });
+    if (rowsId.length) {
+      // Found by ID
+      // Proceed...
+      renderDetail(rowsId[0]);
+      return;
+    }
+    root.innerHTML = `<p class="px-6 py-8 text-zinc-400">No project found.</p>`;
     return;
   }
 

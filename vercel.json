@@ -32,6 +32,10 @@
       "destination": "/blog/article.html?slug=:slug"
     },
     {
+      "source": "/showcase/:slug",
+      "destination": "/project.html?slug=:slug"
+    },
+    {
       "source": "/blogs/article/:slug",
       "destination": "/article.html?slug=:slug"
     }
