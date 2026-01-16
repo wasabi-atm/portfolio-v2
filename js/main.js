@@ -2,7 +2,7 @@ import { renderSidebar } from './components/sidebar.js';
 import { loadProjectsAndRender, loadHomePinnedCaseStudies } from './pages/project-list.js';
 import { loadBlogsAndRender } from './pages/blog.js';
 import { loadProjectDetail } from './pages/detail.js';
-import { initConnectPageAccordion } from './pages/connect.js';
+import { initConnectPageAccordion, initTestimonialsCarousel } from './pages/connect.js';
 import { currentFilename } from './utils.js';
 import { initProjectModal } from './components/modal.js';
 
@@ -63,6 +63,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (document.getElementById('connect-accordions')) {
         initConnectPageAccordion();
+    }
+
+    if (document.getElementById('testimonials-container')) {
+        initTestimonialsCarousel();
     }
 
     // If index.html, ensure modals are init (handled by renderSidebar > initProjectModal, but good to ensure)
