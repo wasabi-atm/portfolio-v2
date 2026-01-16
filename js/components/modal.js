@@ -26,7 +26,7 @@ export function initProjectModal() {
             const vidEl = document.getElementById(slot.idVideo);
             const imgEl = document.getElementById(slot.idImg);
 
-            let source = slot.src;
+            let source = slot.src ? decodeURIComponent(slot.src) : '';
 
             // Reset state
             if (vidEl) {
@@ -40,16 +40,7 @@ export function initProjectModal() {
                 imgEl.src = '';
             }
 
-            // Fallback only for explicit Clamby title
-            if (!source) {
-                if (link.dataset.title === 'Clamby') {
-                    if (slot.idVideo === 'modal-video-main') source = 'assets/Clamby/Clamby Achievement.webm';
-                    if (slot.idVideo === 'modal-video-1') source = 'assets/Clamby/Clamby Data 1.webm';
-                    if (slot.idVideo === 'modal-video-2') source = 'assets/Clamby/Clamby Data 2.webm';
-                    if (slot.idVideo === 'modal-video-3') source = 'assets/Clamby/Clamby Data 3.webm';
-                    if (slot.idVideo === 'modal-video-4') source = 'assets/Clamby/Clamby Data 4.webm';
-                }
-            }
+
 
             if (source) {
                 // Check if image
@@ -109,7 +100,7 @@ export function initProjectModal() {
     // Attach click listeners to all project cards
     // We look for any <a> that starts with /showcase (local) or has data-title (if used elsewhere)
     // Re-selecting based on the current index.html structure
-    const projectLinks = document.querySelectorAll('a.group[href^="/showcase"], a.group[href^="/project"]');
+    const projectLinks = document.querySelectorAll('a.group[href^="/showcase"], a.group[href^="/project"], a[data-trigger="modal"]');
     projectLinks.forEach(l => l.addEventListener('click', openModal));
 
     if (closeBtn) closeBtn.addEventListener('click', closeModal);

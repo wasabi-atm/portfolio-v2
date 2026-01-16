@@ -60,11 +60,6 @@
       "source": "/showcase.html",
       "destination": "/showcase",
       "permanent": true
-    },
-    {
-      "source": "/article.html",
-      "destination": "/blogs",
-      "permanent": true
     }
   ]
 }
