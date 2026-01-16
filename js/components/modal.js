@@ -26,7 +26,8 @@ export function initProjectModal() {
             const vidEl = document.getElementById(slot.idVideo);
             const imgEl = document.getElementById(slot.idImg);
 
-            let source = slot.src ? decodeURIComponent(slot.src) : '';
+            // Source is already URL-encoded from HTML attributes
+            const source = slot.src || '';
 
             // Reset state
             if (vidEl) {
@@ -40,25 +41,22 @@ export function initProjectModal() {
                 imgEl.src = '';
             }
 
-
-
             if (source) {
-                // Check if image
-                const isImage = /\.(png|jpg|jpeg|webp|gif|svg)$/i.test(source);
+                // Check if image (decode for extension check only)
+                const decodedSource = decodeURIComponent(source);
+                const isImage = /\.(png|jpg|jpeg|webp|gif|svg)$/i.test(decodedSource);
 
                 if (isImage) {
-                    // Show Image
+                    // Show Image - use the already-encoded source
                     if (imgEl) {
                         imgEl.src = source;
                         imgEl.classList.remove('hidden');
                     }
                 } else {
-                    // Show Video
-                    // Show Video
+                    // Show Video - use the already-encoded source
                     if (vidEl) {
                         vidEl.classList.remove('hidden');
-                        // Ensure we handle spaces/encoding correctly
-                        vidEl.src = encodeURI(source);
+                        vidEl.src = source;
                         vidEl.load(); // Critical for some browsers to pick up new source immediately
                         const playPromise = vidEl.play();
                         if (playPromise !== undefined) {

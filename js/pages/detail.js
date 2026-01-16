@@ -390,7 +390,7 @@ export async function loadProjectDetail() {
        <!-- Sticky Breadcrumb Nav -->
       <div class="sticky top-[60px] md:top-0 z-[100] w-full bg-white/80 backdrop-blur-md backdrop-saturate-150 border-b border-zinc-200/50 transition-all dark:bg-zinc-900/80 dark:border-white/5">
          <div class="mx-auto w-full max-w-4xl px-6 sm:px-8 md:px-12 py-3 flex items-center gap-4">
-            <a href="index.html" aria-label="Back to Blogs" id="back-button"
+            <a href="/blog" aria-label="Back to Blogs" id="back-button"
                class="group inline-flex items-center justify-center -ml-2 p-2 rounded-lg hover:bg-zinc-100 transition-colors text-zinc-600 hover:text-black dark:text-zinc-400 dark:hover:text-white dark:hover:bg-zinc-800">
               <img src="${chevronPath}" alt="" class="w-4 h-4 opacity-70 group-hover:opacity-100 transition-opacity dark:invert" draggable="false"/>
             </a>

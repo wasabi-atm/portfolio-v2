@@ -662,9 +662,6 @@
   .animate-pulse {
     animation: var(--animate-pulse);
   }
-  .resize {
-    resize: both;
-  }
   .snap-x {
     scroll-snap-type: x var(--tw-scroll-snap-strictness);
   }

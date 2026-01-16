@@ -9,7 +9,7 @@ export function renderSidebar() {
   const filename = currentFilename();
   // If we are in /blog/ folder, filename might be 'blog.html' or 'article.html' based on currentFilename() logic
   const isConnect = filename === 'connect.html';
-  const isBlog = filename === 'blog.html' || filename === 'article.html';
+  const isBlog = filename === 'blog.html' || filename === 'article.html' || location.pathname.startsWith('/blog/') || location.pathname.includes('article.html');
   const isHome = !isConnect && !isBlog && filename === 'index.html';
 
   const inBlogDir = location.pathname.includes('/blog/');
