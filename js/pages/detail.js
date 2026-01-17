@@ -498,6 +498,56 @@ export async function loadProjectDetail() {
                     if (target) target.scrollIntoView({ behavior: 'smooth' });
                 }
             });
+
+            // IntersectionObserver to highlight active section in ToC
+            const observerOptions = {
+                root: null,
+                rootMargin: '-20% 0px -70% 0px', // Trigger when section is in upper third of viewport
+                threshold: 0
+            };
+
+            let currentActiveId = null;
+
+            const highlightTocLink = (id) => {
+                if (currentActiveId === id) return;
+                currentActiveId = id;
+
+                // Reset all links
+                toc.querySelectorAll('a').forEach(link => {
+                    link.classList.remove('text-black', 'dark:text-white', 'font-medium');
+                    link.classList.add('text-zinc-500', 'dark:text-zinc-400');
+                    const dot = link.querySelector('.toc-dot');
+                    if (dot) {
+                        dot.classList.remove('bg-black', 'ring-black', 'dark:bg-white', 'dark:ring-white');
+                        dot.classList.add('bg-zinc-200', 'ring-zinc-200', 'dark:bg-zinc-700', 'dark:ring-zinc-700');
+                    }
+                });
+
+                // Highlight active link
+                const activeLink = toc.querySelector(`a[data-id="${id}"]`);
+                if (activeLink) {
+                    activeLink.classList.remove('text-zinc-500', 'dark:text-zinc-400');
+                    activeLink.classList.add('text-black', 'dark:text-white', 'font-medium');
+                    const dot = activeLink.querySelector('.toc-dot');
+                    if (dot) {
+                        dot.classList.remove('bg-zinc-200', 'ring-zinc-200', 'dark:bg-zinc-700', 'dark:ring-zinc-700');
+                        dot.classList.add('bg-black', 'ring-black', 'dark:bg-white', 'dark:ring-white');
+                    }
+                }
+            };
+
+            const observer = new IntersectionObserver((observedEntries) => {
+                observedEntries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        highlightTocLink(entry.target.id);
+                    }
+                });
+            }, observerOptions);
+
+            // Observe all sections/headings in the entries list
+            entries.forEach(e => {
+                if (e.el) observer.observe(e.el);
+            });
         }
     }, 100);
 

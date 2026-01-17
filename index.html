@@ -13,6 +13,19 @@
   <meta property="og:url" content="https://wirawibisana.com" />
   <meta property="og:type" content="website" />
 
+  <!-- Prevent dark mode flash - apply theme before CSS loads -->
+  <script>
+    (function () {
+      try {
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+          document.documentElement.classList.add('dark');
+        } else {
+          document.documentElement.classList.remove('dark');
+        }
+      } catch (e) { }
+    })();
+  </script>
+
   <!-- Early intro overlay styles and flag; ensures overlay paints before content -->
 
 

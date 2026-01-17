@@ -11,6 +11,20 @@
   <meta property="og:image" content="assets/thumbnail.png" />
   <meta property="og:url" content="https://wirawibisana.com/connect.html" />
   <meta property="og:type" content="profile" />
+
+  <!-- Prevent dark mode flash - apply theme before CSS loads -->
+  <script>
+    (function () {
+      try {
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+          document.documentElement.classList.add('dark');
+        } else {
+          document.documentElement.classList.remove('dark');
+        }
+      } catch (e) { }
+    })();
+  </script>
+
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
   <link href="./dist/output.css" rel="stylesheet">
   <link id="site-favicon" rel="icon" type="image/png" href="assets/faviconneu.png">

@@ -47,9 +47,45 @@ export function normalizeBlog(entry) {
 
 function normalizeBlogLinks(val) {
   if (!val) return [];
-  // Basic normalization for links if needed in future
-  if (Array.isArray(val)) return val;
-  return [];
+  if (!Array.isArray(val)) return [];
+
+  const results = [];
+
+  val.forEach(item => {
+    if (!item || typeof item !== 'object') return;
+
+    // Builder.io uses typed field names like: appStoreLink, figmaLink, githubLink, websiteLink, etc.
+    Object.entries(item).forEach(([key, url]) => {
+      if (!url || typeof url !== 'string') return;
+
+      // Generate a label from the field name
+      const keyLower = key.toLowerCase();
+      let label = 'Link';
+
+      if (keyLower.includes('appstore') || keyLower.includes('app store') || keyLower.includes('apple')) {
+        label = 'App Store';
+      } else if (keyLower.includes('figma')) {
+        label = 'Figma';
+      } else if (keyLower.includes('github')) {
+        label = 'GitHub';
+      } else if (keyLower.includes('website') || keyLower.includes('web')) {
+        label = 'Website';
+      } else if (keyLower.includes('prototype')) {
+        label = 'Prototype';
+      } else if (keyLower.includes('demo')) {
+        label = 'Demo';
+      } else if (keyLower.includes('youtube')) {
+        label = 'YouTube';
+      } else if (keyLower.includes('link')) {
+        // Generic link - try to clean up the key name
+        label = key.replace(/link/gi, '').replace(/([A-Z])/g, ' $1').trim() || 'Link';
+      }
+
+      results.push({ url: String(url), label });
+    });
+  });
+
+  return results;
 }
 
 export function blogRowHTML(b) {
@@ -58,6 +94,9 @@ export function blogRowHTML(b) {
   const href = b.slug ? `/article.html?slug=${encodeURIComponent(b.slug)}` : `/article.html?id=${encodeURIComponent(b.id)}`;
   const dateStr = formatBlogDateShort(b.date);
   const role = (b.tags && b.tags[0]) ? b.tags[0] : 'Article';
+
+  // Estimate reading time based on description (minimum 3 min for articles)
+  const readTimeMin = Math.max(3, wordsPerMinuteEstimate(b.description || ''));
 
   return `
     <article class="py-12 first:pt-0 last:pb-0">
@@ -74,7 +113,7 @@ export function blogRowHTML(b) {
         <div class="flex flex-col gap-3 group-hover:-translate-y-1 transition-transform duration-500">
            <div class="flex items-center gap-3 text-xs font-medium">
              <span class="px-2.5 py-1 rounded-full bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300 capitalize">${role.toLowerCase()}</span>
-             <span class="text-zinc-400">${dateStr}</span>
+             <span class="text-zinc-400">${dateStr} • ${readTimeMin} min read</span>
            </div>
            
            <h2 class="text-2xl md:text-3xl font-bold text-zinc-900 dark:text-white leading-tight transition-colors group-hover:text-zinc-600 dark:group-hover:text-zinc-300">
