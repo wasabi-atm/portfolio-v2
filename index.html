@@ -31,7 +31,9 @@
 
 
 
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <!-- Preload local Inter font for performance -->
+  <link rel="preload" href="/assets/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link href="/assets/fonts/fonts.css" rel="stylesheet">
   <link href="./dist/output.css" rel="stylesheet">
   <link id="site-favicon" rel="icon" type="image/png" href="assets/faviconneu.png">
   <script>
@@ -82,8 +84,9 @@
         <!-- Media Card -->
         <div
           class="overflow-hidden rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-zinc-100 dark:bg-zinc-900 w-full aspect-[1028/590] relative shadow-sm transition-all hover:shadow-md">
-          <video class="block w-full h-full object-cover" src="assets/ClambyCommercial1.webm" autoplay muted loop
-            playsinline disablePictureInPicture preload="auto" aria-label="Clamby commercial demo"></video>
+          <video class="block w-full h-full object-cover" data-src="assets/ClambyCommercial1.webm" autoplay muted loop
+            playsinline disablePictureInPicture preload="none" poster="assets/Clamby/Clamby%20Achievement_poster.jpg"
+            aria-label="Clamby commercial demo"></video>
         </div>
         <!-- Text Card -->
         <div
@@ -140,8 +143,9 @@
         <!-- Media -->
         <div
           class="overflow-hidden rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-zinc-100 dark:bg-zinc-900 aspect-[1028/590] lg:aspect-square relative shadow-sm transition-all group-hover:shadow-md">
-          <video class="block w-full h-full object-cover" src="assets/Carte1point1.webm" autoplay muted loop playsinline
-            loading="lazy" preload="none" aria-label="Carte 1.1 demo"></video>
+          <video class="block w-full h-full object-cover" data-src="assets/Carte1point1.webm" autoplay muted loop
+            playsinline preload="none" poster="assets/Carte_1-1/Carte%201-1%20Achievement_poster.jpg"
+            aria-label="Carte 1.1 demo"></video>
         </div>
         <!-- Text -->
         <div
@@ -232,8 +236,8 @@
         <!-- Media (Order 1 on Mobile -> Order 2 on Desktop) -->
         <div
           class="overflow-hidden rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-zinc-100 dark:bg-zinc-900 aspect-[1028/590] lg:aspect-square relative shadow-sm transition-all group-hover:shadow-md order-1 lg:order-2">
-          <video class="block w-full h-full object-cover" src="assets/Carte.webm" autoplay muted loop playsinline
-            loading="lazy" preload="none" aria-label="Carte demo"></video>
+          <video class="block w-full h-full object-cover" data-src="assets/Carte.webm" autoplay muted loop playsinline
+            preload="none" poster="assets/Carte/Carte%20Achievement_poster.jpg" aria-label="Carte demo"></video>
         </div>
       </a>
 
@@ -247,8 +251,9 @@
         <!-- Media -->
         <div
           class="overflow-hidden rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-zinc-100 dark:bg-zinc-900 aspect-[1028/590] lg:aspect-square relative shadow-sm transition-all group-hover:shadow-md">
-          <video class="block w-full h-full object-cover" src="assets/Stoa%20Showcase%20Nue.webm" autoplay muted loop
-            loading="lazy" playsinline preload="none" aria-label="Stoa demo"></video>
+          <video class="block w-full h-full object-cover" data-src="assets/Stoa%20Showcase%20Nue.webm" autoplay muted
+            loop playsinline preload="none" poster="assets/Stoa/Stoa%20Achievement_poster.jpg"
+            aria-label="Stoa demo"></video>
         </div>
         <!-- Text -->
         <div
@@ -337,8 +342,8 @@
         <!-- Media (Order 1 on Mobile -> Order 2 on Desktop) -->
         <div
           class="overflow-hidden rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-zinc-100 dark:bg-zinc-900 aspect-[1028/590] lg:aspect-square relative shadow-sm transition-all group-hover:shadow-md order-1 lg:order-2">
-          <video class="block w-full h-full object-cover" src="assets/Swisekai%20Showcase%20Neu.webm" autoplay muted
-            loop loading="lazy" playsinline preload="none" poster="assets/Swisekai.webp"
+          <video class="block w-full h-full object-cover" data-src="assets/Swisekai%20Showcase%20Neu.webm" autoplay
+            muted loop playsinline preload="none" poster="assets/SwiSekai/SwiSekai%20Achievement_poster.jpg"
             aria-label="Swisekai demo"></video>
         </div>
       </a>
@@ -447,7 +452,7 @@
   </div>
 
   <div id="mobile-footer-root" class="lg:hidden"></div>
-  <script type="module" src="js/main.js"></script>
+  <script type="module" src="dist/js/bundle.js"></script>
 </body>
 
 </html>

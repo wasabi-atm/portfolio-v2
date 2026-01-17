@@ -6,7 +6,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build:css": "tailwindcss -i src/input.css -o dist/output.css",
-    "watch:css": "tailwindcss -i src/input.css -o dist/output.css --watch"
+    "watch:css": "tailwindcss -i src/input.css -o dist/output.css --watch",
+    "build:js": "vite build",
+    "build": "npm run build:css && npm run build:js"
   },
   "repository": {
     "type": "git",
@@ -23,6 +25,7 @@
     "@tailwindcss/cli": "^4.1.12",
     "autoprefixer": "^10.4.21",
     "postcss": "^8.5.6",
-    "tailwindcss": "^4.1.12"
+    "tailwindcss": "^4.1.12",
+    "vite": "^7.3.1"
   }
 }

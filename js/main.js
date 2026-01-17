@@ -5,6 +5,7 @@ import { loadProjectDetail } from './pages/detail.js';
 import { initConnectPageAccordion, initTestimonialsCarousel } from './pages/connect.js';
 import { currentFilename } from './utils.js';
 import { initProjectModal } from './components/modal.js';
+import { initLazyVideos } from './components/lazy-video.js';
 
 // Init Prefetch
 function initPrefetch() {
