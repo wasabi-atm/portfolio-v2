@@ -8,7 +8,8 @@
     "build:css": "tailwindcss -i src/input.css -o dist/output.css",
     "watch:css": "tailwindcss -i src/input.css -o dist/output.css --watch",
     "build:js": "vite build",
-    "build": "npm run build:css && npm run build:js"
+    "build:all": "npm run build:css && npm run build:js",
+    "build": "npm run build:css"
   },
   "repository": {
     "type": "git",
