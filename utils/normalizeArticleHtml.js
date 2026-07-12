@@ -2,9 +2,8 @@ export default function normalizeArticleHtml(input) {
   let s = (input || "").toString();
   if (!s) return "";
 
-  // 1) Unescape specifically-escaped <img> tags
-  s = s.replace(/&lt;(img\b[^>]*?)\/?&gt;/gi, "<$1>");
-  s = s.replace(/&lt;(img\b[^>]*?)\s*\/?&gt;/gi, "<$1>");
+  // 1) Unescape specifically-escaped <img> tags (including double-escaped ones)
+  s = s.replace(/(?:&amp;lt;|&lt;)(img\b[\s\S]*?)(?:\/| \/)?(?:&amp;gt;|&gt;)/gi, "<$1>");
 
   // 2) Convert plain text to simple HTML blocks and images when no HTML tags are present
   const hasHtml = /<[^>]+>/.test(s);

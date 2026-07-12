@@ -21,13 +21,32 @@ function formatDateShort(dateString) {
   }
 }
 
+// Helper to guarantee a real JavaScript Array from an array or array-like object dictionary
+function ensureArray(data) {
+  if (!data) return [];
+  if (Array.isArray(data)) return data;
+  if (typeof data === "object") {
+    const keys = Object.keys(data).map(Number).filter(n => !isNaN(n)).sort((a, b) => a - b);
+    if (keys.length > 0) {
+      return keys.map(k => data[k]);
+    }
+  }
+  return [];
+}
+
+// Helper to safely get the first item of an array or array-like object dictionary
+function getFirstItem(data) {
+  const arr = ensureArray(data);
+  return arr.length > 0 ? arr[0] : null;
+}
+
 // Normalize Builder.io links
 function normalizeBlogLinks(val) {
-  if (!val) return [];
-  if (!Array.isArray(val)) return [];
+  const arr = ensureArray(val);
+  if (arr.length === 0) return [];
 
   const results = [];
-  val.forEach((item) => {
+  arr.forEach((item) => {
     if (!item || typeof item !== "object") return;
     Object.entries(item).forEach(([key, url]) => {
       if (!url || typeof url !== "string") return;
@@ -168,14 +187,10 @@ export default async function BlogPostPage({ params }) {
       const slugVal = builderData.slug || builderData.Slug || builderData.url || builderData.Url || "";
 
       let tags = builderData["Blog tags"] || builderData.blogTags || builderData.tags || [];
-      if (Array.isArray(tags)) {
-        tags = tags
-          .map((t) => (typeof t === "string" ? t : t?.value || t?.name || ""))
-          .map((s) => (s || "").trim())
-          .filter(Boolean);
-      } else {
-        tags = [];
-      }
+      tags = ensureArray(tags)
+        .map((t) => (typeof t === "string" ? t : t?.value || t?.name || ""))
+        .map((s) => (s || "").trim())
+        .filter(Boolean);
 
       let coverImage = builderData.Thumbnail || builderData.thumbnail || builderData.coverImage || builderData.image || "";
       if (coverImage && typeof coverImage === "object") {
@@ -223,11 +238,9 @@ export default async function BlogPostPage({ params }) {
       .filter(Boolean);
   let skills = [];
   if (isBuilder) {
-    if (Array.isArray(builderData.skills)) {
-      builderData.skills.forEach((item) => {
-        if (typeof item === "string") skills.push(...splitSkills(item));
-      });
-    }
+    ensureArray(builderData.skills).forEach((item) => {
+      if (typeof item === "string") skills.push(...splitSkills(item));
+    });
     ["skill1", "skill2", "skill3"].forEach((k) => {
       const v = builderData[k];
       if (v) skills.push(...splitSkills(v));
@@ -247,8 +260,8 @@ export default async function BlogPostPage({ params }) {
   let showOverviewGrid = false;
 
   if (isBuilder) {
-    const gridList = builderData.projectOverviewGrid || builderData["Project overview grid"] || builderData.projectOverview;
-    if (Array.isArray(gridList) && gridList.length > 0) {
+    const gridList = ensureArray(builderData.projectOverviewGrid || builderData["Project overview grid"] || builderData.projectOverview);
+    if (gridList.length > 0) {
       const item = gridList[0];
       const findVal = (p, keys) => {
         for (const k of keys) if (p[k]) return p[k].toString().trim();
@@ -270,12 +283,9 @@ export default async function BlogPostPage({ params }) {
   }
 
   // Gallery images
-  const contentItem =
-    isBuilder && Array.isArray(builderData["Blog content"]) && builderData["Blog content"].length
-      ? builderData["Blog content"][0]
-      : isBuilder && Array.isArray(builderData.blogContent) && builderData.blogContent.length
-      ? builderData.blogContent[0]
-      : null;
+  const contentItem = isBuilder
+    ? getFirstItem(builderData["Blog content"] || builderData.blogContent)
+    : null;
 
   const galleryImages = contentItem
     ? [
