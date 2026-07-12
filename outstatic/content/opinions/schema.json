@@ -1,0 +1,12 @@
+{
+  "title": "Opinions",
+  "type": "object",
+  "properties": {
+    "tags": {
+      "title": "Tags",
+      "fieldType": "String",
+      "dataType": "string",
+      "description": "Comma-separated list of tags"
+    }
+  }
+}

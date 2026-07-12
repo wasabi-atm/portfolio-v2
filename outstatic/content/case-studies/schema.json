@@ -1,0 +1,54 @@
+{
+  "title": "Case Studies",
+  "type": "object",
+  "properties": {
+    "myRole": {
+      "title": "My Role",
+      "fieldType": "String",
+      "dataType": "string",
+      "description": "Role in the project"
+    },
+    "team": {
+      "title": "Team",
+      "fieldType": "String",
+      "dataType": "string",
+      "description": "Team details"
+    },
+    "timeline": {
+      "title": "Timeline",
+      "fieldType": "String",
+      "dataType": "string",
+      "description": "Timeline (e.g., 3 months)"
+    },
+    "skills": {
+      "title": "Skills",
+      "fieldType": "String",
+      "dataType": "string",
+      "description": "Comma-separated list of skills"
+    },
+    "links": {
+      "title": "Project Links",
+      "fieldType": "Text",
+      "dataType": "string",
+      "description": "JSON string of external links e.g. [{\"label\": \"Website\", \"url\": \"...\"}]"
+    },
+    "challengeText": {
+      "title": "Challenge Text",
+      "fieldType": "Text",
+      "dataType": "string",
+      "description": "Challenge description"
+    },
+    "solutionText": {
+      "title": "Solution Text",
+      "fieldType": "Text",
+      "dataType": "string",
+      "description": "Solution description"
+    },
+    "impactText": {
+      "title": "Impact Text",
+      "fieldType": "Text",
+      "dataType": "string",
+      "description": "Impact description"
+    }
+  }
+}
