@@ -3,6 +3,12 @@ import "./globals.css";
 export const metadata = {
   title: "Wira Wibisana | Portfolio",
   description: "Product Designer & Frontend Engineer portfolio website",
+  icons: {
+    icon: [
+      { url: "/favicon.ico" },
+      { url: "/assets/faviconneu.png", type: "image/png" },
+    ],
+  },
 };
 
 export default function RootLayout({ children }) {
