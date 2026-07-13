@@ -9,6 +9,7 @@ export const metadata = {
       { url: "/favicon.ico" },
       { url: "/assets/faviconneu.png", type: "image/png" },
     ],
+    shortcut: "/favicon.ico",
   },
 };
 

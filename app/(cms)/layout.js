@@ -3,6 +3,9 @@ import "outstatic/outstatic.css";
 export const metadata = {
   title: "Outstatic Dashboard",
   description: "Outstatic CMS Dashboard",
+  icons: {
+    icon: "/favicon.ico",
+  },
 };
 
 export default function CmsLayout({ children }) {
