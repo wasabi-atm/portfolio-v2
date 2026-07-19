@@ -1,0 +1,18 @@
+{
+  "title": "Posts",
+  "type": "object",
+  "properties": {
+    "coverImage": {
+      "title": "Thumbnail Image (URL)",
+      "fieldType": "String",
+      "dataType": "string",
+      "description": "URL of the thumbnail image"
+    },
+    "description": {
+      "title": "Description",
+      "fieldType": "Text",
+      "dataType": "string",
+      "description": "A short summary of the post"
+    }
+  }
+}
