@@ -1,22 +1,6 @@
 {
-  "commit": "",
-  "generated": "2026-07-19T11:19:09.568Z",
+  "commit": "e6532852e3da6421fe6bbdd13d87bf8ae3a93b61",
+  "generated": "2026-07-19T11:32:17.752Z",
   "metadata": [
-    {
-      "__outstatic": {
-        "commit": "",
-        "hash": "3113170536",
-        "path": "outstatic/content/posts/lorem-ipsum-dolor-sit-amet.mdx"
-      },
-      "author": {
-        "name": "Wira Wibisana",
-        "picture": "https://avatars.githubusercontent.com/u/96015846?v=4"
-      },
-      "collection": "posts",
-      "publishedAt": "2026-07-19T11:18:17.584Z",
-      "slug": "lorem-ipsum-dolor-sit-amet",
-      "status": "published",
-      "title": "Lorem ipsum dolor sit amet"
-    }
   ]
 }
