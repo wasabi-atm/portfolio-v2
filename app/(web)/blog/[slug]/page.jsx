@@ -1,4 +1,4 @@
-import { getDocumentBySlug } from "outstatic/server";
+import { getDocumentBySlug, getDocuments } from "outstatic/server";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import markdownToHtml from "@/utils/markdownToHtml";
@@ -178,34 +178,38 @@ export default async function BlogPostPage({ params }) {
     }
 
     if (entry) {
-      isBuilder = true;
-      builderData = entry.data || {};
+      const bData = entry.data || {};
+      const slugVal = bData.slug || bData.Slug || bData.url || bData.Url || "";
       
-      const title = builderData["Blog title"] || builderData.blogTitle || builderData.title || builderData.name || "Untitled";
-      const description = builderData["Blog description"] || builderData.blogDescription || builderData.description || "";
-      const publishedAt = builderData["Blog date"] || builderData.blogDate || builderData.date || entry?.createdDate || null;
-      const slugVal = builderData.slug || builderData.Slug || builderData.url || builderData.Url || "";
+      if (slugVal === slug || entry.id === slug) {
+        isBuilder = true;
+        builderData = bData;
+        
+        const title = builderData["Blog title"] || builderData.blogTitle || builderData.title || builderData.name || "Untitled";
+        const description = builderData["Blog description"] || builderData.blogDescription || builderData.description || "";
+        const publishedAt = builderData["Blog date"] || builderData.blogDate || builderData.date || entry?.createdDate || null;
 
-      let tags = builderData["Blog tags"] || builderData.blogTags || builderData.tags || [];
-      tags = ensureArray(tags)
-        .map((t) => (typeof t === "string" ? t : t?.value || t?.name || ""))
-        .map((s) => (s || "").trim())
-        .filter(Boolean);
+        let tags = builderData["Blog tags"] || builderData.blogTags || builderData.tags || [];
+        tags = ensureArray(tags)
+          .map((t) => (typeof t === "string" ? t : t?.value || t?.name || ""))
+          .map((s) => (s || "").trim())
+          .filter(Boolean);
 
-      let coverImage = builderData.Thumbnail || builderData.thumbnail || builderData.coverImage || builderData.image || "";
-      if (coverImage && typeof coverImage === "object") {
-        coverImage = coverImage.url || coverImage.src || "";
+        let coverImage = builderData.Thumbnail || builderData.thumbnail || builderData.coverImage || builderData.image || "";
+        if (coverImage && typeof coverImage === "object") {
+          coverImage = coverImage.url || coverImage.src || "";
+        }
+
+        post = {
+          title,
+          publishedAt,
+          slug: slugVal,
+          coverImage,
+          description,
+          tags,
+          content: typeof builderData["Blog article"] === "string" ? builderData["Blog article"] : typeof builderData.blogArticle === "string" ? builderData.blogArticle : "",
+        };
       }
-
-      post = {
-        title,
-        publishedAt,
-        slug: slugVal,
-        coverImage,
-        description,
-        tags,
-        content: typeof builderData["Blog article"] === "string" ? builderData["Blog article"] : typeof builderData.blogArticle === "string" ? builderData.blogArticle : "",
-      };
     }
   }
 
@@ -578,4 +582,23 @@ export default async function BlogPostPage({ params }) {
       </div>
     </div>
   );
+}
+
+export async function generateStaticParams() {
+  try {
+    const localPosts = await getDocuments("posts", ["slug"]);
+    const localParams = localPosts.map((p) => ({ slug: p.slug }));
+
+    const rawBuilder = await fetchBuilder("blogs", { limit: 100 });
+    const remoteParams = rawBuilder.map((entry) => {
+      const d = entry?.data || {};
+      const slug = d.slug || d.Slug || d.url || d.Url || "";
+      return { slug: slug || entry.id };
+    }).filter(p => !!p.slug);
+
+    return [...localParams, ...remoteParams];
+  } catch (e) {
+    console.error("Failed to generate static params:", e);
+    return [];
+  }
 }
