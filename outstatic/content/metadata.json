@@ -1,6 +1,23 @@
 {
-  "commit": "e6532852e3da6421fe6bbdd13d87bf8ae3a93b61",
-  "generated": "2026-07-19T11:32:17.752Z",
+  "commit": "6932586d0e83fdad770687d1fc1a5a57d1a339f9",
+  "generated": "2026-07-19T12:20:53.151Z",
   "metadata": [
+    {
+      "__outstatic": {
+        "commit": "6932586d0e83fdad770687d1fc1a5a57d1a339f9",
+        "hash": "1207947740",
+        "path": "outstatic/content/opinions/lorem-ipsum-dolor-sit-amet.mdx"
+      },
+      "author": {
+        "name": "Wira Wibisana",
+        "picture": "https://avatars.githubusercontent.com/u/96015846?v=4"
+      },
+      "collection": "opinions",
+      "publishedAt": "2026-07-19T11:18:17.584Z",
+      "slug": "lorem-ipsum-dolor-sit-amet",
+      "status": "draft",
+      "tags": "personal-blog",
+      "title": "Lorem ipsum dolor sit amet"
+    }
   ]
 }
