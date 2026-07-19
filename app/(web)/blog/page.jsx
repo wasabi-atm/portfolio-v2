@@ -142,8 +142,12 @@ export default async function BlogPage() {
             const href = `/blog/${post.slug || post.id}`;
 
             return (
-              <ScrollReveal key={post.slug || post.id} delay={Math.min(idx * 80, 400)}>
-                <article className="py-12 first:pt-0 last:pb-0">
+              <ScrollReveal
+                as="article"
+                key={post.slug || post.id}
+                delay={Math.min(idx * 80, 400)}
+                className="py-12 first:pt-0 last:pb-0"
+              >
                 <Link
                   href={href}
                   className="group grid grid-cols-1 md:grid-cols-[280px_1fr] lg:grid-cols-[320px_1fr] gap-6 md:gap-10 items-start"
@@ -158,35 +162,32 @@ export default async function BlogPage() {
                         loading="lazy"
                       />
                     ) : (
-                      <div className="w-full h-full flex items-center justify-center text-zinc-300 dark:text-zinc-700">
-                        <svg className="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth="1.5"
-                            d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
-                          />
+                      <div className="w-full h-full flex items-center justify-center bg-zinc-50 dark:bg-zinc-800/50">
+                        <svg className="w-10 h-10 text-zinc-300 dark:text-zinc-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                         </svg>
                       </div>
                     )}
                   </div>
 
                   {/* Content */}
-                  <div className="flex flex-col gap-3 group-hover:-translate-y-1 transition-transform duration-500">
-                    <div className="flex items-center gap-3 text-xs font-medium">
-                      <span className="px-2.5 py-1 rounded-full bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300 capitalize">
-                        {role}
-                      </span>
-                      <span className="text-zinc-400 dark:text-zinc-500">
-                        {dateStr} • {readTimeMin} min read
+                  <div className="flex flex-col h-full py-1 md:py-2">
+                    <div className="flex items-center gap-2 mb-4">
+                      {role && (
+                        <span className="inline-flex items-center rounded-full bg-zinc-100 dark:bg-zinc-800 px-3 py-1 text-xs font-medium text-zinc-600 dark:text-zinc-300">
+                          {role}
+                        </span>
+                      )}
+                      <span className="text-sm font-medium text-zinc-400 dark:text-zinc-500">
+                        {dateStr} &bull; {readTimeMin} min read
                       </span>
                     </div>
 
-                    <h2 className="text-2xl md:text-3xl font-bold text-zinc-900 dark:text-white leading-tight transition-colors group-hover:text-zinc-600 dark:group-hover:text-zinc-300">
+                    <h2 className="text-2xl md:text-3xl font-bold tracking-tight text-black dark:text-white mb-3 group-hover:text-zinc-600 dark:group-hover:text-zinc-300 transition-colors">
                       {post.title}
                     </h2>
 
-                    <p className="text-lg text-zinc-500 dark:text-zinc-400 leading-relaxed line-clamp-3 md:line-clamp-2 lg:line-clamp-3">
+                    <p className="text-base text-zinc-500 dark:text-zinc-400 leading-relaxed mb-6 line-clamp-3">
                       {post.description || "No description available."}
                     </p>
 
@@ -195,7 +196,6 @@ export default async function BlogPage() {
                     </div>
                   </div>
                 </Link>
-              </article>
               </ScrollReveal>
             );
           })
