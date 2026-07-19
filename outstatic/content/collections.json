@@ -1,8 +1,14 @@
 [
   {
-    "title": "Posts",
-    "slug": "posts",
-    "path": "outstatic/content/posts",
+    "title": "Case Studies",
+    "slug": "case-studies",
+    "path": "outstatic/content/case-studies",
+    "parent": null
+  },
+  {
+    "title": "Opinions",
+    "slug": "opinions",
+    "path": "outstatic/content/opinions",
     "parent": null
   }
 ]

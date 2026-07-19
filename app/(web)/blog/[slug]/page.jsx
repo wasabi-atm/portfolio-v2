@@ -141,9 +141,9 @@ export default async function BlogPostPage({ params }) {
 
   let post = null;
 
-  // 1. Try to fetch from Outstatic first
+  // 1. Try to fetch from Outstatic first (Case Studies then Opinions)
   try {
-    post = await getDocumentBySlug("posts", slug, [
+    post = await getDocumentBySlug("case-studies", slug, [
       "title",
       "publishedAt",
       "slug",
@@ -152,8 +152,32 @@ export default async function BlogPostPage({ params }) {
       "description",
       "tags",
       "author",
-      "articleType",
+      "myRole",
+      "team",
+      "timeline",
+      "skills",
+      "links",
+      "challengeText",
+      "solutionText",
+      "impactText",
     ]);
+    if (post) {
+      post.articleType = "Projects";
+    } else {
+      post = await getDocumentBySlug("opinions", slug, [
+        "title",
+        "publishedAt",
+        "slug",
+        "coverImage",
+        "content",
+        "description",
+        "tags",
+        "author",
+      ]);
+      if (post) {
+        post.articleType = "Personal Blog";
+      }
+    }
   } catch (e) {
     console.error("Local document lookup failed, trying Builder.io:", e);
   }
@@ -226,13 +250,15 @@ export default async function BlogPostPage({ params }) {
   // Metadata fallbacks
   const myRole = isBuilder
     ? builderData.myRole || builderData.role || builderData["My Role"] || (post.tags?.[0] || "Article")
-    : post.articleType || post.tags?.[0] || "Article";
+    : post.myRole || post.articleType || post.tags?.[0] || "Article";
   const dateStr = formatDateShort(post.publishedAt);
-  const team = isBuilder ? builderData.team || builderData["Team"] : "";
-  const timeline = isBuilder ? builderData.timeline || builderData["Timeline"] : "";
+  const team = isBuilder ? builderData.team || builderData["Team"] : (post.team || "");
+  const timeline = isBuilder ? builderData.timeline || builderData["Timeline"] : (post.timeline || "");
 
   // Link pills
-  const links = isBuilder ? normalizeBlogLinks(builderData.Links || builderData.links) : [];
+  const links = isBuilder
+    ? normalizeBlogLinks(builderData.Links || builderData.links)
+    : (post.links ? JSON.parse(post.links) : []);
 
   // Skills
   const splitSkills = (s) =>
@@ -256,6 +282,8 @@ export default async function BlogPostPage({ params }) {
       seenSkill.add(s.toLowerCase());
       return true;
     });
+  } else if (post.skills) {
+    skills = splitSkills(post.skills);
   }
 
   // Challenge / Solution / Impact grid
@@ -282,6 +310,15 @@ export default async function BlogPostPage({ params }) {
     showOverviewGrid = !!(challenge || solution || impact);
 
     // Apply normalization to grid fields
+    challenge = challenge ? normalizeArticleHtml(challenge) : "";
+    solution = solution ? normalizeArticleHtml(solution) : "";
+    impact = impact ? normalizeArticleHtml(impact) : "";
+  } else {
+    challenge = post.challengeText || "";
+    solution = post.solutionText || "";
+    impact = post.impactText || "";
+    showOverviewGrid = !!(challenge || solution || impact);
+
     challenge = challenge ? normalizeArticleHtml(challenge) : "";
     solution = solution ? normalizeArticleHtml(solution) : "";
     impact = impact ? normalizeArticleHtml(impact) : "";
@@ -587,8 +624,9 @@ export default async function BlogPostPage({ params }) {
 
 export async function generateStaticParams() {
   try {
-    const localPosts = await getDocuments("posts", ["slug"]);
-    const localParams = localPosts.map((p) => ({ slug: p.slug }));
+    const localCaseStudies = await getDocuments("case-studies", ["slug"]);
+    const localOpinions = await getDocuments("opinions", ["slug"]);
+    const localParams = [...localCaseStudies, ...localOpinions].map((p) => ({ slug: p.slug }));
 
     const rawBuilder = await fetchBuilder("blogs", { limit: 100 });
     const remoteParams = rawBuilder.map((entry) => {

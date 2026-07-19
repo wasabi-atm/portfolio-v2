@@ -26,8 +26,8 @@ function estimateReadingTime(content) {
 }
 
 export default async function BlogPage() {
-  // 1. Fetch local posts from Outstatic
-  const localPosts = await getDocuments("posts", [
+  // 1. Fetch local posts from Outstatic (Case Studies and Opinions)
+  const localCaseStudies = await getDocuments("case-studies", [
     "title",
     "description",
     "publishedAt",
@@ -35,8 +35,30 @@ export default async function BlogPage() {
     "coverImage",
     "tags",
     "content",
-    "articleType",
   ]);
+
+  const localOpinions = await getDocuments("opinions", [
+    "title",
+    "description",
+    "publishedAt",
+    "slug",
+    "coverImage",
+    "tags",
+    "content",
+  ]);
+
+  // Map to common structure with explicit article roles
+  const mappedCaseStudies = localCaseStudies.map((p) => ({
+    ...p,
+    articleType: "Projects",
+  }));
+
+  const mappedOpinions = localOpinions.map((p) => ({
+    ...p,
+    articleType: "Personal Blog",
+  }));
+
+  const localPosts = [...mappedCaseStudies, ...mappedOpinions];
 
   // 2. Fetch remote posts from Builder.io
   const rawBuilder = await fetchBuilder("blogs", { limit: 100 });
