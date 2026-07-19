@@ -35,6 +35,7 @@ export default async function BlogPage() {
     "coverImage",
     "tags",
     "content",
+    "articleType",
   ]);
 
   // 2. Fetch remote posts from Builder.io
@@ -112,7 +113,7 @@ export default async function BlogPage() {
           mergedPosts.map((post) => {
             const dateStr = formatDateShort(post.publishedAt);
             const readTimeMin = estimateReadingTime(post.content);
-            const role = post.tags && post.tags[0] ? post.tags[0] : "Article";
+            const role = post.articleType || (post.tags && post.tags[0] ? post.tags[0] : "Article");
             const href = `/blog/${post.slug || post.id}`;
 
             return (

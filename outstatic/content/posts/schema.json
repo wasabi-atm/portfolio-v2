@@ -2,17 +2,21 @@
   "title": "Posts",
   "type": "object",
   "properties": {
-    "coverImage": {
-      "title": "Thumbnail Image (URL)",
-      "fieldType": "String",
+    "articleType": {
+      "title": "Article Type",
+      "fieldType": "Select",
       "dataType": "string",
-      "description": "URL of the thumbnail image"
-    },
-    "description": {
-      "title": "Description",
-      "fieldType": "Text",
-      "dataType": "string",
-      "description": "A short summary of the post"
+      "description": "Category of the article (matches Builder.io: Personal Blog or Projects)",
+      "options": [
+        {
+          "value": "Personal Blog",
+          "label": "Personal Blog"
+        },
+        {
+          "value": "Projects",
+          "label": "Projects"
+        }
+      ]
     }
   }
 }

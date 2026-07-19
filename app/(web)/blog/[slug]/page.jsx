@@ -152,6 +152,7 @@ export default async function BlogPostPage({ params }) {
       "description",
       "tags",
       "author",
+      "articleType",
     ]);
   } catch (e) {
     console.error("Local document lookup failed, trying Builder.io:", e);
@@ -225,7 +226,7 @@ export default async function BlogPostPage({ params }) {
   // Metadata fallbacks
   const myRole = isBuilder
     ? builderData.myRole || builderData.role || builderData["My Role"] || (post.tags?.[0] || "Article")
-    : post.tags?.[0] || "Article";
+    : post.articleType || post.tags?.[0] || "Article";
   const dateStr = formatDateShort(post.publishedAt);
   const team = isBuilder ? builderData.team || builderData["Team"] : "";
   const timeline = isBuilder ? builderData.timeline || builderData["Timeline"] : "";
