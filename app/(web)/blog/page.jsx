@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { getDocuments } from "outstatic/server";
 import { fetchBuilder } from "@/utils/builder";
+import ScrollReveal from "@/components/ScrollReveal";
 
 // Helper to format short date
 function formatDateShort(dateString) {
@@ -112,14 +113,16 @@ export default async function BlogPage() {
   return (
     <main className="lg:ml-0 mx-auto w-auto max-w-[1400px] px-6 sm:px-8 md:px-12 pt-24 pb-24 space-y-8">
       <header className="mb-12 space-y-6">
-        <div className="space-y-4">
-          <h1 className="text-4xl md:text-5xl font-bold tracking-tight text-zinc-900 dark:text-white">
-            Blog & Case Studies
-          </h1>
-          <p className="text-lg text-zinc-500 dark:text-zinc-400 max-w-2xl leading-relaxed">
-            Thoughts on product design, engineering, and the process of building digital experiences.
-          </p>
-        </div>
+        <ScrollReveal>
+          <div className="space-y-4">
+            <h1 className="text-4xl md:text-5xl font-bold tracking-tight text-zinc-900 dark:text-white">
+              Blog & Case Studies
+            </h1>
+            <p className="text-lg text-zinc-500 dark:text-zinc-400 max-w-2xl leading-relaxed">
+              Thoughts on product design, engineering, and the process of building digital experiences.
+            </p>
+          </div>
+        </ScrollReveal>
       </header>
 
       <section id="blogs-list" className="px-0 divide-y divide-zinc-200 dark:divide-zinc-800 bg-white/0">
@@ -132,14 +135,15 @@ export default async function BlogPage() {
             or Builder.io to publish your first post!
           </div>
         ) : (
-          mergedPosts.map((post) => {
+          mergedPosts.map((post, idx) => {
             const dateStr = formatDateShort(post.publishedAt);
             const readTimeMin = estimateReadingTime(post.content);
             const role = post.articleType || (post.tags && post.tags[0] ? post.tags[0] : "Article");
             const href = `/blog/${post.slug || post.id}`;
 
             return (
-              <article key={post.slug || post.id} className="py-12 first:pt-0 last:pb-0">
+              <ScrollReveal key={post.slug || post.id} delay={Math.min(idx * 80, 400)}>
+                <article className="py-12 first:pt-0 last:pb-0">
                 <Link
                   href={href}
                   className="group grid grid-cols-1 md:grid-cols-[280px_1fr] lg:grid-cols-[320px_1fr] gap-6 md:gap-10 items-start"
@@ -192,6 +196,7 @@ export default async function BlogPage() {
                   </div>
                 </Link>
               </article>
+              </ScrollReveal>
             );
           })
         )}

@@ -5,6 +5,8 @@ import markdownToHtml from "@/utils/markdownToHtml";
 import normalizeArticleHtml from "@/utils/normalizeArticleHtml";
 import TableOfContents from "@/components/TableOfContents";
 import { fetchBuilder } from "@/utils/builder";
+import MdxContent from "@/components/MdxContent";
+import ScrollReveal from "@/components/ScrollReveal";
 
 // Helper to format short date
 function formatDateShort(dateString) {
@@ -242,33 +244,40 @@ export default async function BlogPostPage({ params }) {
     return notFound();
   }
 
-  // Parse markdown content to HTML for Outstatic posts
-  // Builder.io posts return HTML directly, so we render it as-is
-  const parsedHtml = isBuilder ? post.content : await markdownToHtml(post.content || "");
-  const contentHtml = normalizeArticleHtml(parsedHtml);
+  // ── Content processing: split by source ──
+  let contentHtml = "";
+  let mdxRawSource = null;
 
-  // Metadata fallbacks
-  const myRole = isBuilder
-    ? builderData.myRole || builderData.role || builderData["My Role"] || (post.tags?.[0] || "Article")
-    : post.myRole || post.articleType || post.tags?.[0] || "Article";
-  const dateStr = formatDateShort(post.publishedAt);
-  const team = isBuilder ? builderData.team || builderData["Team"] : (post.team || "");
-  const timeline = isBuilder ? builderData.timeline || builderData["Timeline"] : (post.timeline || "");
-
-  // Link pills
-  const links = isBuilder
-    ? normalizeBlogLinks(builderData.Links || builderData.links)
-    : (post.links ? JSON.parse(post.links) : []);
-
-  // Skills
-  const splitSkills = (s) =>
-    (s || "")
-      .toString()
-      .split(/\s*[-,]\s+|\n+/)
-      .map((x) => x.trim())
-      .filter(Boolean);
-  let skills = [];
   if (isBuilder) {
+    // Legacy Builder.io: HTML rendering pipeline (unchanged)
+    const parsedHtml = post.content;
+    contentHtml = normalizeArticleHtml(parsedHtml);
+  } else {
+    // Outstatic: pass raw MDX source to MdxContent (RSC renderer)
+    mdxRawSource = post.content || "";
+  }
+
+  const dateStr = formatDateShort(post.publishedAt);
+
+  // ── Builder.io-specific metadata (legacy) ──
+  let myRole = "";
+  let team = "";
+  let timeline = "";
+  let links = [];
+  let skills = [];
+  let challenge = "";
+  let solution = "";
+  let impact = "";
+  let showOverviewGrid = false;
+
+  if (isBuilder) {
+    myRole = builderData.myRole || builderData.role || builderData["My Role"] || (post.tags?.[0] || "Article");
+    team = builderData.team || builderData["Team"] || "";
+    timeline = builderData.timeline || builderData["Timeline"] || "";
+    links = normalizeBlogLinks(builderData.Links || builderData.links);
+
+    const splitSkills = (s) =>
+      (s || "").toString().split(/\s*[-,]\s+|\n+/).map((x) => x.trim()).filter(Boolean);
     ensureArray(builderData.skills).forEach((item) => {
       if (typeof item === "string") skills.push(...splitSkills(item));
     });
@@ -282,17 +291,7 @@ export default async function BlogPostPage({ params }) {
       seenSkill.add(s.toLowerCase());
       return true;
     });
-  } else if (post.skills) {
-    skills = splitSkills(post.skills);
-  }
 
-  // Challenge / Solution / Impact grid
-  let challenge = "";
-  let solution = "";
-  let impact = "";
-  let showOverviewGrid = false;
-
-  if (isBuilder) {
     const gridList = ensureArray(builderData.projectOverviewGrid || builderData["Project overview grid"] || builderData.projectOverview);
     if (gridList.length > 0) {
       const item = gridList[0];
@@ -308,21 +307,20 @@ export default async function BlogPostPage({ params }) {
     if (!solution) solution = builderData.Solution || "";
     if (!impact) impact = builderData.Impact || "";
     showOverviewGrid = !!(challenge || solution || impact);
-
-    // Apply normalization to grid fields
-    challenge = challenge ? normalizeArticleHtml(challenge) : "";
-    solution = solution ? normalizeArticleHtml(solution) : "";
-    impact = impact ? normalizeArticleHtml(impact) : "";
-  } else {
-    challenge = post.challengeText || "";
-    solution = post.solutionText || "";
-    impact = post.impactText || "";
-    showOverviewGrid = !!(challenge || solution || impact);
-
     challenge = challenge ? normalizeArticleHtml(challenge) : "";
     solution = solution ? normalizeArticleHtml(solution) : "";
     impact = impact ? normalizeArticleHtml(impact) : "";
   }
+
+  // ── Outstatic case-study metadata ──
+  const isCaseStudy = !isBuilder && post.articleType === "Projects";
+  const projectType = post.projectType || "";
+  const oustaticRole = post.myRole || "";
+  const platform = post.platform || "";
+  const designTools = post.designTools || "";
+  const pullQuote = post.pullQuote || post.description || "";
+  const prototypeUrl = post.prototypeUrl || "";
+  const prototypeLabel = post.prototypeLabel || "Explore Prototype";
 
   // Gallery images
   const contentItem = isBuilder
@@ -391,6 +389,142 @@ export default async function BlogPostPage({ params }) {
     );
   };
 
+  // ── Render: Outstatic post (new layout) ──
+  if (!isBuilder) {
+    return (
+      <div className="min-h-screen pb-48 md:pb-32 lg:ml-0">
+        {/* Sticky Breadcrumb Nav */}
+        <div className="sticky top-[60px] md:top-0 z-[100] w-full bg-white/80 backdrop-blur-md backdrop-saturate-150 border-b border-zinc-200/50 transition-all dark:bg-zinc-900/80 dark:border-white/5">
+          <div className="mx-auto w-full max-w-4xl px-6 sm:px-8 md:px-12 py-3 flex items-center gap-4">
+            <Link
+              href="/blog"
+              aria-label="Back to Blogs"
+              className="group inline-flex items-center justify-center -ml-2 p-2 rounded-lg hover:bg-zinc-100 transition-colors text-zinc-600 hover:text-black dark:text-zinc-400 dark:hover:text-white dark:hover:bg-zinc-800"
+            >
+              <img
+                src={chevronPath}
+                alt="Back"
+                className="w-4 h-4 opacity-70 group-hover:opacity-100 transition-opacity dark:invert"
+                draggable="false"
+              />
+            </Link>
+            <span className="font-medium text-sm text-zinc-900 truncate pr-4 dark:text-white">
+              {post.title}
+            </span>
+          </div>
+        </div>
+
+        <div className="mx-auto w-full max-w-4xl px-6 sm:px-8 md:px-12 pt-12 pb-8 md:pt-24 md:pb-16 relative">
+          {/* ── Hero Section ── */}
+          <header className="mb-12 md:mb-20">
+            <ScrollReveal>
+              <p className="text-sm font-medium text-zinc-400 uppercase tracking-wider mb-4 dark:text-zinc-500">
+                {dateStr}
+              </p>
+              <h1 className="text-5xl md:text-7xl lg:text-8xl font-semibold tracking-tighter text-zinc-900 leading-[1.05] text-balance dark:text-white">
+                {post.title}
+              </h1>
+            </ScrollReveal>
+
+            {/* Hero Image */}
+            {post.coverImage && (
+              <ScrollReveal delay={100}>
+                <div className="mt-8 md:mt-12 w-full aspect-video rounded-2xl overflow-hidden bg-zinc-100 dark:bg-zinc-900 border border-zinc-200/50 dark:border-zinc-800">
+                  <img
+                    src={post.coverImage}
+                    alt={post.title}
+                    className="w-full h-full object-cover"
+                    loading="eager"
+                  />
+                </div>
+              </ScrollReveal>
+            )}
+
+            {/* Two-Column Metadata (Ellen Covey-style) */}
+            {isCaseStudy && (projectType || oustaticRole || platform || designTools || pullQuote) && (
+              <ScrollReveal delay={200}>
+                <div className="mt-10 md:mt-14 grid grid-cols-1 md:grid-cols-[1fr_1.5fr] gap-8 md:gap-12">
+                  {/* Left: Metadata pairs */}
+                  <div className="space-y-5">
+                    {projectType && (
+                      <div>
+                        <div className="text-xs font-bold uppercase tracking-widest text-zinc-400 dark:text-zinc-500 mb-1">Type</div>
+                        <div className="text-sm text-zinc-700 dark:text-zinc-300">{projectType}</div>
+                      </div>
+                    )}
+                    {oustaticRole && (
+                      <div>
+                        <div className="text-xs font-bold uppercase tracking-widest text-zinc-400 dark:text-zinc-500 mb-1">Role</div>
+                        <div className="text-sm text-zinc-700 dark:text-zinc-300">{oustaticRole}</div>
+                      </div>
+                    )}
+                    {platform && (
+                      <div>
+                        <div className="text-xs font-bold uppercase tracking-widest text-zinc-400 dark:text-zinc-500 mb-1">Platform</div>
+                        <div className="text-sm text-zinc-700 dark:text-zinc-300">{platform}</div>
+                      </div>
+                    )}
+                    {designTools && (
+                      <div>
+                        <div className="text-xs font-bold uppercase tracking-widest text-zinc-400 dark:text-zinc-500 mb-1">Design Tools</div>
+                        <div className="text-sm text-zinc-700 dark:text-zinc-300">{designTools}</div>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Right: Pull quote + CTA */}
+                  <div className="flex flex-col justify-between">
+                    {pullQuote && (
+                      <p className="text-xl md:text-2xl text-zinc-600 dark:text-zinc-300 leading-relaxed font-light text-balance">
+                        {pullQuote}
+                      </p>
+                    )}
+                    {prototypeUrl && (
+                      <a
+                        href={prototypeUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="mt-6 inline-flex items-center gap-3 self-start rounded-full bg-zinc-900 text-white px-6 py-3 text-sm font-medium transition-all hover:bg-zinc-700 hover:scale-[1.02] active:scale-[0.98] shadow-sm dark:bg-white dark:text-black dark:hover:bg-zinc-200"
+                      >
+                        <span>{prototypeLabel}</span>
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                        </svg>
+                      </a>
+                    )}
+                  </div>
+                </div>
+              </ScrollReveal>
+            )}
+
+            {/* Non-case-study description (Opinions / Personal Blog) */}
+            {!isCaseStudy && post.description && (
+              <ScrollReveal delay={150}>
+                <p className="mt-6 text-xl md:text-2xl text-zinc-500 leading-relaxed max-w-3xl text-balance dark:text-zinc-400">
+                  {post.description}
+                </p>
+              </ScrollReveal>
+            )}
+          </header>
+
+          {/* ── Progress bar ── */}
+          <div className="w-full h-px bg-zinc-200 dark:bg-zinc-800 mb-12 md:mb-16" />
+
+          {/* ── Article Body (MDX) ── */}
+          {mdxRawSource ? (
+            <article className="prose prose-zinc prose-lg max-w-none dark:prose-invert text-zinc-600 dark:text-zinc-300">
+              <MdxContent source={mdxRawSource} />
+            </article>
+          ) : null}
+
+          {/* Floating Table of Contents */}
+          <TableOfContents />
+        </div>
+      </div>
+    );
+  }
+
+  // ── Render: Legacy Builder.io post (unchanged) ──
   return (
     <div className="min-h-screen pb-48 md:pb-32 lg:ml-0">
       {/* Sticky Breadcrumb Nav */}
@@ -417,75 +551,48 @@ export default async function BlogPostPage({ params }) {
       <div className="mx-auto w-full max-w-4xl px-6 sm:px-8 md:px-12 pt-12 pb-8 md:pt-24 md:pb-16 relative">
         <header className="mb-8 md:mb-12">
           <div className="space-y-5 md:space-y-6">
-            {/* Hero Image */}
             {post.coverImage && (
               <div className="w-full aspect-video rounded-2xl overflow-hidden bg-zinc-100 dark:bg-zinc-900 border border-zinc-200/50 dark:border-zinc-800">
-                <img
-                  src={post.coverImage}
-                  alt={post.title}
-                  className="w-full h-full object-cover"
-                  loading="eager"
-                />
+                <img src={post.coverImage} alt={post.title} className="w-full h-full object-cover" loading="eager" />
               </div>
             )}
-
-            {/* Title & Subtitle */}
             <div className="space-y-4">
-              <p className="text-sm font-medium text-zinc-400 uppercase tracking-wider dark:text-zinc-500">
-                {dateStr}
-              </p>
-              <h1 className="text-5xl md:text-7xl lg:text-8xl font-semibold tracking-tighter text-zinc-900 leading-[1.1] text-balance dark:text-white">
-                {post.title}
-              </h1>
+              <p className="text-sm font-medium text-zinc-400 uppercase tracking-wider dark:text-zinc-500">{dateStr}</p>
+              <h1 className="text-5xl md:text-7xl lg:text-8xl font-semibold tracking-tighter text-zinc-900 leading-[1.1] text-balance dark:text-white">{post.title}</h1>
               {post.description && (
-                <p className="text-xl md:text-2xl text-zinc-500 leading-relaxed max-w-3xl text-balance dark:text-zinc-400">
-                  {post.description}
-                </p>
+                <p className="text-xl md:text-2xl text-zinc-500 leading-relaxed max-w-3xl text-balance dark:text-zinc-400">{post.description}</p>
               )}
             </div>
 
-            {/* Meta Chips */}
             {(myRole || team || timeline) && (
               <div className="flex flex-wrap gap-3 text-sm">
                 {myRole && (
                   <div className="inline-flex items-center gap-2 rounded-full bg-zinc-100 dark:bg-zinc-800 px-4 py-2">
                     <span className="text-zinc-400 font-medium whitespace-nowrap">Role</span>
-                    <span className="text-zinc-900 font-semibold whitespace-nowrap dark:text-zinc-100 capitalize">
-                      {myRole}
-                    </span>
+                    <span className="text-zinc-900 font-semibold whitespace-nowrap dark:text-zinc-100 capitalize">{myRole}</span>
                   </div>
                 )}
                 {team && (
                   <div className="inline-flex items-center gap-2 rounded-full bg-zinc-100 dark:bg-zinc-800 px-4 py-2">
                     <span className="text-zinc-400 font-medium whitespace-nowrap">Team</span>
-                    <span className="text-zinc-900 font-semibold whitespace-nowrap dark:text-zinc-100">
-                      {team}
-                    </span>
+                    <span className="text-zinc-900 font-semibold whitespace-nowrap dark:text-zinc-100">{team}</span>
                   </div>
                 )}
                 {timeline && (
                   <div className="inline-flex items-center gap-2 rounded-full bg-zinc-100 dark:bg-zinc-800 px-4 py-2">
                     <span className="text-zinc-400 font-medium whitespace-nowrap">Timeline</span>
-                    <span className="text-zinc-900 font-semibold whitespace-nowrap dark:text-zinc-100">
-                      {timeline}
-                    </span>
+                    <span className="text-zinc-900 font-semibold whitespace-nowrap dark:text-zinc-100">{timeline}</span>
                   </div>
                 )}
               </div>
             )}
 
-            {/* Skills & Action Links */}
             {(skills.length > 0 || links.length > 0) && (
               <div className="flex flex-wrap items-center gap-4 pt-2">
                 {skills.length > 0 && (
                   <div className="flex flex-wrap gap-2">
                     {skills.map((s, idx) => (
-                      <span
-                        key={idx}
-                        className="inline-flex items-center rounded-md border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 px-2.5 py-1 text-xs font-medium text-zinc-500 dark:text-zinc-400"
-                      >
-                        {s}
-                      </span>
+                      <span key={idx} className="inline-flex items-center rounded-md border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 px-2.5 py-1 text-xs font-medium text-zinc-500 dark:text-zinc-400">{s}</span>
                     ))}
                   </div>
                 )}
@@ -494,11 +601,7 @@ export default async function BlogPostPage({ params }) {
                     {links.map((l, idx) => {
                       const u = (l.url || "").toLowerCase();
                       const label = (l.label || "").toLowerCase();
-                      const isPrimary =
-                        u.includes("apps.apple.com") ||
-                        label.includes("app store") ||
-                        label.includes("download") ||
-                        label.includes("get app");
+                      const isPrimary = u.includes("apps.apple.com") || label.includes("app store") || label.includes("download") || label.includes("get app");
                       const cls = isPrimary
                         ? "inline-flex items-center gap-2.5 rounded-full bg-black text-white px-5 py-2.5 text-sm font-medium transition-opacity hover:opacity-80 shadow-sm dark:bg-white dark:text-black"
                         : "inline-flex items-center gap-2.5 rounded-full bg-white text-zinc-900 border border-zinc-200 px-5 py-2.5 text-sm font-medium transition-colors hover:bg-zinc-50 dark:bg-zinc-900 dark:text-white dark:border-white/10 dark:hover:bg-zinc-800";
@@ -516,54 +619,33 @@ export default async function BlogPostPage({ params }) {
           </div>
         </header>
 
-        {/* Overview Grid */}
         {showOverviewGrid && (
           <div className="mb-8 md:mb-12 grid grid-cols-1 md:grid-cols-3 gap-6">
             {challenge && (
               <div className="flex-1 min-w-[240px] rounded-2xl border bg-white border-zinc-200 p-6 md:p-8 flex flex-col gap-4 dark:bg-zinc-800 dark:border-zinc-700">
-                <span className="text-zinc-400 dark:text-zinc-500 text-xs font-bold uppercase tracking-wider">
-                  Challenge
-                </span>
-                <div
-                  className="text-sm md:text-base leading-relaxed text-zinc-600 dark:text-zinc-300"
-                  dangerouslySetInnerHTML={{ __html: challenge }}
-                />
+                <span className="text-zinc-400 dark:text-zinc-500 text-xs font-bold uppercase tracking-wider">Challenge</span>
+                <div className="text-sm md:text-base leading-relaxed text-zinc-600 dark:text-zinc-300" dangerouslySetInnerHTML={{ __html: challenge }} />
               </div>
             )}
             {solution && (
               <div className="flex-1 min-w-[240px] rounded-2xl border bg-white border-zinc-200 p-6 md:p-8 flex flex-col gap-4 dark:bg-zinc-800 dark:border-zinc-700">
-                <span className="text-zinc-400 dark:text-zinc-500 text-xs font-bold uppercase tracking-wider">
-                  Solution
-                </span>
-                <div
-                  className="text-sm md:text-base leading-relaxed text-zinc-600 dark:text-zinc-300"
-                  dangerouslySetInnerHTML={{ __html: solution }}
-                />
+                <span className="text-zinc-400 dark:text-zinc-500 text-xs font-bold uppercase tracking-wider">Solution</span>
+                <div className="text-sm md:text-base leading-relaxed text-zinc-600 dark:text-zinc-300" dangerouslySetInnerHTML={{ __html: solution }} />
               </div>
             )}
             {impact && (
               <div className="flex-1 min-w-[240px] rounded-2xl border bg-zinc-900 text-white border-zinc-900 p-6 md:p-8 flex flex-col gap-4 dark:bg-black dark:border-zinc-850">
-                <span className="text-zinc-400 text-xs font-bold uppercase tracking-wider">
-                  Impact
-                </span>
-                <div
-                  className="text-sm md:text-base leading-relaxed text-zinc-200"
-                  dangerouslySetInnerHTML={{ __html: impact }}
-                />
+                <span className="text-zinc-400 text-xs font-bold uppercase tracking-wider">Impact</span>
+                <div className="text-sm md:text-base leading-relaxed text-zinc-200" dangerouslySetInnerHTML={{ __html: impact }} />
               </div>
             )}
           </div>
         )}
 
-        {/* Article Body */}
         {contentHtml && (
-          <article
-            className="prose prose-zinc prose-lg max-w-none dark:prose-invert text-zinc-600 dark:text-zinc-300"
-            dangerouslySetInnerHTML={{ __html: contentHtml }}
-          />
+          <article className="prose prose-zinc prose-lg max-w-none dark:prose-invert text-zinc-600 dark:text-zinc-300" dangerouslySetInnerHTML={{ __html: contentHtml }} />
         )}
 
-        {/* Gallery Section */}
         {galleryImages.length > 0 && (
           <section className="w-full md:w-4/5 md:mx-auto lg:w-3/4 xl:w-2/3 md:px-6 lg:px-8 py-12">
             <div className="rounded-xl overflow-hidden border border-zinc-200/50 dark:border-zinc-800">
@@ -581,9 +663,7 @@ export default async function BlogPostPage({ params }) {
                       <div key={idx} className="relative aspect-square w-full overflow-hidden border-t md:border-t-0 md:border-l border-zinc-200/40 dark:border-zinc-800/40">
                         <img src={url} alt={`Gallery small ${idx}`} className="block w-full h-full object-cover" />
                         {idx === 2 && galleryImages.length > 4 && (
-                          <div className="absolute inset-0 bg-black/60 text-white grid place-items-center text-2xl font-medium">
-                            +{galleryImages.length - 4}
-                          </div>
+                          <div className="absolute inset-0 bg-black/60 text-white grid place-items-center text-2xl font-medium">+{galleryImages.length - 4}</div>
                         )}
                       </div>
                     ))}
@@ -594,28 +674,21 @@ export default async function BlogPostPage({ params }) {
           </section>
         )}
 
-        {/* Case Study Chapters */}
         {chapters.length > 0 && (
           <div className="space-y-12 divide-y divide-zinc-200/45 dark:divide-zinc-800/45">
             {chapters.map((chap) => (
               <section key={chap.id} id={chap.id} className="scroll-mt-24 pt-10 mt-10">
                 <div className="my-8">
                   <div className="w-2/3 border-b-2 border-black pb-1 dark:border-zinc-700">
-                    <h2 className="text-left text-2xl md:text-3xl lg:text-4xl font-semibold tracking-tight text-black dark:text-white">
-                      {chap.label}
-                    </h2>
+                    <h2 className="text-left text-2xl md:text-3xl lg:text-4xl font-semibold tracking-tight text-black dark:text-white">{chap.label}</h2>
                   </div>
                 </div>
-                <div
-                  className="prose prose-zinc prose-lg max-w-none dark:prose-invert text-zinc-600 dark:text-zinc-300"
-                  dangerouslySetInnerHTML={{ __html: chap.html }}
-                />
+                <div className="prose prose-zinc prose-lg max-w-none dark:prose-invert text-zinc-600 dark:text-zinc-300" dangerouslySetInnerHTML={{ __html: chap.html }} />
               </section>
             ))}
           </div>
         )}
 
-        {/* Floating Table of Contents */}
         <TableOfContents />
       </div>
     </div>

@@ -2,53 +2,47 @@
   "title": "Case Studies",
   "type": "object",
   "properties": {
+    "projectType": {
+      "title": "Project Type",
+      "fieldType": "String",
+      "dataType": "string",
+      "description": "e.g. Self-initiated, Client work, Freelance"
+    },
     "myRole": {
       "title": "My Role",
       "fieldType": "String",
       "dataType": "string",
-      "description": "Role in the project"
+      "description": "e.g. UX design, UI design, research, illustration"
     },
-    "team": {
-      "title": "Team",
+    "platform": {
+      "title": "Platform",
       "fieldType": "String",
       "dataType": "string",
-      "description": "Team details"
+      "description": "e.g. iOS, Web, Android"
     },
-    "timeline": {
-      "title": "Timeline",
+    "designTools": {
+      "title": "Design Tools",
       "fieldType": "String",
       "dataType": "string",
-      "description": "Timeline (e.g., 3 months)"
+      "description": "e.g. Figma, Protopie, Procreate"
     },
-    "skills": {
-      "title": "Skills",
+    "pullQuote": {
+      "title": "Pull Quote",
+      "fieldType": "Text",
+      "dataType": "string",
+      "description": "Short summary sentence displayed prominently in the hero"
+    },
+    "prototypeUrl": {
+      "title": "Prototype URL",
       "fieldType": "String",
       "dataType": "string",
-      "description": "Comma-separated list of skills"
+      "description": "Link to Figma prototype or live demo"
     },
-    "links": {
-      "title": "Project Links",
-      "fieldType": "Text",
+    "prototypeLabel": {
+      "title": "Prototype Button Label",
+      "fieldType": "String",
       "dataType": "string",
-      "description": "JSON string of external links e.g. [{\"label\": \"Website\", \"url\": \"...\"}]"
-    },
-    "challengeText": {
-      "title": "Challenge Text",
-      "fieldType": "Text",
-      "dataType": "string",
-      "description": "Challenge description"
-    },
-    "solutionText": {
-      "title": "Solution Text",
-      "fieldType": "Text",
-      "dataType": "string",
-      "description": "Solution description"
-    },
-    "impactText": {
-      "title": "Impact Text",
-      "fieldType": "Text",
-      "dataType": "string",
-      "description": "Impact description"
+      "description": "CTA button text e.g. Explore Prototype"
     }
   }
 }
