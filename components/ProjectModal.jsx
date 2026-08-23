@@ -77,7 +77,7 @@ export default function ProjectModal({ isOpen, onClose, project }) {
           {/* Header */}
           <div className="flex items-start justify-between px-6 py-6 border-b border-zinc-100 dark:border-zinc-800 shrink-0 gap-4">
             <div className="flex flex-col md:flex-row md:items-center gap-4 md:gap-6 w-full overflow-hidden">
-              <h2 className="text-3xl md:text-4xl font-semibold text-black dark:text-white truncate lg:max-w-md">
+              <h2 className="text-3xl md:text-4xl font-serif font-bold text-zinc-950 dark:text-white truncate lg:max-w-md">
                 {project.title}
               </h2>
               {(project.link || project.appStoreLink || project.caseStudySlug) && (

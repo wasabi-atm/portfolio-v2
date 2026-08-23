@@ -48,7 +48,7 @@ function Persona({ name, image, quote, children }) {
   return (
     <div className="flex flex-col md:flex-row gap-8 md:gap-12 items-start w-full min-w-0 px-2">
       {/* Avatar */}
-      <div className="flex-shrink-0 w-40 h-48 md:w-48 md:h-56 mx-auto md:mx-0 rounded-2xl bg-zinc-100 dark:bg-zinc-800 overflow-hidden flex items-end justify-center">
+      <div className="flex-shrink-0 w-36 h-44 md:w-44 md:h-52 mx-auto md:mx-0 rounded-2xl bg-zinc-100 dark:bg-zinc-800 overflow-hidden flex items-end justify-center border border-zinc-200/60 dark:border-zinc-700/60">
         {image ? (
           <img
             src={image}
@@ -58,7 +58,7 @@ function Persona({ name, image, quote, children }) {
           />
         ) : (
           /* Placeholder silhouette */
-          <svg viewBox="0 0 120 150" className="w-28 h-36 text-zinc-300 dark:text-zinc-600">
+          <svg viewBox="0 0 120 150" className="w-24 h-32 text-zinc-300 dark:text-zinc-600">
             <circle cx="60" cy="40" r="25" fill="currentColor" />
             <ellipse cx="60" cy="130" rx="45" ry="40" fill="currentColor" />
           </svg>
@@ -67,32 +67,38 @@ function Persona({ name, image, quote, children }) {
 
       {/* Content */}
       <div className="flex-1 min-w-0">
-        <h3 className="text-2xl md:text-3xl font-semibold text-zinc-900 dark:text-white mb-3">
+        <div className="flex items-center gap-2 mb-2">
+          <span className="text-[10px] font-mono font-semibold uppercase tracking-widest text-zinc-400 dark:text-zinc-500">
+            USER PERSONA
+          </span>
+        </div>
+        <h3 className="text-2xl md:text-3xl font-serif font-bold text-zinc-950 dark:text-white mb-2">
           {name}
         </h3>
         {quote && (
-          <p className="text-zinc-500 dark:text-zinc-400 italic text-base md:text-lg mb-4 leading-relaxed">
+          <p className="text-zinc-600 dark:text-zinc-400 font-serif italic text-base md:text-lg mb-4 leading-relaxed">
             &ldquo;{quote}&rdquo;
           </p>
         )}
         {bio && (
-          <p className="text-zinc-600 dark:text-zinc-300 text-sm md:text-base leading-relaxed mb-6">
+          <p className="text-zinc-700 dark:text-zinc-300 text-sm md:text-base leading-relaxed mb-6">
             {bio}
           </p>
         )}
 
         {/* Goals & Frustrations */}
         {(goals.length > 0 || frustrations.length > 0) && (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4 border-t border-zinc-100 dark:border-zinc-800">
             {goals.length > 0 && (
               <div>
-                <h4 className="text-xs font-bold uppercase tracking-widest text-emerald-500 mb-3">
-                  Goals
+                <h4 className="text-[11px] font-mono font-bold uppercase tracking-widest text-emerald-600 dark:text-emerald-400 mb-3">
+                  PRIMARY GOALS
                 </h4>
                 <ul className="space-y-2">
                   {goals.map((g, i) => (
-                    <li key={i} className="text-sm text-zinc-600 dark:text-zinc-300 leading-relaxed">
-                      {g}
+                    <li key={i} className="text-xs md:text-sm text-zinc-600 dark:text-zinc-300 leading-relaxed flex items-start gap-2">
+                      <span className="text-emerald-500 font-mono mt-0.5">•</span>
+                      <span>{g}</span>
                     </li>
                   ))}
                 </ul>
@@ -100,13 +106,14 @@ function Persona({ name, image, quote, children }) {
             )}
             {frustrations.length > 0 && (
               <div>
-                <h4 className="text-xs font-bold uppercase tracking-widest text-rose-400 mb-3">
-                  Frustrations
+                <h4 className="text-[11px] font-mono font-bold uppercase tracking-widest text-rose-500 dark:text-rose-400 mb-3">
+                  KEY FRUSTRATIONS
                 </h4>
                 <ul className="space-y-2">
                   {frustrations.map((f, i) => (
-                    <li key={i} className="text-sm text-zinc-600 dark:text-zinc-300 leading-relaxed">
-                      {f}
+                    <li key={i} className="text-xs md:text-sm text-zinc-600 dark:text-zinc-300 leading-relaxed flex items-start gap-2">
+                      <span className="text-rose-400 font-mono mt-0.5">•</span>
+                      <span>{f}</span>
                     </li>
                   ))}
                 </ul>
@@ -155,7 +162,7 @@ function PersonaStepper({ children }) {
   return (
     <div className="my-12 md:my-16 not-prose">
       <div
-        className="relative overflow-hidden rounded-2xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-900"
+        className="relative overflow-hidden rounded-3xl border border-zinc-200/80 dark:border-zinc-800/80 bg-zinc-50/60 dark:bg-zinc-900/60"
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
       >

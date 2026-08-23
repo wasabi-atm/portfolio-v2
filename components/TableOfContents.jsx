@@ -18,9 +18,9 @@ export default function TableOfContents() {
         .replace(/[^a-z0-9]+/g, "-")
         .replace(/^-+|-+$/g, "") || "sec";
 
-    const entries = elements.map((el) => {
+    const entries = elements.map((el, idx) => {
       if (!el.id) el.id = slugify(el.textContent);
-      return { id: el.id, label: el.textContent, el };
+      return { id: el.id, label: el.textContent, index: String(idx + 1).padStart(2, "0"), el };
     });
 
     setHeadings(entries);
@@ -53,14 +53,14 @@ export default function TableOfContents() {
     <aside className="hidden xl:block">
       <div
         id="toc-floating"
-        className="group fixed top-1/2 -translate-y-1/2 right-6 z-50 w-12 hover:w-72 transition-all duration-500 ease-[cubic-bezier(0.25,0.1,0.25,1)] py-6 overflow-hidden"
+        className="group fixed top-1/2 -translate-y-1/2 right-6 z-50 w-10 hover:w-72 transition-all duration-500 ease-[cubic-bezier(0.25,0.1,0.25,1)] py-6 overflow-hidden bg-zinc-50/90 dark:bg-zinc-900/90 backdrop-blur-md rounded-2xl border border-zinc-200/80 dark:border-zinc-800/80 shadow-lg px-2"
       >
-        <p className="text-xs uppercase tracking-wide text-zinc-400 mb-4 pl-5 font-bold opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap delay-75">
-          Contents
+        <p className="text-[10px] font-mono uppercase tracking-widest text-zinc-400 dark:text-zinc-500 mb-3 pl-3 font-semibold opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap delay-75">
+          INDEX OF SECTIONS
         </p>
         <nav
           id="toc-links"
-          className="relative flex flex-col space-y-3 text-sm border-l border-zinc-200 dark:border-zinc-800 ml-6"
+          className="relative flex flex-col space-y-2.5 text-xs font-mono border-l border-zinc-200 dark:border-zinc-800 ml-3"
         >
           {headings.map((h) => {
             const isActive = activeId === h.id;
@@ -72,21 +72,22 @@ export default function TableOfContents() {
                   e.preventDefault();
                   h.el.scrollIntoView({ behavior: "smooth" });
                 }}
-                className={`group/link flex items-center pl-4 relative transition-colors ${
+                className={`group/link flex items-center pl-3 relative transition-colors ${
                   isActive
-                    ? "text-black dark:text-white font-medium"
-                    : "text-zinc-500 dark:text-zinc-400 hover:text-black dark:hover:text-white"
+                    ? "text-zinc-950 dark:text-white font-bold"
+                    : "text-zinc-400 dark:text-zinc-500 hover:text-zinc-900 dark:hover:text-white"
                 }`}
               >
                 <span
                   className={`toc-dot absolute top-1/2 -translate-y-1/2 rounded-full transition-all duration-300 ${
                     isActive
-                      ? "w-2.5 h-2.5 bg-black dark:bg-white -left-[5px]"
-                      : "w-2 h-2 bg-zinc-350 dark:bg-zinc-700 -left-[4px] group-hover/link:bg-zinc-400 dark:group-hover/link:bg-zinc-500"
+                      ? "w-2.5 h-2.5 bg-zinc-950 dark:bg-white -left-[5px]"
+                      : "w-1.5 h-1.5 bg-zinc-300 dark:bg-zinc-700 -left-[3px] group-hover/link:bg-zinc-500"
                   }`}
                 />
-                <span className="opacity-0 translate-x-3 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 delay-75 whitespace-nowrap">
-                  {h.label}
+                <span className="opacity-0 translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 delay-75 whitespace-nowrap truncate pr-2 flex items-center gap-1.5">
+                  <span className="text-[10px] text-zinc-400">{h.index}</span>
+                  <span>{h.label}</span>
                 </span>
               </a>
             );

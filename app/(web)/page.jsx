@@ -14,7 +14,6 @@ const PROJECTS = [
     tokens: "30+",
     interviews: "15",
     link: "https://clamby.id",
-    caseStudySlug: "carma-case-study",
     videoPreview: "/assets/ClambyCommercial1.webm",
     videoMain: "/assets/Clamby/Clamby%20Achievement.webm",
     video1: "/assets/Clamby/Clamby%20Data%201.webm",
@@ -124,7 +123,7 @@ export default function HomePage() {
             <div className="w-full rounded-2xl border border-zinc-200/80 dark:border-zinc-800 bg-white dark:bg-zinc-900/60 p-6 flex flex-col gap-6 transition-all duration-300 ease-out group-hover:-translate-y-1 group-hover:border-zinc-400 dark:group-hover:border-zinc-600 motion-reduce:transform-none">
               <div className="flex justify-between items-start w-full">
                 <div className="space-y-1">
-                  <h3 className="text-2xl lg:text-3xl font-semibold text-black dark:text-white tracking-tight">
+                  <h3 className="text-2xl lg:text-3xl font-serif font-bold text-zinc-950 dark:text-white tracking-tight">
                     {project.title}
                   </h3>
                   <div className="text-lg text-zinc-500 dark:text-zinc-400 max-w-2xl leading-relaxed">
@@ -139,23 +138,23 @@ export default function HomePage() {
                   />
                 </div>
               </div>
-              {/* Metrics Grid */}
-              <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 w-full">
-                <div className="p-4 rounded-xl bg-zinc-50 dark:bg-zinc-950/40 border border-zinc-200/60 dark:border-zinc-800/60 flex flex-col items-start justify-center gap-1 min-h-[90px]">
-                  <span className="text-xs font-semibold tracking-wider uppercase text-zinc-400 dark:text-zinc-500">My Role</span>
-                  <span className="text-base lg:text-lg font-bold text-zinc-900 dark:text-zinc-100 leading-tight">{project.role}</span>
+              {/* Metrics Grid (Flat & Borderless) */}
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 w-full pt-2">
+                <div className="flex flex-col gap-0.5">
+                  <span className="text-[11px] font-mono uppercase tracking-wider text-zinc-400 dark:text-zinc-500">My Role</span>
+                  <span className="text-base font-bold text-zinc-950 dark:text-white leading-tight">{project.role}</span>
                 </div>
-                <div className="p-4 rounded-xl bg-zinc-50 dark:bg-zinc-950/40 border border-zinc-200/60 dark:border-zinc-800/60 flex flex-col items-start justify-center gap-1 min-h-[90px]">
-                  <span className="text-xs font-semibold tracking-wider uppercase text-zinc-400 dark:text-zinc-500">Design Components</span>
-                  <span className="text-base lg:text-lg font-bold text-zinc-900 dark:text-zinc-100 leading-tight">{project.components}</span>
+                <div className="flex flex-col gap-0.5">
+                  <span className="text-[11px] font-mono uppercase tracking-wider text-zinc-400 dark:text-zinc-500">Design Components</span>
+                  <span className="text-base font-bold text-zinc-950 dark:text-white leading-tight">{project.components}</span>
                 </div>
-                <div className="p-4 rounded-xl bg-zinc-50 dark:bg-zinc-950/40 border border-zinc-200/60 dark:border-zinc-800/60 flex flex-col items-start justify-center gap-1 min-h-[90px]">
-                  <span className="text-xs font-semibold tracking-wider uppercase text-zinc-400 dark:text-zinc-500">Brand Tokens</span>
-                  <span className="text-base lg:text-lg font-bold text-zinc-900 dark:text-zinc-100 leading-tight">{project.tokens}</span>
+                <div className="flex flex-col gap-0.5">
+                  <span className="text-[11px] font-mono uppercase tracking-wider text-zinc-400 dark:text-zinc-500">Brand Tokens</span>
+                  <span className="text-base font-bold text-zinc-950 dark:text-white leading-tight">{project.tokens}</span>
                 </div>
-                <div className="p-4 rounded-xl bg-zinc-50 dark:bg-zinc-950/40 border border-zinc-200/60 dark:border-zinc-800/60 flex flex-col items-start justify-center gap-1 min-h-[90px]">
-                  <span className="text-xs font-semibold tracking-wider uppercase text-zinc-400 dark:text-zinc-500">User Interviews</span>
-                  <span className="text-base lg:text-lg font-bold text-zinc-900 dark:text-zinc-100 leading-tight">{project.interviews}</span>
+                <div className="flex flex-col gap-0.5">
+                  <span className="text-[11px] font-mono uppercase tracking-wider text-zinc-400 dark:text-zinc-500">User Interviews</span>
+                  <span className="text-base font-bold text-zinc-950 dark:text-white leading-tight">{project.interviews}</span>
                 </div>
               </div>
             </div>
@@ -176,27 +175,27 @@ export default function HomePage() {
             <div className="rounded-2xl border border-zinc-200/80 dark:border-zinc-800 bg-white dark:bg-zinc-900/60 p-6 lg:p-8 flex flex-col gap-6 lg:gap-8 transition-all duration-300 ease-out group-hover:-translate-y-1 group-hover:border-zinc-400 dark:group-hover:border-zinc-600 motion-reduce:transform-none h-full">
               <div className="flex flex-col gap-1 w-full">
                 <div className="flex justify-between items-start w-full">
-                  <h3 className="text-2xl lg:text-3xl font-semibold text-black dark:text-white tracking-tight">{project.title}</h3>
+                  <h3 className="text-2xl lg:text-3xl font-serif font-bold text-zinc-950 dark:text-white tracking-tight">{project.title}</h3>
                   <img src="/assets/Sidebar Icons/Arrow Up Icon.svg" className="w-8 h-8 opacity-45 group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all duration-200 dark:invert" alt="View project" />
                 </div>
                 <p className="text-lg text-zinc-500 dark:text-zinc-400 leading-relaxed">{project.description}</p>
               </div>
-              <div className="grid grid-cols-2 gap-3 w-full mt-auto">
-                <div className="p-3 lg:p-4 rounded-xl bg-zinc-50 dark:bg-zinc-950/40 border border-zinc-200/60 dark:border-zinc-800/60 flex flex-col items-start justify-center gap-1 min-h-[90px]">
-                  <span className="text-xs font-semibold tracking-wider uppercase text-zinc-400 dark:text-zinc-500">My Role</span>
-                  <span className="text-base lg:text-lg font-bold text-zinc-900 dark:text-zinc-100 leading-tight">{project.role}</span>
+              <div className="grid grid-cols-2 gap-4 w-full mt-auto pt-2">
+                <div className="flex flex-col gap-0.5">
+                  <span className="text-[11px] font-mono uppercase tracking-wider text-zinc-400 dark:text-zinc-500">My Role</span>
+                  <span className="text-base font-bold text-zinc-950 dark:text-white leading-tight">{project.role}</span>
                 </div>
-                <div className="p-3 lg:p-4 rounded-xl bg-zinc-50 dark:bg-zinc-950/40 border border-zinc-200/60 dark:border-zinc-800/60 flex flex-col items-start justify-center gap-1 min-h-[90px]">
-                  <span className="text-xs font-semibold tracking-wider uppercase text-zinc-400 dark:text-zinc-500">User Interviews</span>
-                  <span className="text-base lg:text-lg font-bold text-zinc-900 dark:text-zinc-100 leading-tight">{project.interviews}</span>
+                <div className="flex flex-col gap-0.5">
+                  <span className="text-[11px] font-mono uppercase tracking-wider text-zinc-400 dark:text-zinc-500">User Interviews</span>
+                  <span className="text-base font-bold text-zinc-950 dark:text-white leading-tight">{project.interviews}</span>
                 </div>
-                <div className="p-3 lg:p-4 rounded-xl bg-zinc-50 dark:bg-zinc-950/40 border border-zinc-200/60 dark:border-zinc-800/60 flex flex-col items-start justify-center gap-1 min-h-[90px]">
-                  <span className="text-xs font-semibold tracking-wider uppercase text-zinc-400 dark:text-zinc-500">Users Gained</span>
-                  <span className="text-base lg:text-lg font-bold text-zinc-900 dark:text-zinc-100 leading-tight">{project.users}</span>
+                <div className="flex flex-col gap-0.5">
+                  <span className="text-[11px] font-mono uppercase tracking-wider text-zinc-400 dark:text-zinc-500">Users Gained</span>
+                  <span className="text-base font-bold text-zinc-950 dark:text-white leading-tight">{project.users}</span>
                 </div>
-                <div className="p-3 lg:p-4 rounded-xl bg-zinc-50 dark:bg-zinc-950/40 border border-zinc-200/60 dark:border-zinc-800/60 flex flex-col items-start justify-center gap-1 min-h-[90px]">
-                  <span className="text-xs font-semibold tracking-wider uppercase text-zinc-400 dark:text-zinc-500">Business Model</span>
-                  <span className="text-base lg:text-lg font-bold text-zinc-900 dark:text-zinc-100 leading-tight">{project.model}</span>
+                <div className="flex flex-col gap-0.5">
+                  <span className="text-[11px] font-mono uppercase tracking-wider text-zinc-400 dark:text-zinc-500">Business Model</span>
+                  <span className="text-base font-bold text-zinc-950 dark:text-white leading-tight">{project.model}</span>
                 </div>
               </div>
             </div>
@@ -214,27 +213,27 @@ export default function HomePage() {
             <div className="rounded-2xl border border-zinc-200/80 dark:border-zinc-800 bg-white dark:bg-zinc-900/60 p-6 lg:p-8 flex flex-col gap-6 lg:gap-8 transition-all duration-300 ease-out group-hover:-translate-y-1 group-hover:border-zinc-400 dark:group-hover:border-zinc-600 motion-reduce:transform-none h-full order-2 lg:order-1">
               <div className="flex flex-col gap-1 w-full">
                 <div className="flex justify-between items-start w-full">
-                  <h3 className="text-2xl lg:text-3xl font-semibold text-black dark:text-white tracking-tight">{project.title}</h3>
+                  <h3 className="text-2xl lg:text-3xl font-serif font-bold text-zinc-950 dark:text-white tracking-tight">{project.title}</h3>
                   <img src="/assets/Sidebar Icons/Arrow Up Icon.svg" className="w-8 h-8 opacity-45 group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all duration-200 dark:invert" alt="View project" />
                 </div>
                 <p className="text-lg text-zinc-500 dark:text-zinc-400 leading-relaxed">{project.description}</p>
               </div>
-              <div className="grid grid-cols-2 gap-3 w-full mt-auto">
-                <div className="p-3 lg:p-4 rounded-xl bg-zinc-50 dark:bg-zinc-950/40 border border-zinc-200/60 dark:border-zinc-800/60 flex flex-col items-start justify-center gap-1 min-h-[90px]">
-                  <span className="text-xs font-semibold tracking-wider uppercase text-zinc-400 dark:text-zinc-500">My Role</span>
-                  <span className="text-base lg:text-lg font-bold text-zinc-900 dark:text-zinc-100 leading-tight">{project.role}</span>
+              <div className="grid grid-cols-2 gap-4 w-full mt-auto pt-2">
+                <div className="flex flex-col gap-0.5">
+                  <span className="text-[11px] font-mono uppercase tracking-wider text-zinc-400 dark:text-zinc-500">My Role</span>
+                  <span className="text-base font-bold text-zinc-950 dark:text-white leading-tight">{project.role}</span>
                 </div>
-                <div className="p-3 lg:p-4 rounded-xl bg-zinc-50 dark:bg-zinc-950/40 border border-zinc-200/60 dark:border-zinc-800/60 flex flex-col items-start justify-center gap-1 min-h-[90px]">
-                  <span className="text-xs font-semibold tracking-wider uppercase text-zinc-400 dark:text-zinc-500">User Interviews</span>
-                  <span className="text-base lg:text-lg font-bold text-zinc-900 dark:text-zinc-100 leading-tight">{project.interviews}</span>
+                <div className="flex flex-col gap-0.5">
+                  <span className="text-[11px] font-mono uppercase tracking-wider text-zinc-400 dark:text-zinc-500">User Interviews</span>
+                  <span className="text-base font-bold text-zinc-950 dark:text-white leading-tight">{project.interviews}</span>
                 </div>
-                <div className="p-3 lg:p-4 rounded-xl bg-zinc-50 dark:bg-zinc-950/40 border border-zinc-200/60 dark:border-zinc-800/60 flex flex-col items-start justify-center gap-1 min-h-[90px]">
-                  <span className="text-xs font-semibold tracking-wider uppercase text-zinc-400 dark:text-zinc-500">App Store Rank</span>
-                  <span className="text-base lg:text-lg font-bold text-zinc-900 dark:text-zinc-100 leading-tight">{project.rank}</span>
+                <div className="flex flex-col gap-0.5">
+                  <span className="text-[11px] font-mono uppercase tracking-wider text-zinc-400 dark:text-zinc-500">App Store Rank</span>
+                  <span className="text-base font-bold text-zinc-950 dark:text-white leading-tight">{project.rank}</span>
                 </div>
-                <div className="p-3 lg:p-4 rounded-xl bg-zinc-50 dark:bg-zinc-950/40 border border-zinc-200/60 dark:border-zinc-800/60 flex flex-col items-start justify-center gap-1 min-h-[90px]">
-                  <span className="text-xs font-semibold tracking-wider uppercase text-zinc-400 dark:text-zinc-500">Project Timeline</span>
-                  <span className="text-base lg:text-lg font-bold text-zinc-900 dark:text-zinc-100 leading-tight">{project.timeline}</span>
+                <div className="flex flex-col gap-0.5">
+                  <span className="text-[11px] font-mono uppercase tracking-wider text-zinc-400 dark:text-zinc-500">Project Timeline</span>
+                  <span className="text-base font-bold text-zinc-950 dark:text-white leading-tight">{project.timeline}</span>
                 </div>
               </div>
             </div>
@@ -258,27 +257,27 @@ export default function HomePage() {
             <div className="rounded-2xl border border-zinc-200/80 dark:border-zinc-800 bg-white dark:bg-zinc-900/60 p-6 lg:p-8 flex flex-col gap-6 lg:gap-8 transition-all duration-300 ease-out group-hover:-translate-y-1 group-hover:border-zinc-400 dark:group-hover:border-zinc-600 motion-reduce:transform-none h-full">
               <div className="flex flex-col gap-1 w-full">
                 <div className="flex justify-between items-start w-full">
-                  <h3 className="text-2xl lg:text-3xl font-semibold text-black dark:text-white tracking-tight">{project.title}</h3>
+                  <h3 className="text-2xl lg:text-3xl font-serif font-bold text-zinc-950 dark:text-white tracking-tight">{project.title}</h3>
                   <img src="/assets/Sidebar Icons/Arrow Up Icon.svg" className="w-8 h-8 opacity-45 group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all duration-200 dark:invert" alt="View project" />
                 </div>
                 <p className="text-lg text-zinc-500 dark:text-zinc-400 leading-relaxed">{project.description}</p>
               </div>
-              <div className="grid grid-cols-2 gap-3 w-full mt-auto">
-                <div className="p-3 lg:p-4 rounded-xl bg-zinc-50 dark:bg-zinc-950/40 border border-zinc-200/60 dark:border-zinc-800/60 flex flex-col items-start justify-center gap-1 min-h-[90px]">
-                  <span className="text-xs font-semibold tracking-wider uppercase text-zinc-400 dark:text-zinc-500">My Role</span>
-                  <span className="text-base lg:text-lg font-bold text-zinc-900 dark:text-zinc-100 leading-tight">{project.role}</span>
+              <div className="grid grid-cols-2 gap-4 w-full mt-auto pt-2">
+                <div className="flex flex-col gap-0.5">
+                  <span className="text-[11px] font-mono uppercase tracking-wider text-zinc-400 dark:text-zinc-500">My Role</span>
+                  <span className="text-base font-bold text-zinc-950 dark:text-white leading-tight">{project.role}</span>
                 </div>
-                <div className="p-3 lg:p-4 rounded-xl bg-zinc-50 dark:bg-zinc-950/40 border border-zinc-200/60 dark:border-zinc-800/60 flex flex-col items-start justify-center gap-1 min-h-[90px]">
-                  <span className="text-xs font-semibold tracking-wider uppercase text-zinc-400 dark:text-zinc-500">User Interviews</span>
-                  <span className="text-base lg:text-lg font-bold text-zinc-900 dark:text-zinc-100 leading-tight">{project.interviews}</span>
+                <div className="flex flex-col gap-0.5">
+                  <span className="text-[11px] font-mono uppercase tracking-wider text-zinc-400 dark:text-zinc-500">User Interviews</span>
+                  <span className="text-base font-bold text-zinc-950 dark:text-white leading-tight">{project.interviews}</span>
                 </div>
-                <div className="p-3 lg:p-4 rounded-xl bg-zinc-50 dark:bg-zinc-950/40 border border-zinc-200/60 dark:border-zinc-800/60 flex flex-col items-start justify-center gap-1 min-h-[90px]">
-                  <span className="text-xs font-semibold tracking-wider uppercase text-zinc-400 dark:text-zinc-500">Accessibility</span>
-                  <span className="text-base lg:text-lg font-bold text-zinc-900 dark:text-zinc-100 leading-tight">{project.accessibility}</span>
+                <div className="flex flex-col gap-0.5">
+                  <span className="text-[11px] font-mono uppercase tracking-wider text-zinc-400 dark:text-zinc-500">Accessibility</span>
+                  <span className="text-base font-bold text-zinc-950 dark:text-white leading-tight">{project.accessibility}</span>
                 </div>
-                <div className="p-3 lg:p-4 rounded-xl bg-zinc-50 dark:bg-zinc-950/40 border border-zinc-200/60 dark:border-zinc-800/60 flex flex-col items-start justify-center gap-1 min-h-[90px]">
-                  <span className="text-xs font-semibold tracking-wider uppercase text-zinc-400 dark:text-zinc-500">Project Timeline</span>
-                  <span className="text-base lg:text-lg font-bold text-zinc-900 dark:text-zinc-100 leading-tight">{project.timeline}</span>
+                <div className="flex flex-col gap-0.5">
+                  <span className="text-[11px] font-mono uppercase tracking-wider text-zinc-400 dark:text-zinc-500">Project Timeline</span>
+                  <span className="text-base font-bold text-zinc-950 dark:text-white leading-tight">{project.timeline}</span>
                 </div>
               </div>
             </div>
@@ -296,27 +295,27 @@ export default function HomePage() {
             <div className="rounded-2xl border border-zinc-200/80 dark:border-zinc-800 bg-white dark:bg-zinc-900/60 p-6 lg:p-8 flex flex-col gap-6 lg:gap-8 transition-all duration-300 ease-out group-hover:-translate-y-1 group-hover:border-zinc-400 dark:group-hover:border-zinc-600 motion-reduce:transform-none h-full order-2 lg:order-1">
               <div className="flex flex-col gap-1 w-full">
                 <div className="flex justify-between items-start w-full">
-                  <h3 className="text-2xl lg:text-3xl font-semibold text-black dark:text-white tracking-tight">{project.title}</h3>
+                  <h3 className="text-2xl lg:text-3xl font-serif font-bold text-zinc-950 dark:text-white tracking-tight">{project.title}</h3>
                   <img src="/assets/Sidebar Icons/Arrow Up Icon.svg" className="w-8 h-8 opacity-45 group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all duration-200 dark:invert" alt="View project" />
                 </div>
                 <p className="text-lg text-zinc-500 dark:text-zinc-400 leading-relaxed">{project.description}</p>
               </div>
-              <div className="grid grid-cols-2 gap-3 w-full mt-auto">
-                <div className="p-3 lg:p-4 rounded-xl bg-zinc-50 dark:bg-zinc-950/40 border border-zinc-200/60 dark:border-zinc-800/60 flex flex-col items-start justify-center gap-1 min-h-[90px]">
-                  <span className="text-xs font-semibold tracking-wider uppercase text-zinc-400 dark:text-zinc-500">My Role</span>
-                  <span className="text-base lg:text-lg font-bold text-zinc-900 dark:text-zinc-100 leading-tight">{project.role}</span>
+              <div className="grid grid-cols-2 gap-4 w-full mt-auto pt-2">
+                <div className="flex flex-col gap-0.5">
+                  <span className="text-[11px] font-mono uppercase tracking-wider text-zinc-400 dark:text-zinc-500">My Role</span>
+                  <span className="text-base font-bold text-zinc-950 dark:text-white leading-tight">{project.role}</span>
                 </div>
-                <div className="p-3 lg:p-4 rounded-xl bg-zinc-50 dark:bg-zinc-950/40 border border-zinc-200/60 dark:border-zinc-800/60 flex flex-col items-start justify-center gap-1 min-h-[90px]">
-                  <span className="text-xs font-semibold tracking-wider uppercase text-zinc-400 dark:text-zinc-500">Curriculum</span>
-                  <span className="text-base lg:text-lg font-bold text-zinc-900 dark:text-zinc-100 leading-tight">{project.lessons}</span>
+                <div className="flex flex-col gap-0.5">
+                  <span className="text-[11px] font-mono uppercase tracking-wider text-zinc-400 dark:text-zinc-500">Curriculum</span>
+                  <span className="text-base font-bold text-zinc-950 dark:text-white leading-tight">{project.lessons}</span>
                 </div>
-                <div className="p-3 lg:p-4 rounded-xl bg-zinc-50 dark:bg-zinc-950/40 border border-zinc-200/60 dark:border-zinc-800/60 flex flex-col items-start justify-center gap-1 min-h-[90px]">
-                  <span className="text-xs font-semibold tracking-wider uppercase text-zinc-400 dark:text-zinc-500">Platform</span>
-                  <span className="text-base lg:text-lg font-bold text-zinc-900 dark:text-zinc-100 leading-tight">{project.platform}</span>
+                <div className="flex flex-col gap-0.5">
+                  <span className="text-[11px] font-mono uppercase tracking-wider text-zinc-400 dark:text-zinc-500">Platform</span>
+                  <span className="text-base font-bold text-zinc-950 dark:text-white leading-tight">{project.platform}</span>
                 </div>
-                <div className="p-3 lg:p-4 rounded-xl bg-zinc-50 dark:bg-zinc-950/40 border border-zinc-200/60 dark:border-zinc-800/60 flex flex-col items-start justify-center gap-1 min-h-[90px]">
-                  <span className="text-xs font-semibold tracking-wider uppercase text-zinc-400 dark:text-zinc-500">User Projects</span>
-                  <span className="text-base lg:text-lg font-bold text-zinc-900 dark:text-zinc-100 leading-tight">{project.projects}</span>
+                <div className="flex flex-col gap-0.5">
+                  <span className="text-[11px] font-mono uppercase tracking-wider text-zinc-400 dark:text-zinc-500">User Projects</span>
+                  <span className="text-base font-bold text-zinc-950 dark:text-white leading-tight">{project.projects}</span>
                 </div>
               </div>
             </div>

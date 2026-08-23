@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import ScrollReveal from "@/components/ScrollReveal";
 
 const STACK_DESIGN = [
   { name: "Figma", icon: "/assets/Design Stack/Figma icon.png" },
@@ -14,318 +14,356 @@ const STACK_DESIGN = [
 ];
 
 const STACK_TECH = [
-  { name: "HTML 5", icon: "/assets/Tech Stack/HTML%205%20Icon.png" },
-  { name: "CSS", icon: "/assets/Tech Stack/CSS%20Icon.png" },
-  { name: "JavaScript", icon: "/assets/Tech Stack/Javascript%20Icon.png" },
-  { name: "Tailwind CSS", icon: "/assets/Tech Stack/Tailwind%20CSS%20Logo.png" },
+  { name: "Swift / SwiftUI", icon: "/assets/Tech Stack/Swift%20Icon.png" },
   { name: "Next.js", icon: "/assets/Tech Stack/Next.js%20Icon.png" },
-  { name: "Swift", icon: "/assets/Tech Stack/Swift%20Icon.png" },
+  { name: "React", icon: "/assets/Tech Stack/Javascript%20Icon.png" },
+  { name: "Tailwind CSS", icon: "/assets/Tech Stack/Tailwind%20CSS%20Logo.png" },
+  { name: "JavaScript", icon: "/assets/Tech Stack/Javascript%20Icon.png" },
+  { name: "HTML / CSS", icon: "/assets/Tech Stack/HTML%205%20Icon.png" },
 ];
 
 const STACK_MGMT = [
   { name: "Notion", icon: "/assets/Management Stack/Notion%20Icon.png" },
-  { name: "Slack", icon: "/assets/Management Stack/Slack%20Icon.png" },
   { name: "Jira", icon: "/assets/Management Stack/Jira%20Icon.png" },
-  { name: "Confluence", icon: "/assets/Management Stack/Confluence%20Icon.png" },
+  { name: "Slack", icon: "/assets/Management Stack/Slack%20Icon.png" },
   { name: "Miro", icon: "/assets/Management Stack/Miro%20Logo%20Icon.png" },
   { name: "ClickUp", icon: "/assets/Management Stack/ClickUp%20Icon.avif" },
+  { name: "Confluence", icon: "/assets/Management Stack/Confluence%20Icon.png" },
 ];
 
 const TESTIMONIALS = [
   {
-    quote: "Wira works really well with coders because he understands tech limitations and feasibility.",
-    avatarBg: "from-blue-100 to-blue-200 dark:from-blue-900/40 dark:to-blue-800/40 text-blue-600 dark:text-blue-200",
+    quote: "Wira works seamlessly with engineers because he codes. He knows what's feasible before he draws a line.",
     role: "iOS Developer",
+    context: "Engineering",
   },
   {
-    quote: "He captured the authentic Japanese aesthetic perfectly but optimized it for the Singaporean crowd.",
-    avatarBg: "from-red-100 to-red-200 dark:from-red-900/40 dark:to-red-800/40 text-red-600 dark:text-red-200",
-    role: "Creative Director (SG)",
+    quote: "He doesn't just make things look good—he designs with conversion, retention, and growth in mind.",
+    role: "Creative Director",
+    context: "Agency Leadership",
   },
   {
-    quote: "I'm glad Wira could translate the design I had in mind into actionable specs for the coders.",
-    avatarBg: "from-purple-100 to-purple-200 dark:from-purple-900/40 dark:to-purple-800/40 text-purple-600 dark:text-purple-200",
+    quote: "Wira takes messy product requirements and turns them into working interactive prototypes in days.",
     role: "Product Manager",
+    context: "Product Team",
   },
   {
-    quote: "Japanese F&B clients are particular about details. Wira’s eye for layout satisfied even our strictest owners.",
-    avatarBg: "from-amber-100 to-amber-200 dark:from-amber-900/40 dark:to-amber-800/40 text-amber-600 dark:text-amber-200",
-    role: "Restaurant Manager",
-  },
-  {
-    quote: "Wira is able to adapt to tight deadlines and sudden scope changes without breaking the user flow.",
-    avatarBg: "from-emerald-100 to-emerald-200 dark:from-emerald-900/40 dark:to-emerald-800/40 text-emerald-600 dark:text-emerald-200",
-    role: "UX Lead",
-  },
-  {
-    quote: "His campaigns didn't just look good; they filled seats. He knows how to position seasonal menus.",
-    avatarBg: "from-orange-100 to-orange-200 dark:from-orange-900/40 dark:to-orange-800/40 text-orange-600 dark:text-orange-200",
-    role: "Marketing Head",
-  },
-  {
-    quote: "He eliminates the friction between design and engineering by validating designs early.",
-    avatarBg: "from-cyan-100 to-cyan-200 dark:from-cyan-900/40 dark:to-cyan-800/40 text-cyan-600 dark:text-cyan-200",
+    quote: "Zero handoff friction. His UI specs and components drop right into our codebase without rework.",
     role: "Senior Engineer",
+    context: "Frontend Engineering",
+  },
+];
+
+const PRINCIPLES = [
+  {
+    roman: "I",
+    title: "Prototype in Code",
+    summary: "Static mockups hide edge cases. Prototyping in Swift and React proves interaction physics and technical feasibility immediately.",
   },
   {
-    quote: "Agency life in Singapore is intense. Wira handled the pressure and delivered high-quality assets.",
-    avatarBg: "from-fuchsia-100 to-fuchsia-200 dark:from-fuchsia-900/40 dark:to-fuchsia-800/40 text-fuchsia-600 dark:text-fuchsia-200",
-    role: "Art Director",
+    roman: "II",
+    title: "Design for Real Friction",
+    summary: "Apps live on spotty connections, small screens, and divided attention. Good design works under real-world constraints.",
+  },
+  {
+    roman: "III",
+    title: "Production-Ready in Figma",
+    summary: "Deep proficiency in Figma auto-layout, design tokens, and components ensures designs translate 1:1 to code without guesswork.",
+  },
+  {
+    roman: "IV",
+    title: "Full-Funnel Distribution",
+    summary: "A great product needs distribution. I design the marketing collaterals, app previews, and landing pages needed to launch and acquire users.",
   },
 ];
 
 export default function ConnectPage() {
-  const containerRef = useRef(null);
-
-  const getScrollAmount = () => {
-    if (!containerRef.current) return 320;
-    const firstCard = containerRef.current.querySelector(".snap-start");
-    if (!firstCard) return 320;
-    return firstCard.offsetWidth + 16; // card width + gap-4 (16px)
-  };
-
-  const handlePrev = () => {
-    if (containerRef.current) {
-      containerRef.current.scrollBy({
-        left: -getScrollAmount(),
-        behavior: "smooth",
-      });
-    }
-  };
-
-  const handleNext = () => {
-    if (containerRef.current) {
-      containerRef.current.scrollBy({
-        left: getScrollAmount(),
-        behavior: "smooth",
-      });
-    }
-  };
-
-  const renderBullet = () => (
-    <svg className="w-1.5 h-1.5 mt-2.5 shrink-0 text-zinc-400 dark:text-zinc-500" fill="currentColor" viewBox="0 0 8 8">
-      <circle cx="4" cy="4" r="3" />
-    </svg>
-  );
-
-  const renderIconGroup = (items) => (
-    <div className="grid grid-cols-4 gap-3">
-      {items.map((item) => (
-        <div
-          key={item.name}
-          className="relative group aspect-square flex items-center justify-center bg-white dark:bg-zinc-950 rounded-xl p-2.5 border border-zinc-200/60 dark:border-zinc-800 transition-all duration-300 ease-out hover:-translate-y-1 hover:border-zinc-400 dark:hover:border-zinc-600"
-        >
-          <img src={item.icon} alt={item.name} className="w-full h-full object-contain" loading="lazy" />
-          <div className="absolute -top-10 left-1/2 -translate-x-1/2 bg-black text-white text-xs font-medium px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-10 shadow-lg">
-            {item.name}
-          </div>
-        </div>
-      ))}
-    </div>
-  );
-
   return (
-    <main className="w-full max-w-[1600px] px-6 md:px-12 pt-24 pb-12 lg:py-12 space-y-12">
-      <section className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 auto-rows-auto">
-        {/* 1. What I solve */}
-        <div className="md:col-span-2 bg-zinc-100/50 dark:bg-zinc-900/60 border border-zinc-200/80 dark:border-zinc-800/80 rounded-3xl p-6 md:p-8 flex flex-col gap-4">
-          <h2 className="text-2xl md:text-3xl font-semibold text-black dark:text-white tracking-tight">What I solve</h2>
-          <ul className="space-y-3.5 text-base text-zinc-700 dark:text-zinc-300 leading-relaxed">
-            <li className="flex items-start gap-3">
-              {renderBullet()}
-              <span>Reduce UX friction in consumer apps.</span>
-            </li>
-            <li className="flex items-start gap-3">
-              {renderBullet()}
-              <span>Bridge product thinking + visual execution.</span>
-            </li>
-            <li className="flex items-start gap-3">
-              {renderBullet()}
-              <span>Gaps between design intent and development reality.</span>
-            </li>
-          </ul>
-        </div>
+    <main className="w-full max-w-[1600px] px-6 md:px-12 pt-24 pb-16 lg:py-16 space-y-20 lg:space-y-24 overflow-x-hidden">
+      {/* ── 1. Hero: Design Engineer + Marketing ── */}
+      <header className="space-y-8">
+        <ScrollReveal>
+          <div className="space-y-4">
+            <h1 className="text-4xl sm:text-6xl lg:text-7xl font-serif font-bold tracking-tight text-zinc-950 dark:text-white leading-[1.06]">
+              Why Hire Me
+            </h1>
 
-        {/* 2. How I work */}
-        <div className="md:col-span-1 md:row-span-2 bg-zinc-100/50 dark:bg-zinc-900/60 border border-zinc-200/80 dark:border-zinc-800/80 rounded-3xl p-6 md:p-8 flex flex-col gap-6 min-h-[300px]">
-          <h2 className="text-2xl md:text-3xl font-semibold text-black dark:text-white tracking-tight">How I work</h2>
-          <div className="grid grid-cols-2 gap-3 flex-1">
-            <div className="bg-white dark:bg-zinc-800/40 border border-zinc-200/40 dark:border-zinc-700/50 p-4 rounded-2xl flex flex-col gap-3 justify-start">
-              <div className="text-3xl">💡</div>
-              <p className="text-xs font-semibold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">Why First</p>
-              <p className="text-sm font-medium text-zinc-700 dark:text-zinc-300 leading-snug">Start with the why, not the UI</p>
-            </div>
-            <div className="bg-white dark:bg-zinc-800/40 border border-zinc-200/40 dark:border-zinc-700/50 p-4 rounded-2xl flex flex-col gap-3 justify-start">
-              <div className="text-3xl">🔒</div>
-              <p className="text-xs font-semibold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">Constraints</p>
-              <p className="text-sm font-medium text-zinc-700 dark:text-zinc-300 leading-snug">Design for real constraints, not ideal scenarios</p>
-            </div>
-            <div className="bg-white dark:bg-zinc-800/40 border border-zinc-200/40 dark:border-zinc-700/50 p-4 rounded-2xl flex flex-col gap-3 justify-start">
-              <div className="text-3xl">🔍</div>
-              <p className="text-xs font-semibold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">Clarity</p>
-              <p className="text-sm font-medium text-zinc-700 dark:text-zinc-300 leading-snug">Prefer clarity over decoration</p>
-            </div>
-            <div className="bg-white dark:bg-zinc-800/40 border border-zinc-200/40 dark:border-zinc-700/50 p-4 rounded-2xl flex flex-col gap-3 justify-start">
-              <div className="text-3xl">🚀</div>
-              <p className="text-xs font-semibold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">Velocity</p>
-              <p className="text-sm font-medium text-zinc-700 dark:text-zinc-300 leading-snug">Ship, learn, and iterate fast</p>
-            </div>
+            <p className="text-xl md:text-2xl font-serif text-zinc-700 dark:text-zinc-300 max-w-3xl leading-relaxed">
+              I&apos;m a <strong className="font-semibold text-zinc-950 dark:text-white">Design Engineer with a marketing background</strong>. I craft high-fidelity interfaces in Figma, write production code in Swift and React, and design marketing collaterals that drive growth.
+            </p>
           </div>
-        </div>
+        </ScrollReveal>
 
-        {/* 3. My Impacts */}
-        <div className="md:col-span-2 bg-zinc-100/50 dark:bg-zinc-900/60 border border-zinc-200/80 dark:border-zinc-800/80 rounded-3xl p-6 md:p-8 flex flex-col gap-4">
-          <h2 className="text-2xl md:text-3xl font-semibold text-black dark:text-white tracking-tight">My Impacts</h2>
-          <ul className="space-y-3.5 text-base text-zinc-700 dark:text-zinc-300 leading-relaxed">
-            <li className="flex items-start gap-3">
-              {renderBullet()}
-              <span>Shipped a consumer app to the App Store as Product Design Lead.</span>
-            </li>
-            <li className="flex items-start gap-3">
-              {renderBullet()}
-              <span>Worked in a fast paced Singapore & Bali Agency environment for 2+ years.</span>
-            </li>
-            <li className="flex items-start gap-3">
-              {renderBullet()}
-              <span>Balanced speed, brand consistency, and usability in live projects.</span>
-            </li>
-          </ul>
-        </div>
+        {/* ── Tier 1: Two Clean Proof Cards (No Fluff) ── */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 pt-2">
+          {/* Card 1: 5 Years Cross-Functional Craft */}
+          <ScrollReveal delay={40} className="lg:col-span-6 h-full">
+            <div className="relative overflow-hidden rounded-3xl min-h-[300px] p-8 md:p-10 flex flex-col justify-between group bg-zinc-900 text-white h-full">
+              <div className="absolute inset-0 z-0">
+                <img
+                  src="/assets/BG Placeholder.avif"
+                  alt="Background Craft"
+                  className="w-full h-full object-cover opacity-25 group-hover:scale-105 transition-transform duration-700"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-zinc-950/85 to-zinc-900/50" />
+              </div>
 
-        {/* 4. My Working Stack */}
-        <div className="md:col-span-2 bg-zinc-100/50 dark:bg-zinc-900/60 border border-zinc-200/80 dark:border-zinc-800/80 rounded-3xl p-6 md:p-8 flex flex-col gap-6">
-          <h2 className="text-2xl md:text-3xl font-semibold text-black dark:text-white tracking-tight">My Working Stack</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-            <div className="space-y-4">
-              <h3 className="text-sm font-semibold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">Design</h3>
-              {renderIconGroup(STACK_DESIGN)}
+              <div className="relative z-10 space-y-3">
+                <span className="text-xs font-mono font-bold tracking-widest text-emerald-400 uppercase">
+                  5 YEARS EXPERIENCE
+                </span>
+                <h3 className="text-2xl sm:text-3xl font-serif font-bold text-white tracking-tight leading-snug">
+                  Figma + Code + Marketing
+                </h3>
+                <p className="text-base text-zinc-300 leading-relaxed max-w-lg">
+                  I bridge the gap most teams struggle with. I design in Figma, code frontend in Swift and React, and create the marketing collaterals that bring products to market.
+                </p>
+              </div>
+
+              <div className="relative z-10 pt-6 flex items-center gap-3 text-xs font-mono text-zinc-400">
+                <span>FIGMA</span>
+                <span>&bull;</span>
+                <span>SWIFT</span>
+                <span>&bull;</span>
+                <span>REACT</span>
+                <span>&bull;</span>
+                <span>MARKETING</span>
+              </div>
             </div>
-            <div className="space-y-4">
-              <h3 className="text-sm font-semibold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">Tech</h3>
-              {renderIconGroup(STACK_TECH)}
-            </div>
-            <div className="space-y-4">
-              <h3 className="text-sm font-semibold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">Management</h3>
-              {renderIconGroup(STACK_MGMT)}
-            </div>
-          </div>
-        </div>
+          </ScrollReveal>
 
-        {/* 5. Roles I Fit */}
-        <div className="md:col-span-1 bg-zinc-100/50 dark:bg-zinc-900/60 border border-zinc-200/80 dark:border-zinc-800/80 rounded-3xl p-6 md:p-8 flex flex-col gap-4">
-          <h2 className="text-2xl md:text-3xl font-semibold text-black dark:text-white tracking-tight">Roles I Fit</h2>
-          <ul className="space-y-3.5 text-base text-zinc-700 dark:text-zinc-300 leading-relaxed">
-            <li className="flex items-start gap-3">
-              {renderBullet()}
-              <span>Product Designer</span>
-            </li>
-            <li className="flex items-start gap-3">
-              {renderBullet()}
-              <span>UI/UX Designer</span>
-            </li>
-            <li className="flex items-start gap-3">
-              {renderBullet()}
-              <span>Marketing Specialist</span>
-            </li>
-          </ul>
-        </div>
+          {/* Card 2: App Store Track Record */}
+          <ScrollReveal delay={80} className="lg:col-span-6 h-full">
+            <div className="rounded-3xl p-8 md:p-10 flex flex-col justify-between bg-zinc-100 dark:bg-zinc-900/70 border border-zinc-200/80 dark:border-zinc-800/80 h-full">
+              <div className="space-y-3">
+                <span className="text-xs font-mono font-bold tracking-widest text-zinc-500 dark:text-zinc-400 uppercase">
+                  TRACK RECORD
+                </span>
 
-        {/* 6. What Teammates Say */}
-        <div className="md:col-span-2 bg-zinc-100/50 dark:bg-zinc-900/60 border border-zinc-200/80 dark:border-zinc-800/80 rounded-3xl p-6 md:p-8 flex flex-col gap-6 overflow-hidden">
-          <div className="flex justify-between items-center">
-            <h2 className="text-2xl md:text-3xl font-semibold text-black dark:text-white tracking-tight">What they say</h2>
-            <div className="flex gap-2">
-              <button
-                onClick={handlePrev}
-                className="w-10 h-10 rounded-full bg-white dark:bg-zinc-800 border border-zinc-200/80 dark:border-zinc-700/80 flex items-center justify-center hover:bg-zinc-50 dark:hover:bg-zinc-700 transition-colors shadow-sm focus:outline-none cursor-pointer"
-                aria-label="Previous testimonial"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="w-5 h-5 text-zinc-600 dark:text-zinc-300 transform rotate-180"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <path d="M5 12h14M12 5l7 7-7 7" />
-                </svg>
-              </button>
-              <button
-                onClick={handleNext}
-                className="w-10 h-10 rounded-full bg-white dark:bg-zinc-800 border border-zinc-200/80 dark:border-zinc-700/80 flex items-center justify-center hover:bg-zinc-50 dark:hover:bg-zinc-700 transition-colors shadow-sm focus:outline-none cursor-pointer"
-                aria-label="Next testimonial"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="w-5 h-5 text-zinc-600 dark:text-zinc-300"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <path d="M5 12h14M12 5l7 7-7 7" />
-                </svg>
-              </button>
-            </div>
-          </div>
-
-          <div
-            ref={containerRef}
-            className="flex gap-4 overflow-x-auto snap-x snap-mandatory pb-4 no-scrollbar -mr-8 pr-8"
-          >
-            {TESTIMONIALS.map((t, idx) => (
-              <div
-                key={idx}
-                className="snap-start min-w-[280px] md:min-w-[320px] bg-white dark:bg-zinc-800/40 border border-zinc-200/50 dark:border-zinc-700/60 p-5 rounded-2xl flex flex-col gap-4"
-              >
-                <p className="text-zinc-600 dark:text-zinc-300 leading-relaxed text-[15px]">"{t.quote}"</p>
-                <div className="flex items-center gap-3 mt-auto">
-                  <div className={`w-10 h-10 rounded-full bg-gradient-to-br ${t.avatarBg} flex items-center justify-center`}>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="w-5 h-5"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    >
-                      <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-                      <circle cx="12" cy="7" r="4" />
-                    </svg>
+                <div className="space-y-2">
+                  <div className="text-4xl sm:text-5xl font-serif font-bold text-zinc-950 dark:text-white">
+                    3 Native Apps Shipped
                   </div>
-                  <div className="text-sm font-medium text-black dark:text-white">{t.role}</div>
+                  <div className="text-xl sm:text-2xl font-serif text-zinc-800 dark:text-zinc-200">
+                    Peaked at <strong className="font-bold text-zinc-950 dark:text-white underline decoration-zinc-400 underline-offset-4">#4 in App Store Business</strong>
+                  </div>
+                  <p className="text-base text-zinc-600 dark:text-zinc-400 leading-relaxed pt-1">
+                    Hands-on native iOS product design in Figma and production development from initial wireframe to App Store release.
+                  </p>
                 </div>
               </div>
-            ))}
-          </div>
-        </div>
 
-        {/* 7. Ready to work! */}
-        <a
-          href="mailto:atmanawiera@gmail.com"
-          className="md:col-span-1 bg-zinc-100/50 dark:bg-zinc-900/60 border border-zinc-200/80 dark:border-zinc-800/80 rounded-3xl p-6 md:p-8 flex flex-col justify-between gap-4 min-h-[200px] group transition-all duration-300 ease-out hover:bg-zinc-900 hover:border-zinc-900 hover:text-white dark:hover:bg-white dark:hover:border-white dark:hover:text-black hover:scale-[1.01]"
-        >
-          <div className="flex justify-between items-start w-full">
-            <h2 className="text-2xl md:text-3xl font-semibold text-black dark:text-white group-hover:text-white dark:group-hover:text-black transition-colors tracking-tight">
-              Ready to work!
-            </h2>
-            <img
-              src="/assets/Sidebar Icons/Arrow Up Icon.svg"
-              className="w-8 h-8 opacity-45 group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all duration-200 dark:invert group-hover:invert dark:group-hover:invert-0"
-              alt="Contact arrow"
-            />
+              <div className="pt-6 flex items-center gap-3 text-xs font-mono text-zinc-500 dark:text-zinc-400">
+                <span>APP STORE RELEASED</span>
+                <span>&bull;</span>
+                <span>ACTIVE USERS</span>
+              </div>
+            </div>
+          </ScrollReveal>
+        </div>
+      </header>
+
+      {/* ── 2. What I Bring to a Team ── */}
+      <section className="space-y-8">
+        <ScrollReveal>
+          <span className="text-xs font-mono uppercase tracking-widest text-zinc-400 dark:text-zinc-500 block">
+            WHAT I BRING TO A TEAM
+          </span>
+        </ScrollReveal>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-10 lg:gap-12">
+          <ScrollReveal delay={40}>
+            <div className="space-y-3">
+              <span className="text-2xl font-serif font-bold text-zinc-400 dark:text-zinc-600 block">01.</span>
+              <h3 className="text-2xl font-serif font-bold text-zinc-950 dark:text-white leading-snug">
+                Figma & Design Engineering
+              </h3>
+              <p className="text-base text-zinc-600 dark:text-zinc-400 leading-relaxed">
+                I build structured, tokenized Figma files and functional UI directly in React, Next.js, and Swift. Your engineering team won&apos;t have to guess layout behaviors, responsive breakpoints, or interaction curves.
+              </p>
+            </div>
+          </ScrollReveal>
+
+          <ScrollReveal delay={80}>
+            <div className="space-y-3">
+              <span className="text-2xl font-serif font-bold text-zinc-400 dark:text-zinc-600 block">02.</span>
+              <h3 className="text-2xl font-serif font-bold text-zinc-950 dark:text-white leading-snug">
+                Marketing Strategy & Collaterals
+              </h3>
+              <p className="text-base text-zinc-600 dark:text-zinc-400 leading-relaxed">
+                A great product needs clear distribution. Working in marketing, I strategize with cross-functional teams and design high-impact marketing collaterals, ad visuals, and landing pages that drive user acquisition.
+              </p>
+            </div>
+          </ScrollReveal>
+
+          <ScrollReveal delay={120}>
+            <div className="space-y-3">
+              <span className="text-2xl font-serif font-bold text-zinc-400 dark:text-zinc-600 block">03.</span>
+              <h3 className="text-2xl font-serif font-bold text-zinc-950 dark:text-white leading-snug">
+                End-to-End Execution
+              </h3>
+              <p className="text-base text-zinc-600 dark:text-zinc-400 leading-relaxed">
+                Because I design marketing assets, architect Figma systems, and write frontend code, ideas move from initial concept to live release without multi-team handoff bottlenecks.
+              </p>
+            </div>
+          </ScrollReveal>
+        </div>
+      </section>
+
+      {/* ── 3. How I Work (Operating Principles) ── */}
+      <section className="space-y-8">
+        <ScrollReveal>
+          <span className="text-xs font-mono uppercase tracking-widest text-zinc-400 dark:text-zinc-500 block">
+            HOW I WORK
+          </span>
+        </ScrollReveal>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-10">
+          {PRINCIPLES.map((p, idx) => (
+            <ScrollReveal key={p.roman} delay={idx * 40}>
+              <div className="space-y-3">
+                <span className="text-3xl font-serif font-bold text-zinc-950 dark:text-white">
+                  {p.roman}.
+                </span>
+                <div className="space-y-2">
+                  <h4 className="text-lg font-bold text-zinc-900 dark:text-white">
+                    {p.title}
+                  </h4>
+                  <p className="text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed">
+                    {p.summary}
+                  </p>
+                </div>
+              </div>
+            </ScrollReveal>
+          ))}
+        </div>
+      </section>
+
+      {/* ── 4. Working Toolkit (Completely Unboxed) ── */}
+      <section className="space-y-8">
+        <ScrollReveal>
+          <span className="text-xs font-mono uppercase tracking-widest text-zinc-400 dark:text-zinc-500 block">
+            WORKING TOOLKIT
+          </span>
+        </ScrollReveal>
+
+        <ScrollReveal delay={60}>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-10 lg:gap-12">
+            {/* Design & Motion */}
+            <div className="space-y-4">
+              <h4 className="text-xs font-mono font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">
+                DESIGN & MOTION
+              </h4>
+              <div className="flex flex-wrap gap-2.5">
+                {STACK_DESIGN.map((item) => (
+                  <div
+                    key={item.name}
+                    className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-zinc-100/80 dark:bg-zinc-900 hover:bg-zinc-200 dark:hover:bg-zinc-800 transition-colors"
+                  >
+                    <img src={item.icon} alt={item.name} className="w-4 h-4 object-contain shrink-0" loading="lazy" />
+                    <span className="text-xs font-medium text-zinc-800 dark:text-zinc-200">{item.name}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Code */}
+            <div className="space-y-4">
+              <h4 className="text-xs font-mono font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">
+                CODE
+              </h4>
+              <div className="flex flex-wrap gap-2.5">
+                {STACK_TECH.map((item) => (
+                  <div
+                    key={item.name}
+                    className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-zinc-100/80 dark:bg-zinc-900 hover:bg-zinc-200 dark:hover:bg-zinc-800 transition-colors"
+                  >
+                    <img src={item.icon} alt={item.name} className="w-4 h-4 object-contain shrink-0" loading="lazy" />
+                    <span className="text-xs font-medium text-zinc-800 dark:text-zinc-200">{item.name}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Ops & Workflow */}
+            <div className="space-y-4">
+              <h4 className="text-xs font-mono font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">
+                OPS & WORKFLOW
+              </h4>
+              <div className="flex flex-wrap gap-2.5">
+                {STACK_MGMT.map((item) => (
+                  <div
+                    key={item.name}
+                    className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-zinc-100/80 dark:bg-zinc-900 hover:bg-zinc-200 dark:hover:bg-zinc-800 transition-colors"
+                  >
+                    <img src={item.icon} alt={item.name} className="w-4 h-4 object-contain shrink-0" loading="lazy" />
+                    <span className="text-xs font-medium text-zinc-800 dark:text-zinc-200">{item.name}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
-          <p className="text-base text-zinc-500 dark:text-zinc-400 group-hover:text-zinc-300 dark:group-hover:text-zinc-600 transition-colors mt-auto">
-            Drop me an email.
-          </p>
-        </a>
+        </ScrollReveal>
+      </section>
+
+      {/* ── 5. Endorsements ── */}
+      <section className="space-y-8">
+        <ScrollReveal>
+          <span className="text-xs font-mono uppercase tracking-widest text-zinc-400 dark:text-zinc-500 block">
+            WHAT PEOPLE SAY
+          </span>
+        </ScrollReveal>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-10 lg:gap-12">
+          {TESTIMONIALS.map((t, idx) => (
+            <ScrollReveal key={idx} delay={idx * 50}>
+              <div className="space-y-3">
+                <p className="text-lg md:text-xl font-serif italic text-zinc-800 dark:text-zinc-200 leading-relaxed">
+                  &ldquo;{t.quote}&rdquo;
+                </p>
+
+                <div className="flex items-center gap-2 pt-1">
+                  <span className="font-semibold text-xs text-zinc-950 dark:text-white">{t.role}</span>
+                  <span className="text-zinc-400 text-xs">&bull;</span>
+                  <span className="text-[11px] font-mono text-zinc-400 dark:text-zinc-500 uppercase">{t.context}</span>
+                </div>
+              </div>
+            </ScrollReveal>
+          ))}
+        </div>
+      </section>
+
+      {/* ── 6. Direct Contact CTA ── */}
+      <section className="pt-8">
+        <ScrollReveal delay={80}>
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6">
+            <div className="space-y-1.5 max-w-xl">
+              <h2 className="text-2xl sm:text-4xl font-serif font-bold tracking-tight text-zinc-950 dark:text-white">
+                Want to build something fast?
+              </h2>
+              <p className="text-base text-zinc-600 dark:text-zinc-400">
+                Available for design engineering contracts, full-time product roles, and mobile launches.
+              </p>
+            </div>
+
+            <div className="flex flex-wrap gap-3 shrink-0">
+              <a
+                href="mailto:atmanawiera@gmail.com"
+                className="px-6 py-3.5 rounded-full bg-zinc-950 text-white hover:bg-zinc-800 dark:bg-white dark:text-zinc-950 dark:hover:bg-zinc-200 text-xs font-mono font-bold tracking-wider uppercase transition-all cursor-pointer"
+              >
+                EMAIL ME &rarr;
+              </a>
+              <a
+                href="https://linkedin.com/in/wira29"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-6 py-3.5 rounded-full border border-zinc-300 text-zinc-900 hover:bg-zinc-100 dark:border-zinc-700 dark:text-white dark:hover:bg-zinc-800 text-xs font-mono font-bold tracking-wider uppercase transition-all cursor-pointer"
+              >
+                LINKEDIN
+              </a>
+            </div>
+          </div>
+        </ScrollReveal>
       </section>
     </main>
   );

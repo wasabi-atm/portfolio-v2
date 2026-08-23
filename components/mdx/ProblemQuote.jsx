@@ -46,10 +46,10 @@ const SILHOUETTES = [
 function QuoteMark({ flip = false }) {
   return (
     <span
-      className={`text-zinc-200 dark:text-zinc-700 select-none leading-none ${
+      className={`text-zinc-200 dark:text-zinc-700 select-none leading-none font-serif ${
         flip ? "self-end" : "self-start"
       }`}
-      style={{ fontSize: "4rem", fontFamily: "Georgia, serif", lineHeight: 0.8 }}
+      style={{ fontSize: "4rem", lineHeight: 0.8 }}
       aria-hidden="true"
     >
       {flip ? "\u201D" : "\u201C"}
@@ -81,7 +81,7 @@ function ProblemQuote({ children }) {
   }, []);
 
   const silhouette = (
-    <div className="flex-shrink-0 w-20 h-24 md:w-24 md:h-28 text-zinc-300 dark:text-zinc-600">
+    <div className="flex-shrink-0 w-16 h-20 md:w-20 md:h-24 text-zinc-300 dark:text-zinc-600">
       {SILHOUETTES[silhouetteIdx]}
     </div>
   );
@@ -89,14 +89,14 @@ function ProblemQuote({ children }) {
   return (
     <div
       ref={ref}
-      className="my-8 md:my-10 not-prose"
+      className="my-10 md:my-14 not-prose"
       style={{
         opacity: visible ? 1 : 0,
         transform: visible ? "translateY(0)" : "translateY(20px)",
         transition: "opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1)",
       }}
     >
-      <div className="relative rounded-2xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 px-8 py-8 md:px-10 md:py-10">
+      <div className="relative rounded-3xl border border-zinc-200/80 dark:border-zinc-800/80 bg-zinc-50/70 dark:bg-zinc-900/70 p-8 md:p-10 shadow-sm">
         <div className="flex items-center gap-6 md:gap-8">
           {/* Quote marks */}
           <QuoteMark />
@@ -105,7 +105,7 @@ function ProblemQuote({ children }) {
           {!isRight && silhouette}
 
           {/* Quote text */}
-          <p className="flex-1 text-lg md:text-xl text-zinc-700 dark:text-zinc-200 italic leading-relaxed font-medium">
+          <p className="flex-1 text-lg md:text-2xl font-serif text-zinc-800 dark:text-zinc-200 italic leading-relaxed font-normal">
             {children}
           </p>
 

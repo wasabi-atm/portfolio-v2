@@ -389,47 +389,65 @@ export default async function BlogPostPage({ params }) {
     );
   };
 
-  // ── Render: Outstatic post (new layout) ──
+  // ── Render: Outstatic post (new editorial layout) ──
   if (!isBuilder) {
     return (
       <div className="min-h-screen pb-48 md:pb-32 lg:ml-0">
-        {/* Sticky Breadcrumb Nav */}
-        <div className="sticky top-[60px] md:top-0 z-[100] w-full bg-white/80 backdrop-blur-md backdrop-saturate-150 border-b border-zinc-200/50 transition-all dark:bg-zinc-900/80 dark:border-white/5">
-          <div className="mx-auto w-full max-w-4xl px-6 sm:px-8 md:px-12 py-3 flex items-center gap-4">
-            <Link
-              href="/blog"
-              aria-label="Back to Blogs"
-              className="group inline-flex items-center justify-center -ml-2 p-2 rounded-lg hover:bg-zinc-100 transition-colors text-zinc-600 hover:text-black dark:text-zinc-400 dark:hover:text-white dark:hover:bg-zinc-800"
-            >
-              <img
-                src={chevronPath}
-                alt="Back"
-                className="w-4 h-4 opacity-70 group-hover:opacity-100 transition-opacity dark:invert"
-                draggable="false"
-              />
-            </Link>
-            <span className="font-medium text-sm text-zinc-900 truncate pr-4 dark:text-white">
-              {post.title}
+        {/* Sticky Editorial Breadcrumb Nav */}
+        <div className="sticky top-[60px] md:top-0 z-[100] w-full bg-zinc-50/90 backdrop-blur-md border-b border-zinc-200/80 transition-all dark:bg-zinc-950/90 dark:border-zinc-800/80">
+          <div className="mx-auto w-full max-w-4xl px-6 md:px-12 py-3 flex items-center justify-between gap-4">
+            <div className="flex items-center gap-3 overflow-hidden">
+              <Link
+                href="/blog"
+                aria-label="Back to Dispatches"
+                className="group inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-zinc-100 dark:bg-zinc-850 hover:bg-zinc-200 dark:hover:bg-zinc-800 transition-colors text-xs font-mono text-zinc-700 dark:text-zinc-300 shrink-0"
+              >
+                <svg className="w-3.5 h-3.5 transform group-hover:-translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                </svg>
+                <span>ALL DISPATCHES</span>
+              </Link>
+              <span className="font-medium text-xs font-mono text-zinc-400 dark:text-zinc-500 truncate hidden sm:inline">
+                / {post.title}
+              </span>
+            </div>
+
+            <span className="text-[11px] font-mono uppercase tracking-widest text-zinc-400 dark:text-zinc-500 shrink-0">
+              {dateStr}
             </span>
           </div>
         </div>
 
-        <div className="mx-auto w-full max-w-4xl px-6 sm:px-8 md:px-12 pt-12 pb-8 md:pt-24 md:pb-16 relative">
-          {/* ── Hero Section ── */}
-          <header className="mb-12 md:mb-20">
+        <div className="mx-auto w-full max-w-4xl px-6 md:px-12 pt-12 pb-8 md:pt-20 md:pb-16 relative">
+          {/* ── Editorial Header ── */}
+          <header className="mb-12 md:mb-16">
             <ScrollReveal>
-              <p className="text-sm font-medium text-zinc-400 uppercase tracking-wider mb-4 dark:text-zinc-500">
-                {dateStr}
-              </p>
-              <h1 className="text-5xl md:text-7xl lg:text-8xl font-semibold tracking-tighter text-zinc-900 leading-[1.05] text-balance dark:text-white">
-                {post.title}
-              </h1>
+              <div className="space-y-4">
+                <div className="flex flex-wrap items-center gap-2.5">
+                  <span className="px-3 py-1 rounded-full text-[11px] font-mono uppercase tracking-wider bg-zinc-900 text-white dark:bg-white dark:text-zinc-950 font-semibold">
+                    {post.articleType === "Projects" ? "CASE STUDY" : "ESSAY"}
+                  </span>
+                  <span className="text-xs font-mono text-zinc-400 dark:text-zinc-500">
+                    VOL. 26 &bull; {dateStr}
+                  </span>
+                </div>
+
+                <h1 className="text-4xl sm:text-6xl lg:text-7xl font-serif font-bold tracking-tight text-zinc-950 dark:text-white leading-[1.08] text-balance">
+                  {post.title}
+                </h1>
+
+                {post.description && (
+                  <p className="text-xl md:text-2xl font-serif italic text-zinc-600 dark:text-zinc-400 leading-relaxed max-w-3xl text-balance pt-1">
+                    &ldquo;{post.description}&rdquo;
+                  </p>
+                )}
+              </div>
             </ScrollReveal>
 
             {/* Hero Image */}
             {post.coverImage && (
               <ScrollReveal delay={100}>
-                <div className="mt-8 md:mt-12 w-full aspect-video rounded-2xl overflow-hidden bg-zinc-100 dark:bg-zinc-900 border border-zinc-200/50 dark:border-zinc-800">
+                <div className="mt-8 md:mt-12 w-full aspect-video rounded-3xl overflow-hidden bg-zinc-100 dark:bg-zinc-900 border border-zinc-200/80 dark:border-zinc-800/80 shadow-sm">
                   <img
                     src={post.coverImage}
                     alt={post.title}
@@ -440,53 +458,61 @@ export default async function BlogPostPage({ params }) {
               </ScrollReveal>
             )}
 
-            {/* Two-Column Metadata (Ellen Covey-style) */}
+            {/* Two-Column Dossier Specification */}
             {isCaseStudy && (projectType || oustaticRole || platform || designTools || pullQuote) && (
               <ScrollReveal delay={200}>
-                <div className="mt-10 md:mt-14 grid grid-cols-1 md:grid-cols-[1fr_1.5fr] gap-8 md:gap-12">
-                  {/* Left: Metadata pairs */}
+                <div className="mt-12 md:mt-16 grid grid-cols-1 md:grid-cols-[1.2fr_1.8fr] gap-10 md:gap-14">
+                  {/* Left: Metadata pairs (Clean whitespace list, no divide-y) */}
                   <div className="space-y-5">
+                    <div className="text-xs font-mono uppercase tracking-widest text-zinc-400 dark:text-zinc-500">
+                      SPECIFICATION DOSSIER
+                    </div>
                     {projectType && (
-                      <div>
-                        <div className="text-xs font-bold uppercase tracking-widest text-zinc-400 dark:text-zinc-500 mb-1">Type</div>
-                        <div className="text-sm text-zinc-700 dark:text-zinc-300">{projectType}</div>
+                      <div className="space-y-0.5">
+                        <div className="text-[11px] font-mono uppercase tracking-wider text-zinc-400 dark:text-zinc-500">Project Type</div>
+                        <div className="text-base font-medium text-zinc-900 dark:text-zinc-200">{projectType}</div>
                       </div>
                     )}
                     {oustaticRole && (
-                      <div>
-                        <div className="text-xs font-bold uppercase tracking-widest text-zinc-400 dark:text-zinc-500 mb-1">Role</div>
-                        <div className="text-sm text-zinc-700 dark:text-zinc-300">{oustaticRole}</div>
+                      <div className="space-y-0.5">
+                        <div className="text-[11px] font-mono uppercase tracking-wider text-zinc-400 dark:text-zinc-500">Role & Scope</div>
+                        <div className="text-base font-medium text-zinc-900 dark:text-zinc-200">{oustaticRole}</div>
                       </div>
                     )}
                     {platform && (
-                      <div>
-                        <div className="text-xs font-bold uppercase tracking-widest text-zinc-400 dark:text-zinc-500 mb-1">Platform</div>
-                        <div className="text-sm text-zinc-700 dark:text-zinc-300">{platform}</div>
+                      <div className="space-y-0.5">
+                        <div className="text-[11px] font-mono uppercase tracking-wider text-zinc-400 dark:text-zinc-500">Target Platform</div>
+                        <div className="text-base font-medium text-zinc-900 dark:text-zinc-200">{platform}</div>
                       </div>
                     )}
                     {designTools && (
-                      <div>
-                        <div className="text-xs font-bold uppercase tracking-widest text-zinc-400 dark:text-zinc-500 mb-1">Design Tools</div>
-                        <div className="text-sm text-zinc-700 dark:text-zinc-300">{designTools}</div>
+                      <div className="space-y-0.5">
+                        <div className="text-[11px] font-mono uppercase tracking-wider text-zinc-400 dark:text-zinc-500">Design & Systems Stack</div>
+                        <div className="text-base font-medium text-zinc-900 dark:text-zinc-200">{designTools}</div>
                       </div>
                     )}
                   </div>
 
-                  {/* Right: Pull quote + CTA */}
-                  <div className="flex flex-col justify-between">
+                  {/* Right: Pull quote + CTA (No border-l) */}
+                  <div className="flex flex-col justify-between space-y-6">
                     {pullQuote && (
-                      <p className="text-xl md:text-2xl text-zinc-600 dark:text-zinc-300 leading-relaxed font-light text-balance">
-                        {pullQuote}
-                      </p>
+                      <div className="space-y-2">
+                        <span className="text-xs font-mono uppercase tracking-widest text-zinc-400 dark:text-zinc-500">
+                          EXECUTIVE SUMMARY
+                        </span>
+                        <p className="text-xl md:text-2xl font-serif text-zinc-700 dark:text-zinc-300 leading-relaxed font-normal">
+                          {pullQuote}
+                        </p>
+                      </div>
                     )}
                     {prototypeUrl && (
                       <a
                         href={prototypeUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="mt-6 inline-flex items-center gap-3 self-start rounded-full bg-zinc-900 text-white px-6 py-3 text-sm font-medium transition-all hover:bg-zinc-700 hover:scale-[1.02] active:scale-[0.98] shadow-sm dark:bg-white dark:text-black dark:hover:bg-zinc-200"
+                        className="inline-flex items-center justify-center gap-2.5 self-start rounded-full bg-zinc-900 text-white px-6 py-3 text-sm font-mono tracking-wider transition-all hover:bg-zinc-700 hover:scale-[1.02] active:scale-[0.98] dark:bg-white dark:text-zinc-950 dark:hover:bg-zinc-200 cursor-pointer"
                       >
-                        <span>{prototypeLabel}</span>
+                        <span>{prototypeLabel.toUpperCase()}</span>
                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
                         </svg>
@@ -496,92 +522,124 @@ export default async function BlogPostPage({ params }) {
                 </div>
               </ScrollReveal>
             )}
-
-            {/* Non-case-study description (Opinions / Personal Blog) */}
-            {!isCaseStudy && post.description && (
-              <ScrollReveal delay={150}>
-                <p className="mt-6 text-xl md:text-2xl text-zinc-500 leading-relaxed max-w-3xl text-balance dark:text-zinc-400">
-                  {post.description}
-                </p>
-              </ScrollReveal>
-            )}
           </header>
 
-          {/* ── Progress bar ── */}
-          <div className="w-full h-px bg-zinc-200 dark:bg-zinc-800 mb-12 md:mb-16" />
+          {/* ── Editorial Divider ── */}
+          <div className="flex items-center gap-4 my-12 md:my-16">
+            <div className="flex-1 h-px bg-zinc-200 dark:bg-zinc-800" />
+            <span className="text-[10px] font-mono tracking-widest uppercase text-zinc-400 dark:text-zinc-500">
+              ARTICLE BODY
+            </span>
+            <div className="flex-1 h-px bg-zinc-200 dark:bg-zinc-800" />
+          </div>
 
-          {/* ── Article Body (MDX) ── */}
+          {/* ── Article Body (MDX) with Editorial Dropcap ── */}
           {mdxRawSource ? (
-            <article className="prose prose-zinc prose-lg max-w-none dark:prose-invert text-zinc-600 dark:text-zinc-300">
+            <article className="prose prose-zinc prose-lg max-w-none dark:prose-invert text-zinc-700 dark:text-zinc-300 editorial-dropcap">
               <MdxContent source={mdxRawSource} />
             </article>
           ) : null}
 
           {/* Floating Table of Contents */}
           <TableOfContents />
+
+          {/* Bottom Article Footer */}
+          <footer className="mt-20 pt-10 border-t border-zinc-200/80 dark:border-zinc-800/80 flex flex-col sm:flex-row items-center justify-between gap-6">
+            <Link
+              href="/blog"
+              className="inline-flex items-center gap-2 text-sm font-mono tracking-wider text-zinc-900 dark:text-white hover:underline underline-offset-4"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+              </svg>
+              <span>BACK TO ALL DISPATCHES</span>
+            </Link>
+
+            <Link
+              href="/connect"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-zinc-900 text-white dark:bg-white dark:text-zinc-950 text-xs font-mono tracking-wider font-semibold hover:opacity-90 transition-opacity"
+            >
+              <span>WORK WITH WIRA</span>
+              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+              </svg>
+            </Link>
+          </footer>
         </div>
       </div>
     );
   }
 
-  // ── Render: Legacy Builder.io post (unchanged) ──
+  // ── Render: Legacy Builder.io post (editorial modernized) ──
   return (
     <div className="min-h-screen pb-48 md:pb-32 lg:ml-0">
       {/* Sticky Breadcrumb Nav */}
-      <div className="sticky top-[60px] md:top-0 z-[100] w-full bg-white/80 backdrop-blur-md backdrop-saturate-150 border-b border-zinc-200/50 transition-all dark:bg-zinc-900/80 dark:border-white/5">
-        <div className="mx-auto w-full max-w-4xl px-6 sm:px-8 md:px-12 py-3 flex items-center gap-4">
-          <Link
-            href="/blog"
-            aria-label="Back to Blogs"
-            className="group inline-flex items-center justify-center -ml-2 p-2 rounded-lg hover:bg-zinc-100 transition-colors text-zinc-600 hover:text-black dark:text-zinc-400 dark:hover:text-white dark:hover:bg-zinc-800"
-          >
-            <img
-              src={chevronPath}
-              alt="Back"
-              className="w-4 h-4 opacity-70 group-hover:opacity-100 transition-opacity dark:invert"
-              draggable="false"
-            />
-          </Link>
-          <span className="font-medium text-sm text-zinc-900 truncate pr-4 dark:text-white">
-            {post.title}
+      <div className="sticky top-[60px] md:top-0 z-[100] w-full bg-zinc-50/90 backdrop-blur-md border-b border-zinc-200/80 transition-all dark:bg-zinc-950/90 dark:border-zinc-800/80">
+        <div className="mx-auto w-full max-w-4xl px-6 md:px-12 py-3 flex items-center justify-between gap-4">
+          <div className="flex items-center gap-3 overflow-hidden">
+            <Link
+              href="/blog"
+              aria-label="Back to Dispatches"
+              className="group inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-zinc-100 dark:bg-zinc-850 hover:bg-zinc-200 dark:hover:bg-zinc-800 transition-colors text-xs font-mono text-zinc-700 dark:text-zinc-300 shrink-0"
+            >
+              <svg className="w-3.5 h-3.5 transform group-hover:-translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+              </svg>
+              <span>ALL DISPATCHES</span>
+            </Link>
+            <span className="font-medium text-xs font-mono text-zinc-400 dark:text-zinc-500 truncate hidden sm:inline">
+              / {post.title}
+            </span>
+          </div>
+
+          <span className="text-[11px] font-mono uppercase tracking-widest text-zinc-400 dark:text-zinc-500 shrink-0">
+            {dateStr}
           </span>
         </div>
       </div>
 
-      <div className="mx-auto w-full max-w-4xl px-6 sm:px-8 md:px-12 pt-12 pb-8 md:pt-24 md:pb-16 relative">
-        <header className="mb-8 md:mb-12">
-          <div className="space-y-5 md:space-y-6">
+      <div className="mx-auto w-full max-w-4xl px-6 md:px-12 pt-12 pb-8 md:pt-20 md:pb-16 relative">
+        <header className="mb-12 md:mb-16">
+          <div className="space-y-6">
             {post.coverImage && (
-              <div className="w-full aspect-video rounded-2xl overflow-hidden bg-zinc-100 dark:bg-zinc-900 border border-zinc-200/50 dark:border-zinc-800">
+              <div className="w-full aspect-video rounded-3xl overflow-hidden bg-zinc-100 dark:bg-zinc-900 border border-zinc-200/80 dark:border-zinc-800/80">
                 <img src={post.coverImage} alt={post.title} className="w-full h-full object-cover" loading="eager" />
               </div>
             )}
             <div className="space-y-4">
-              <p className="text-sm font-medium text-zinc-400 uppercase tracking-wider dark:text-zinc-500">{dateStr}</p>
-              <h1 className="text-5xl md:text-7xl lg:text-8xl font-semibold tracking-tighter text-zinc-900 leading-[1.1] text-balance dark:text-white">{post.title}</h1>
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-mono font-medium text-zinc-400 uppercase tracking-wider dark:text-zinc-500">
+                  {dateStr} &bull; BUILDER DISPATCH
+                </span>
+              </div>
+              <h1 className="text-4xl sm:text-6xl lg:text-7xl font-serif font-bold tracking-tight text-zinc-950 dark:text-white leading-[1.08] text-balance">
+                {post.title}
+              </h1>
               {post.description && (
-                <p className="text-xl md:text-2xl text-zinc-500 leading-relaxed max-w-3xl text-balance dark:text-zinc-400">{post.description}</p>
+                <p className="text-xl md:text-2xl font-serif italic text-zinc-600 leading-relaxed max-w-3xl text-balance dark:text-zinc-400">
+                  &ldquo;{post.description}&rdquo;
+                </p>
               )}
             </div>
 
             {(myRole || team || timeline) && (
-              <div className="flex flex-wrap gap-3 text-sm">
+              <div className="flex flex-wrap gap-3 text-xs font-mono pt-2">
                 {myRole && (
-                  <div className="inline-flex items-center gap-2 rounded-full bg-zinc-100 dark:bg-zinc-800 px-4 py-2">
-                    <span className="text-zinc-400 font-medium whitespace-nowrap">Role</span>
-                    <span className="text-zinc-900 font-semibold whitespace-nowrap dark:text-zinc-100 capitalize">{myRole}</span>
+                  <div className="inline-flex items-center gap-2 rounded-full bg-zinc-100 dark:bg-zinc-800/80 px-4 py-1.5 border border-zinc-200/60 dark:border-zinc-700/60">
+                    <span className="text-zinc-400 tracking-wider uppercase">ROLE</span>
+                    <span className="text-zinc-900 font-semibold dark:text-zinc-100 capitalize">{myRole}</span>
                   </div>
                 )}
                 {team && (
-                  <div className="inline-flex items-center gap-2 rounded-full bg-zinc-100 dark:bg-zinc-800 px-4 py-2">
-                    <span className="text-zinc-400 font-medium whitespace-nowrap">Team</span>
-                    <span className="text-zinc-900 font-semibold whitespace-nowrap dark:text-zinc-100">{team}</span>
+                  <div className="inline-flex items-center gap-2 rounded-full bg-zinc-100 dark:bg-zinc-800/80 px-4 py-1.5 border border-zinc-200/60 dark:border-zinc-700/60">
+                    <span className="text-zinc-400 tracking-wider uppercase">TEAM</span>
+                    <span className="text-zinc-900 font-semibold dark:text-zinc-100">{team}</span>
                   </div>
                 )}
                 {timeline && (
-                  <div className="inline-flex items-center gap-2 rounded-full bg-zinc-100 dark:bg-zinc-800 px-4 py-2">
-                    <span className="text-zinc-400 font-medium whitespace-nowrap">Timeline</span>
-                    <span className="text-zinc-900 font-semibold whitespace-nowrap dark:text-zinc-100">{timeline}</span>
+                  <div className="inline-flex items-center gap-2 rounded-full bg-zinc-100 dark:bg-zinc-800/80 px-4 py-1.5 border border-zinc-200/60 dark:border-zinc-700/60">
+                    <span className="text-zinc-400 tracking-wider uppercase">TIMELINE</span>
+                    <span className="text-zinc-900 font-semibold dark:text-zinc-100">{timeline}</span>
                   </div>
                 )}
               </div>
@@ -592,7 +650,7 @@ export default async function BlogPostPage({ params }) {
                 {skills.length > 0 && (
                   <div className="flex flex-wrap gap-2">
                     {skills.map((s, idx) => (
-                      <span key={idx} className="inline-flex items-center rounded-md border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 px-2.5 py-1 text-xs font-medium text-zinc-500 dark:text-zinc-400">{s}</span>
+                      <span key={idx} className="inline-flex items-center rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 px-3 py-1 text-xs font-mono text-zinc-600 dark:text-zinc-400">{s}</span>
                     ))}
                   </div>
                 )}
@@ -603,12 +661,12 @@ export default async function BlogPostPage({ params }) {
                       const label = (l.label || "").toLowerCase();
                       const isPrimary = u.includes("apps.apple.com") || label.includes("app store") || label.includes("download") || label.includes("get app");
                       const cls = isPrimary
-                        ? "inline-flex items-center gap-2.5 rounded-full bg-black text-white px-5 py-2.5 text-sm font-medium transition-opacity hover:opacity-80 shadow-sm dark:bg-white dark:text-black"
-                        : "inline-flex items-center gap-2.5 rounded-full bg-white text-zinc-900 border border-zinc-200 px-5 py-2.5 text-sm font-medium transition-colors hover:bg-zinc-50 dark:bg-zinc-900 dark:text-white dark:border-white/10 dark:hover:bg-zinc-800";
+                        ? "inline-flex items-center gap-2.5 rounded-full bg-black text-white px-5 py-2.5 text-xs font-mono tracking-wider font-semibold transition-opacity hover:opacity-80 shadow-sm dark:bg-white dark:text-black"
+                        : "inline-flex items-center gap-2.5 rounded-full bg-white text-zinc-900 border border-zinc-200 px-5 py-2.5 text-xs font-mono tracking-wider font-semibold transition-colors hover:bg-zinc-50 dark:bg-zinc-900 dark:text-white dark:border-white/10 dark:hover:bg-zinc-800";
                       return (
                         <a key={idx} href={l.url} target="_blank" rel="noopener noreferrer" className={cls}>
                           {getLinkIcon(l.url, l.label)}
-                          <span>{l.label}</span>
+                          <span>{l.label.toUpperCase()}</span>
                         </a>
                       );
                     })}
@@ -620,35 +678,35 @@ export default async function BlogPostPage({ params }) {
         </header>
 
         {showOverviewGrid && (
-          <div className="mb-8 md:mb-12 grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="mb-14 grid grid-cols-1 md:grid-cols-3 gap-10 pt-4">
             {challenge && (
-              <div className="flex-1 min-w-[240px] rounded-2xl border bg-white border-zinc-200 p-6 md:p-8 flex flex-col gap-4 dark:bg-zinc-800 dark:border-zinc-700">
-                <span className="text-zinc-400 dark:text-zinc-500 text-xs font-bold uppercase tracking-wider">Challenge</span>
-                <div className="text-sm md:text-base leading-relaxed text-zinc-600 dark:text-zinc-300" dangerouslySetInnerHTML={{ __html: challenge }} />
+              <div className="space-y-2">
+                <span className="text-zinc-400 dark:text-zinc-500 text-xs font-mono font-bold uppercase tracking-widest">01 // CHALLENGE</span>
+                <div className="text-sm leading-relaxed text-zinc-600 dark:text-zinc-400" dangerouslySetInnerHTML={{ __html: challenge }} />
               </div>
             )}
             {solution && (
-              <div className="flex-1 min-w-[240px] rounded-2xl border bg-white border-zinc-200 p-6 md:p-8 flex flex-col gap-4 dark:bg-zinc-800 dark:border-zinc-700">
-                <span className="text-zinc-400 dark:text-zinc-500 text-xs font-bold uppercase tracking-wider">Solution</span>
-                <div className="text-sm md:text-base leading-relaxed text-zinc-600 dark:text-zinc-300" dangerouslySetInnerHTML={{ __html: solution }} />
+              <div className="space-y-2">
+                <span className="text-zinc-400 dark:text-zinc-500 text-xs font-mono font-bold uppercase tracking-widest">02 // SOLUTION</span>
+                <div className="text-sm leading-relaxed text-zinc-600 dark:text-zinc-400" dangerouslySetInnerHTML={{ __html: solution }} />
               </div>
             )}
             {impact && (
-              <div className="flex-1 min-w-[240px] rounded-2xl border bg-zinc-900 text-white border-zinc-900 p-6 md:p-8 flex flex-col gap-4 dark:bg-black dark:border-zinc-850">
-                <span className="text-zinc-400 text-xs font-bold uppercase tracking-wider">Impact</span>
-                <div className="text-sm md:text-base leading-relaxed text-zinc-200" dangerouslySetInnerHTML={{ __html: impact }} />
+              <div className="space-y-2">
+                <span className="text-zinc-400 dark:text-zinc-500 text-xs font-mono font-bold uppercase tracking-widest">03 // IMPACT</span>
+                <div className="text-sm leading-relaxed text-zinc-950 dark:text-zinc-200 font-medium" dangerouslySetInnerHTML={{ __html: impact }} />
               </div>
             )}
           </div>
         )}
 
         {contentHtml && (
-          <article className="prose prose-zinc prose-lg max-w-none dark:prose-invert text-zinc-600 dark:text-zinc-300" dangerouslySetInnerHTML={{ __html: contentHtml }} />
+          <article className="prose prose-zinc prose-lg max-w-none dark:prose-invert text-zinc-700 dark:text-zinc-300 editorial-dropcap" dangerouslySetInnerHTML={{ __html: contentHtml }} />
         )}
 
         {galleryImages.length > 0 && (
-          <section className="w-full md:w-4/5 md:mx-auto lg:w-3/4 xl:w-2/3 md:px-6 lg:px-8 py-12">
-            <div className="rounded-xl overflow-hidden border border-zinc-200/50 dark:border-zinc-800">
+          <section className="w-full py-12">
+            <div className="rounded-3xl overflow-hidden border border-zinc-200/80 dark:border-zinc-800/80">
               {galleryImages.length === 1 ? (
                 <div className="relative aspect-square w-full">
                   <img src={galleryImages[0]} alt="Case Study Gallery" className="block w-full h-full object-cover" />
@@ -675,15 +733,15 @@ export default async function BlogPostPage({ params }) {
         )}
 
         {chapters.length > 0 && (
-          <div className="space-y-12 divide-y divide-zinc-200/45 dark:divide-zinc-800/45">
+          <div className="space-y-12 divide-y divide-zinc-200/80 dark:divide-zinc-800/80 mt-12">
             {chapters.map((chap) => (
-              <section key={chap.id} id={chap.id} className="scroll-mt-24 pt-10 mt-10">
-                <div className="my-8">
-                  <div className="w-2/3 border-b-2 border-black pb-1 dark:border-zinc-700">
-                    <h2 className="text-left text-2xl md:text-3xl lg:text-4xl font-semibold tracking-tight text-black dark:text-white">{chap.label}</h2>
+              <section key={chap.id} id={chap.id} className="scroll-mt-24 pt-10">
+                <div className="my-6">
+                  <div className="border-b border-zinc-900 pb-2 dark:border-zinc-700">
+                    <h2 className="text-left text-2xl md:text-3xl lg:text-4xl font-serif font-bold tracking-tight text-black dark:text-white">{chap.label}</h2>
                   </div>
                 </div>
-                <div className="prose prose-zinc prose-lg max-w-none dark:prose-invert text-zinc-600 dark:text-zinc-300" dangerouslySetInnerHTML={{ __html: chap.html }} />
+                <div className="prose prose-zinc prose-lg max-w-none dark:prose-invert text-zinc-700 dark:text-zinc-300" dangerouslySetInnerHTML={{ __html: chap.html }} />
               </section>
             ))}
           </div>
